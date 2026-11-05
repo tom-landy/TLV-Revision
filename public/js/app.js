@@ -32,7 +32,7 @@
   var memoryState = null;
 
   function emptyState() {
-    return { version: 1, student: { name: "" }, attempts: [], certificates: {}, practice: {} };
+    return { version: 1, student: { name: "" }, attempts: [], certificates: {}, practice: {}, tests: [], missed: {}, cards: {} };
   }
 
   function loadState() {
@@ -76,6 +76,18 @@
           text: typeof p.text === "string" ? p.text.slice(0, 20000) : "",
           mark: typeof p.mark === "number" ? p.mark : null
         };
+      });
+    }
+    if (Array.isArray(s.tests)) {
+      out.tests = s.tests.filter(function (x) { return x && typeof x.subjectId === "string" && typeof x.pct === "number"; });
+    }
+    if (s.missed && typeof s.missed === "object") {
+      Object.keys(s.missed).forEach(function (k) { if (typeof s.missed[k] === "number") out.missed[k] = s.missed[k]; });
+    }
+    if (s.cards && typeof s.cards === "object") {
+      Object.keys(s.cards).forEach(function (k) {
+        var c = s.cards[k];
+        if (c && typeof c.known === "number" && typeof c.total === "number") out.cards[k] = { known: c.known, total: c.total, date: c.date };
       });
     }
     return out;
@@ -255,6 +267,10 @@
         "<h1>Hi " + esc(state.student.name.split(" ")[0]) + "</h1>" +
         "<p>You have passed <strong>" + passedCount + "</strong> of <strong>" + allTopics.length +
         "</strong> topics.</p>" + progressBar(allTopics.length ? Math.round(passedCount / allTopics.length * 100) : 0) +
+        (function () {
+          var n = missedPool(state).length;
+          return n ? '<p><a class="btn" href="#/mistakes">Practise my mistakes <span class="badge">' + n + "</span></a></p>" : "";
+        })() +
         "</section>";
     }
 
@@ -266,7 +282,8 @@
       html += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
         '<div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
         '<span class="muted">' + done + "/" + s.topics.length + " passed</span>" +
-        (subjectComplete(state, s) ? ' <a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Subject certificate</a>' : "") +
+        (subjectComplete(state, s) ? ' <a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Element certificate</a>' : "") +
+        '<a class="btn small-btn head-action" href="#/test/' + encodeURIComponent(s.id) + '">Element test</a>' +
         "</div>" +
         '<div class="grid">';
       s.topics.forEach(function (t) {
@@ -336,8 +353,9 @@
       }
     });
 
+    var cardInfo = state.cards[t.id];
     html += '</section><aside class="card quiz-panel"><h2>Quiz</h2>' +
-      "<p>" + count + " questions · pass mark " + pm + "%</p>";
+      "<p>" + count + " questions, mixed types · pass mark " + pm + "%</p>";
     if (st.attempts) {
       html += '<p class="small">Attempts: ' + st.attempts + " · best score " + st.best + "%</p>" + progressBar(st.best, pm);
     }
@@ -346,6 +364,11 @@
         '<a class="btn" href="#/certificate/' + encodeURIComponent(t.id) + '">View certificate</a> ';
     }
     html += '<a class="btn primary" href="#/quiz/' + encodeURIComponent(t.id) + '">' + (st.attempts ? "Try again" : "Start quiz") + "</a>";
+    if ((t.cards || []).length) {
+      html += '<h2 class="panel-h">Flashcards</h2><p class="small">' + t.cards.length + " cards" +
+        (cardInfo ? " · last time you knew " + cardInfo.known + " first time" : "") + "</p>" +
+        '<a class="btn" href="#/cards/' + encodeURIComponent(t.id) + '">Study flashcards</a>';
+    }
     if ((t.practice || []).length) {
       html += '<p class="small muted panel-note">Then try the <a href="#practice" id="toPractice">written exam questions</a> below.</p>';
     }
@@ -474,6 +497,394 @@
     }).join("");
   }
 
+  // ---------- Quiz engine ----------
+  //
+  // Question types (set with `type`, default "mcq"):
+  //   mcq    options + answer (index)
+  //   multi  options + answers (array of indexes): select all that apply
+  //   type   accept (array of accepted answers): student types the answer
+  //   match  pairs [[term, description], ...]: pick the term for each description
+  //   order  items in the correct order: student arranges them
+  //   sort   categories + items [[text, categoryIndex], ...]: put each item in a group
+  // Every question is worth 1 point. Multi-part types give partial credit.
+
+  function qType(q) { return q.type || "mcq"; }
+
+  function questionKey(topicId, q) { return topicId + "|" + q.q; }
+
+  function prepQuestion(q, topic) {
+    var type = qType(q);
+    var pq = { type: type, q: q.q, explanation: q.explanation || "", key: questionKey(topic.id, q), topicId: topic.id };
+    var idxs, order;
+    if (type === "mcq" || type === "multi") {
+      idxs = q.options.map(function (_, i) { return i; });
+      order = (q.shuffle === false || q.options.length === 2) ? idxs : shuffle(idxs);
+      pq.options = order.map(function (i) { return q.options[i]; });
+      if (type === "mcq") pq.answer = order.indexOf(q.answer);
+      else pq.answers = q.answers.map(function (a) { return order.indexOf(a); });
+    } else if (type === "type") {
+      pq.accept = q.accept;
+      pq.placeholder = q.placeholder || "Type your answer";
+    } else if (type === "match") {
+      pq.rows = shuffle(q.pairs.map(function (p) { return { text: p[1], correct: p[0] }; }));
+      pq.choices = shuffle(q.pairs.map(function (p) { return p[0]; }));
+    } else if (type === "order") {
+      pq.correct = q.items.slice();
+      var start = shuffle(q.items);
+      var guard = 0;
+      while (start.join("|") === q.items.join("|") && guard++ < 10) start = shuffle(q.items);
+      pq.start = start;
+    } else if (type === "sort") {
+      pq.categories = q.categories.slice();
+      pq.items = shuffle(q.items.map(function (it) { return { text: it[0], cat: it[1] }; }));
+    }
+    return pq;
+  }
+
+  function blankResponse(pq) {
+    switch (pq.type) {
+      case "multi": return [];
+      case "type": return "";
+      case "match": return pq.rows.map(function () { return ""; });
+      case "order": return pq.start.slice();
+      case "sort": return pq.items.map(function () { return null; });
+      default: return null;
+    }
+  }
+
+  function isAnswered(pq, r) {
+    switch (pq.type) {
+      case "multi": return r.length > 0;
+      case "type": return r.trim() !== "";
+      case "match": return r.every(function (x) { return x !== ""; });
+      case "order": return true;
+      case "sort": return r.every(function (x) { return x !== null; });
+      default: return r !== null;
+    }
+  }
+
+  function normaliseTyped(str) {
+    return String(str).toLowerCase()
+      .replace(/[£$,%'’]/g, "").replace(/\s+/g, " ").trim()
+      .replace(/^the /, "").replace(/[.!]+$/, "");
+  }
+
+  function typedMatches(given, accept) {
+    var g = normaliseTyped(given);
+    // "48 hours", "500 units" -> "48", "500"
+    var unit = g.match(/^(-?[\d.]+)\s*[a-z ]+$/);
+    if (unit) g = unit[1];
+    return accept.some(function (a) {
+      var n = normaliseTyped(a);
+      if (g === n) return true;
+      var gn = parseFloat(g), an = parseFloat(n);
+      return /^-?[\d.]+$/.test(g) && /^-?[\d.]+$/.test(n) && gn === an;
+    });
+  }
+
+  // Returns a number from 0 to 1.
+  function scoreQuestion(pq, r) {
+    var n, hits, wrong;
+    switch (pq.type) {
+      case "mcq": return r === pq.answer ? 1 : 0;
+      case "multi":
+        hits = r.filter(function (i) { return pq.answers.indexOf(i) !== -1; }).length;
+        wrong = r.length - hits;
+        return Math.max(0, (hits - wrong) / pq.answers.length);
+      case "type": return typedMatches(r, pq.accept) ? 1 : 0;
+      case "match":
+        n = pq.rows.filter(function (row, i) { return r[i] === row.correct; }).length;
+        return n / pq.rows.length;
+      case "order":
+        n = r.filter(function (item, i) { return item === pq.correct[i]; }).length;
+        return n / pq.correct.length;
+      case "sort":
+        n = pq.items.filter(function (it, i) { return r[i] === it.cat; }).length;
+        return n / pq.items.length;
+    }
+    return 0;
+  }
+
+  var TYPE_HINT = {
+    mcq: "Choose one answer.",
+    multi: "Select all that apply.",
+    type: "Type your answer.",
+    match: "Choose the right term for each description.",
+    order: "Use the arrows to put these in the right order, first at the top.",
+    sort: "Put each item in the right group."
+  };
+
+  function questionBodyHtml(pq, r) {
+    var h = "";
+    if (pq.type === "mcq" || pq.type === "multi") {
+      var multi = pq.type === "multi";
+      h += '<div class="options" role="' + (multi ? "group" : "radiogroup") + '" aria-label="Answers">' +
+        pq.options.map(function (o, i) {
+          var sel = multi ? r.indexOf(i) !== -1 : r === i;
+          return '<button type="button" class="option' + (multi ? " is-multi" : "") + (sel ? " selected" : "") + '" role="' + (multi ? "checkbox" : "radio") +
+            '" aria-checked="' + sel + '" data-i="' + i + '"><span class="key">' + (i < 9 ? i + 1 : "") + "</span>" + esc(o) + "</button>";
+        }).join("") + "</div>";
+    } else if (pq.type === "type") {
+      h += '<label class="sr-only" for="typed">Your answer</label>' +
+        '<input id="typed" class="typed" autocomplete="off" spellcheck="false" placeholder="' + esc(pq.placeholder) + '" value="' + esc(r) + '">';
+    } else if (pq.type === "match") {
+      h += '<div class="match">' + pq.rows.map(function (row, i) {
+        return '<div class="match-row"><label for="m' + i + '">' + esc(row.text) + "</label>" +
+          '<select id="m' + i + '" data-i="' + i + '"><option value="">Choose…</option>' +
+          pq.choices.map(function (c) { return '<option' + (r[i] === c ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") +
+          "</select></div>";
+      }).join("") + "</div>";
+    } else if (pq.type === "order") {
+      h += '<ol class="order">' + r.map(function (item, i) {
+        return '<li><span class="order-n">' + (i + 1) + '</span><span class="order-text">' + esc(item) + "</span>" +
+          '<span class="order-btns"><button type="button" class="icon-btn" data-move="-1" data-i="' + i + '" aria-label="Move up: ' + esc(item) + '"' + (i === 0 ? " disabled" : "") + ">↑</button>" +
+          '<button type="button" class="icon-btn" data-move="1" data-i="' + i + '" aria-label="Move down: ' + esc(item) + '"' + (i === r.length - 1 ? " disabled" : "") + ">↓</button></span></li>";
+      }).join("") + "</ol>";
+    } else if (pq.type === "sort") {
+      h += '<div class="sort">' + pq.items.map(function (it, i) {
+        return '<div class="sort-row"><span class="sort-text" id="s' + i + '">' + esc(it.text) + "</span>" +
+          '<span class="seg" role="radiogroup" aria-labelledby="s' + i + '">' + pq.categories.map(function (c, ci) {
+            var sel = r[i] === ci;
+            return '<button type="button" role="radio" aria-checked="' + sel + '" class="seg-btn' + (sel ? " selected" : "") + '" data-i="' + i + '" data-c="' + ci + '">' + esc(c) + "</button>";
+          }).join("") + "</span></div>";
+      }).join("") + "</div>";
+    }
+    return h;
+  }
+
+  // Binds input for the current question. onChange(newResponse, rerender)
+  function bindQuestionBody(root, pq, r, onChange) {
+    if (pq.type === "mcq" || pq.type === "multi") {
+      root.querySelectorAll(".option").forEach(function (b) {
+        b.addEventListener("click", function () { onChange(toggleOption(pq, r, Number(b.getAttribute("data-i"))), true); });
+      });
+    } else if (pq.type === "type") {
+      var inp = root.querySelector("#typed");
+      inp.addEventListener("input", function () { onChange(inp.value, false); });
+      inp.focus();
+    } else if (pq.type === "match") {
+      root.querySelectorAll(".match select").forEach(function (sel) {
+        sel.addEventListener("change", function () {
+          var next = Array.prototype.map.call(root.querySelectorAll(".match select"), function (x) { return x.value; });
+          onChange(next, false);
+        });
+      });
+    } else if (pq.type === "order") {
+      root.querySelectorAll(".order .icon-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var i = Number(b.getAttribute("data-i")), d = Number(b.getAttribute("data-move"));
+          var next = r.slice(), tmp = next[i]; next[i] = next[i + d]; next[i + d] = tmp;
+          onChange(next, true, '.order .icon-btn[data-i="' + (i + d) + '"][data-move="' + d + '"]');
+        });
+      });
+    } else if (pq.type === "sort") {
+      root.querySelectorAll(".seg-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          var next = r.slice(); next[Number(b.getAttribute("data-i"))] = Number(b.getAttribute("data-c"));
+          onChange(next, true, '.seg-btn[data-i="' + b.getAttribute("data-i") + '"][data-c="' + b.getAttribute("data-c") + '"]');
+        });
+      });
+    }
+  }
+
+  function toggleOption(pq, r, i) {
+    if (pq.type === "mcq") return i;
+    var next = r.slice(), at = next.indexOf(i);
+    if (at === -1) next.push(i); else next.splice(at, 1);
+    return next;
+  }
+
+  function reviewBodyHtml(pq, r) {
+    var h = "";
+    if (pq.type === "mcq") {
+      var right = r === pq.answer;
+      h += '<p class="' + (right ? "ok" : "bad") + '">Your answer: ' + esc(pq.options[r]) + "</p>" +
+        (right ? "" : '<p class="ok">Correct answer: ' + esc(pq.options[pq.answer]) + "</p>");
+    } else if (pq.type === "multi") {
+      h += '<ul class="review-items">' + pq.options.map(function (o, i) {
+        var should = pq.answers.indexOf(i) !== -1, did = r.indexOf(i) !== -1;
+        if (!should && !did) return "";
+        var cls = should && did ? "ok" : "bad";
+        var note = should && did ? "selected, correct" : should ? "missed" : "selected, but wrong";
+        return '<li class="' + cls + '">' + esc(o) + ' <span class="muted">(' + note + ")</span></li>";
+      }).join("") + "</ul>";
+    } else if (pq.type === "type") {
+      var ok = typedMatches(r, pq.accept);
+      h += '<p class="' + (ok ? "ok" : "bad") + '">Your answer: ' + esc(r) + "</p>" +
+        (ok ? "" : '<p class="ok">Correct answer: ' + esc(pq.accept[0]) + "</p>");
+    } else if (pq.type === "match") {
+      h += '<ul class="review-items">' + pq.rows.map(function (row, i) {
+        var good = r[i] === row.correct;
+        return '<li class="' + (good ? "ok" : "bad") + '"><strong>' + esc(row.correct) + "</strong>: " + esc(row.text) +
+          (good ? "" : ' <span class="muted">(you chose ' + esc(r[i]) + ")</span>") + "</li>";
+      }).join("") + "</ul>";
+    } else if (pq.type === "order") {
+      h += '<p class="small muted">Correct order:</p><ol class="review-items">' + pq.correct.map(function (item, i) {
+        var good = r[i] === item;
+        return '<li class="' + (good ? "ok" : "bad") + '">' + esc(item) +
+          (good ? "" : ' <span class="muted">(you put ' + esc(r[i]) + " here)</span>") + "</li>";
+      }).join("") + "</ol>";
+    } else if (pq.type === "sort") {
+      h += '<ul class="review-items">' + pq.items.map(function (it, i) {
+        var good = r[i] === it.cat;
+        return '<li class="' + (good ? "ok" : "bad") + '">' + esc(it.text) + ": <strong>" + esc(pq.categories[it.cat]) + "</strong>" +
+          (good ? "" : ' <span class="muted">(you chose ' + esc(pq.categories[r[i]]) + ")</span>") + "</li>";
+      }).join("") + "</ul>";
+    }
+    return h;
+  }
+
+  function fmtPoints(n) {
+    var r = Math.round(n * 10) / 10;
+    return String(r % 1 === 0 ? r : r.toFixed(1));
+  }
+
+  // Pick a quiz: mostly multiple choice, plus up to `maxOther` of the other types.
+  function pickQuestions(pool, count, maxOther) {
+    var others = shuffle(pool.filter(function (x) { return qType(x.q) !== "mcq"; }));
+    var mcqs = shuffle(pool.filter(function (x) { return qType(x.q) === "mcq"; }));
+    var take = others.slice(0, Math.min(maxOther, others.length));
+    var rest = shuffle(mcqs.concat(others.slice(take.length)));
+    take = take.concat(rest.slice(0, Math.max(0, count - take.length)));
+    return shuffle(take);
+  }
+
+  function recordMistakes(st, questions, responses) {
+    questions.forEach(function (pq, i) {
+      if (scoreQuestion(pq, responses[i]) >= 1) delete st.missed[pq.key];
+      else st.missed[pq.key] = (st.missed[pq.key] || 0) + 1;
+    });
+  }
+
+  // Runs a quiz. opts: crumbs (html), colour, questions (prepared), finish(score, total, responses) -> html for the top of the results page
+  function runQuiz(opts) {
+    var questions = opts.questions;
+    var idx = 0, done = false;
+    var responses = questions.map(blankResponse);
+
+    function answeredCount() {
+      return questions.filter(function (pq, i) { return isAnswered(pq, responses[i]); }).length;
+    }
+
+    function updateChrome() {
+      var nb = document.getElementById("nextBtn");
+      if (nb) nb.disabled = !isAnswered(questions[idx], responses[idx]);
+      var a = document.getElementById("answered");
+      if (a) a.textContent = answeredCount() + " answered";
+      var bar = app.querySelector(".quiz .bar span");
+      if (bar) bar.style.width = Math.round(answeredCount() / questions.length * 100) + "%";
+    }
+
+    function renderQuestion(focusSel) {
+      var pq = questions[idx];
+      var last = idx === questions.length - 1;
+      app.innerHTML = opts.crumbs +
+        '<section class="card quiz" style="--subject:' + esc(opts.colour) + '">' +
+        '<div class="quiz-top"><span>Question ' + (idx + 1) + " of " + questions.length + "</span>" +
+        '<span id="answered">' + answeredCount() + " answered</span></div>" +
+        progressBar(Math.round(answeredCount() / questions.length * 100)) +
+        '<h2 class="question">' + esc(pq.q) + "</h2>" +
+        '<p class="type-hint">' + TYPE_HINT[pq.type] + "</p>" +
+        '<div id="qbody">' + questionBodyHtml(pq, responses[idx]) + "</div>" +
+        '<p class="small muted quiz-hint">Answers are marked when you finish. You can go back and change them until then.</p>' +
+        '<div class="quiz-actions">' +
+        (idx > 0 ? '<button class="btn" id="backBtn" type="button">Back</button>' : "<span></span>") +
+        '<button class="btn primary" id="nextBtn" type="button">' + (last ? "Finish and mark" : "Next question") + "</button></div>" +
+        "</section>";
+      bindBody(focusSel);
+      document.getElementById("nextBtn").addEventListener("click", next);
+      var back = document.getElementById("backBtn");
+      if (back) back.addEventListener("click", function () { idx--; renderQuestion(); });
+      updateChrome();
+      if (!focusSel && pq.type !== "type") {
+        var f = app.querySelector("#qbody .selected") || app.querySelector("#qbody button:not([disabled]), #qbody select");
+        if (f) f.focus();
+      }
+    }
+
+    function bindBody(focusSel) {
+      var body = document.getElementById("qbody");
+      var pq = questions[idx];
+      bindQuestionBody(body, pq, responses[idx], function (next, rerender, nextFocus) {
+        responses[idx] = next;
+        if (rerender) {
+          body.innerHTML = questionBodyHtml(pq, next);
+          bindBody(nextFocus);
+        }
+        updateChrome();
+      });
+      if (focusSel) {
+        var el = body.querySelector(focusSel);
+        if (el && el.disabled) el = body.querySelector(focusSel.replace(/data-move="-?1"/, function (m) { return m.indexOf("-1") !== -1 ? 'data-move="1"' : 'data-move="-1"'; }));
+        if (el) el.focus();
+      }
+    }
+
+    function next() {
+      if (!isAnswered(questions[idx], responses[idx])) return;
+      if (idx < questions.length - 1) { idx++; renderQuestion(); }
+      else finish();
+    }
+
+    function finish() {
+      done = true;
+      document.removeEventListener("keydown", onKey);
+      var scores = questions.map(function (pq, i) { return scoreQuestion(pq, responses[i]); });
+      var total = questions.length;
+      var score = scores.reduce(function (m, x) { return m + x; }, 0);
+      var html = opts.finish(score, total, responses);
+      html += '<section class="review-list"><h2>Your answers</h2>' + questions.map(function (pq, i) {
+        var sc = scores[i];
+        var cls = sc >= 1 ? "is-right" : sc > 0 ? "is-part" : "is-wrong";
+        var mark = sc >= 1 ? "✓" : sc > 0 ? "½" : "✗";
+        var label = sc >= 1 ? "Correct. " : sc > 0 ? "Partly correct. " : "Incorrect. ";
+        return '<div class="card review ' + cls + '">' +
+          '<div class="review-head"><span class="review-mark" aria-hidden="true">' + mark + "</span>" +
+          '<p class="question"><span class="sr-only">' + label + "</span>" + (i + 1) + ". " + esc(pq.q) + "</p>" +
+          (pq.type !== "mcq" && pq.type !== "type" ? '<span class="badge">' + fmtPoints(sc) + " / 1</span>" : "") + "</div>" +
+          reviewBodyHtml(pq, responses[i]) +
+          (pq.explanation ? '<p class="muted">' + esc(pq.explanation) + "</p>" : "") + "</div>";
+      }).join("") + "</section>";
+      app.innerHTML = html;
+      renderWho();
+      window.scrollTo(0, 0);
+      var retry = document.getElementById("retry");
+      if (retry) retry.addEventListener("click", function (e) { e.preventDefault(); route(); });
+    }
+
+    function onKey(e) {
+      if (done) return;
+      var tag = e.target && e.target.tagName;
+      var pq = questions[idx];
+      if (tag === "INPUT" && e.key === "Enter") { e.preventDefault(); next(); return; }
+      if (/INPUT|TEXTAREA|SELECT/.test(tag || "")) return;
+      var n = parseInt(e.key, 10);
+      if ((pq.type === "mcq" || pq.type === "multi") && n >= 1 && n <= pq.options.length) {
+        e.preventDefault();
+        responses[idx] = toggleOption(pq, responses[idx], n - 1);
+        var body = document.getElementById("qbody");
+        body.innerHTML = questionBodyHtml(pq, responses[idx]);
+        bindBody();
+        updateChrome();
+      } else if (e.key === "Enter" && tag !== "BUTTON" && isAnswered(pq, responses[idx])) {
+        e.preventDefault(); next();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    cleanup = function () { document.removeEventListener("keydown", onKey); };
+    renderQuestion();
+  }
+
+  function resultCard(o) {
+    return '<section class="card result ' + (o.passed === false ? "is-fail" : "is-pass") + '">' +
+      "<h1>" + o.heading + "</h1>" +
+      '<p class="big">' + fmtPoints(o.score) + " / " + o.total + " · " + o.pct + "%</p>" +
+      progressBar(o.pct, o.passMark) +
+      (o.text ? "<p>" + o.text + "</p>" : "") +
+      '<div class="actions">' + o.actions + "</div></section>";
+  }
+
   function viewQuiz(topicId) {
     var entry = topicIndex[topicId];
     if (!entry) return viewNotFound();
@@ -493,140 +904,231 @@
     }
 
     var pm = passMarkFor(t);
-    var questions = shuffle(t.questions).slice(0, Math.min(t.questions.length, SETTINGS.questionsPerQuiz)).map(function (q) {
-      var idxs = q.options.map(function (_, i) { return i; });
-      var order = (q.shuffle === false || q.options.length === 2) ? idxs : shuffle(idxs);
-      return {
-        q: q.q,
-        options: order.map(function (i) { return q.options[i]; }),
-        answer: order.indexOf(q.answer),
-        explanation: q.explanation || ""
-      };
+    var started = Date.now();
+    var pool = t.questions.map(function (q) { return { q: q, topic: t }; });
+    var questions = pickQuestions(pool, SETTINGS.questionsPerQuiz, 4).map(function (x) { return prepQuestion(x.q, x.topic); });
+
+    runQuiz({
+      colour: s.colour || "#1f4e79",
+      crumbs: '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Quiz</nav>",
+      questions: questions,
+      finish: function (score, total, responses) {
+        var pct = Math.round(score / total * 100);
+        var passed = pct >= pm;
+        var now = new Date().toISOString();
+        var st = loadState();
+        var firstPass = passed && !st.certificates[t.id];
+        st.attempts.push({
+          topicId: t.id, score: Math.round(score * 10) / 10, total: total, pct: pct, passed: passed,
+          date: now, seconds: Math.round((Date.now() - started) / 1000)
+        });
+        if (passed) {
+          var prev = st.certificates[t.id];
+          if (!prev || pct > prev.pct) st.certificates[t.id] = { pct: pct, date: now };
+        }
+        recordMistakes(st, questions, responses);
+        saveState(st);
+        var html = storageBanner() + resultCard({
+          passed: passed, score: score, total: total, pct: pct, passMark: pm,
+          heading: passed ? (firstPass ? "Passed. Certificate earned." : "Passed.") : "Not passed yet",
+          text: passed ? "The pass mark was " + pm + "%." : "You need " + pm + "% to pass. Have another look at the key points and flashcards, then try again.",
+          actions: (passed ? '<a class="btn primary" href="#/certificate/' + encodeURIComponent(t.id) + '">View certificate</a>' : "") +
+            '<a class="btn' + (passed ? "" : " primary") + '" href="#/quiz/' + encodeURIComponent(t.id) + '" id="retry">Try again</a>' +
+            ((t.cards || []).length ? '<a class="btn" href="#/cards/' + encodeURIComponent(t.id) + '">Flashcards</a>' : "") +
+            '<a class="btn" href="#/topic/' + encodeURIComponent(t.id) + '">Back to topic</a>'
+        });
+        if (passed && subjectComplete(st, s)) {
+          html += '<div class="banner gold">You have passed every topic in ' + esc(s.title) +
+            '. <a href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Get your Element certificate</a>.</div>';
+        }
+        return html;
+      }
     });
+  }
 
-    var idx = 0, started = Date.now(), done = false;
-    var chosen = questions.map(function () { return null; });
+  var TEST_LENGTH = 20;
 
-    function answeredCount() {
-      return chosen.filter(function (c) { return c !== null; }).length;
+  function viewTest(subjectId) {
+    var s = subjectIndex[subjectId];
+    if (!s) return viewNotFound();
+    var state = loadState();
+    setTitle("Test: " + s.title);
+    markNav("home");
+    if (!state.student.name) {
+      app.innerHTML = nameForm("#/test/" + encodeURIComponent(subjectId));
+      bindNameForm();
+      return;
+    }
+    var pool = [];
+    s.topics.forEach(function (t) { t.questions.forEach(function (q) { pool.push({ q: q, topic: t }); }); });
+    var questions = pickQuestions(pool, TEST_LENGTH, 7).map(function (x) { return prepQuestion(x.q, x.topic); });
+    var started = Date.now();
+
+    runQuiz({
+      colour: s.colour || "#1f4e79",
+      crumbs: '<nav class="crumbs"><a href="#/">Topics</a> › ' + esc(s.title) + " test</nav>",
+      questions: questions,
+      finish: function (score, total, responses) {
+        var pct = Math.round(score / total * 100);
+        var st = loadState();
+        st.tests.push({ subjectId: s.id, score: Math.round(score * 10) / 10, total: total, pct: pct, date: new Date().toISOString(), seconds: Math.round((Date.now() - started) / 1000) });
+        recordMistakes(st, questions, responses);
+        saveState(st);
+        var best = st.tests.filter(function (x) { return x.subjectId === s.id; }).reduce(function (m, x) { return Math.max(m, x.pct); }, 0);
+        // Which topics went worst
+        var byTopic = {};
+        questions.forEach(function (pq, i) {
+          var b = byTopic[pq.topicId] || (byTopic[pq.topicId] = { got: 0, n: 0 });
+          b.got += scoreQuestion(pq, responses[i]); b.n++;
+        });
+        var weak = Object.keys(byTopic).filter(function (k) { return byTopic[k].got / byTopic[k].n < 0.7; });
+        return storageBanner() + resultCard({
+          score: score, total: total, pct: pct,
+          heading: s.title + " test",
+          text: "Your best on this test: " + best + "%." +
+            (weak.length ? " Topics to revisit: " + weak.map(function (k) {
+              return '<a href="#/topic/' + encodeURIComponent(k) + '">' + esc(topicIndex[k].topic.title) + "</a>";
+            }).join(", ") + "." : " No weak topics in this test."),
+          actions: '<a class="btn primary" href="#/test/' + encodeURIComponent(s.id) + '" id="retry">New test</a>' +
+            '<a class="btn" href="#/">Back to topics</a>'
+        });
+      }
+    });
+  }
+
+  function missedPool(state) {
+    var pool = [];
+    Object.keys(state.missed).forEach(function (key) {
+      var cut = key.indexOf("|");
+      var e = topicIndex[key.slice(0, cut)];
+      if (!e) return;
+      var q = e.topic.questions.filter(function (x) { return x.q === key.slice(cut + 1); })[0];
+      if (q) pool.push({ q: q, topic: e.topic });
+    });
+    return pool;
+  }
+
+  function viewMistakes() {
+    var state = loadState();
+    setTitle("Practise my mistakes");
+    markNav("progress");
+    var pool = missedPool(state);
+    if (!pool.length) {
+      app.innerHTML = '<div class="card"><h1>No mistakes to practise</h1><p>Questions you get wrong in quizzes and tests appear here until you get them right.</p><a class="btn primary" href="#/">Back to topics</a></div>';
+      return;
+    }
+    var questions = shuffle(pool).slice(0, 10).map(function (x) { return prepQuestion(x.q, x.topic); });
+    runQuiz({
+      colour: "#1f4e79",
+      crumbs: '<nav class="crumbs"><a href="#/progress">My progress</a> › Practise my mistakes</nav>',
+      questions: questions,
+      finish: function (score, total, responses) {
+        var pct = Math.round(score / total * 100);
+        var st = loadState();
+        recordMistakes(st, questions, responses);
+        saveState(st);
+        var left = missedPool(st).length;
+        return resultCard({
+          score: score, total: total, pct: pct, heading: "Mistakes practice",
+          text: left ? left + " question" + (left === 1 ? "" : "s") + " still to get right." : "You've cleared all your mistakes.",
+          actions: (left ? '<a class="btn primary" href="#/mistakes" id="retry">Keep going</a>' : "") + '<a class="btn" href="#/progress">My progress</a>'
+        });
+      }
+    });
+  }
+
+  // ---------- Flashcards ----------
+
+  function viewCards(topicId) {
+    var entry = topicIndex[topicId];
+    if (!entry) return viewNotFound();
+    var t = entry.topic, s = entry.subject;
+    setTitle("Flashcards: " + t.title);
+    markNav("home");
+    var cards = (t.cards || []).map(function (c) { return { front: c[0], back: c[1] }; });
+    if (!cards.length) {
+      app.innerHTML = '<div class="card"><p>No flashcards for this topic yet.</p><a class="btn" href="#/topic/' + encodeURIComponent(t.id) + '">Back</a></div>';
+      return;
+    }
+    var flipBack = false; // false: term first. true: definition first.
+    var deck, knownFirstTime, seen, current, flipped, done = false;
+
+    function start() {
+      deck = shuffle(cards);
+      knownFirstTime = 0; seen = {}; flipped = false;
+      current = deck.shift();
+      render();
     }
 
-    function renderQuestion() {
-      var q = questions[idx];
-      var last = idx === questions.length - 1;
-      app.innerHTML =
-        '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Quiz</nav>" +
-        '<section class="card quiz" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
-        '<div class="quiz-top"><span>Question ' + (idx + 1) + " of " + questions.length + "</span>" +
-        '<span id="answered">' + answeredCount() + " answered</span></div>" +
-        progressBar(Math.round(answeredCount() / questions.length * 100)) +
-        '<h2 class="question">' + esc(q.q) + "</h2>" +
-        '<div class="options" role="radiogroup" aria-label="Answers">' +
-        q.options.map(function (o, i) {
-          var sel = chosen[idx] === i;
-          return '<button type="button" class="option' + (sel ? " selected" : "") + '" role="radio" aria-checked="' + sel + '" data-i="' + i + '">' +
-            '<span class="key">' + (i + 1) + "</span>" + esc(o) + "</button>";
-        }).join("") +
-        "</div>" +
-        '<p class="small muted quiz-hint">Answers are marked when you finish. You can go back and change them until then.</p>' +
-        '<div class="quiz-actions">' +
-        (idx > 0 ? '<button class="btn" id="backBtn" type="button">Back</button>' : "<span></span>") +
-        '<button class="btn primary" id="nextBtn" type="button"' + (chosen[idx] === null ? " disabled" : "") + ">" +
-        (last ? "Finish and mark" : "Next question") + "</button></div>" +
+    function render() {
+      var remaining = deck.length + 1;
+      app.innerHTML = '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Flashcards</nav>" +
+        '<section class="cards-wrap" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
+        '<div class="quiz-top"><span>' + remaining + " card" + (remaining === 1 ? "" : "s") + " left</span>" +
+        '<label class="check small"><input type="checkbox" id="flipMode"' + (flipBack ? " checked" : "") + "> Show definition first</label></div>" +
+        '<button type="button" class="flashcard' + (flipped ? " is-flipped" : "") + '" id="card" aria-live="polite">' +
+        '<span class="fc-label">' + (flipped ? (flipBack ? "Term" : "Definition") : (flipBack ? "Definition" : "Term")) + "</span>" +
+        '<span class="fc-text">' + esc(flipped ? (flipBack ? current.front : current.back) : (flipBack ? current.back : current.front)) + "</span>" +
+        (flipped ? "" : '<span class="fc-hint">Tap or press space to turn over</span>') +
+        "</button>" +
+        '<div class="fc-actions"' + (flipped ? "" : " hidden") + ">" +
+        '<button class="btn" id="again" type="button">Not yet <span class="muted small">(1)</span></button>' +
+        '<button class="btn primary" id="knew" type="button">Got it <span class="small">(2)</span></button></div>' +
         "</section>";
-      app.querySelectorAll(".option").forEach(function (b) {
-        b.addEventListener("click", function () { choose(Number(b.getAttribute("data-i"))); });
-      });
-      document.getElementById("nextBtn").addEventListener("click", next);
-      var back = document.getElementById("backBtn");
-      if (back) back.addEventListener("click", function () { idx--; renderQuestion(); });
-      var focusEl = app.querySelector(".option.selected") || app.querySelector(".option");
-      focusEl.focus();
+      document.getElementById("card").addEventListener("click", flip);
+      document.getElementById("flipMode").addEventListener("change", function (e) { flipBack = e.target.checked; flipped = false; render(); });
+      if (flipped) {
+        document.getElementById("again").addEventListener("click", function () { answer(false); });
+        document.getElementById("knew").addEventListener("click", function () { answer(true); });
+        document.getElementById("knew").focus();
+      } else {
+        document.getElementById("card").focus();
+      }
     }
 
-    function choose(i) {
-      chosen[idx] = i;
-      app.querySelectorAll(".option").forEach(function (b, bi) {
-        b.classList.toggle("selected", bi === i);
-        b.setAttribute("aria-checked", String(bi === i));
-      });
-      document.getElementById("nextBtn").disabled = false;
-      document.getElementById("answered").textContent = answeredCount() + " answered";
-      var bar = app.querySelector(".quiz .bar span");
-      if (bar) bar.style.width = Math.round(answeredCount() / questions.length * 100) + "%";
-    }
+    function flip() { flipped = !flipped; render(); }
 
-    function next() {
-      if (chosen[idx] === null) return;
-      if (idx < questions.length - 1) { idx++; renderQuestion(); }
-      else finish();
+    function answer(knew) {
+      if (knew && !seen[current.front]) knownFirstTime++;
+      seen[current.front] = true;
+      if (!knew) {
+        // Put it back a few cards later so it comes round again.
+        deck.splice(Math.min(deck.length, 2 + Math.floor(Math.random() * 3)), 0, current);
+      }
+      if (!deck.length) return finish();
+      current = deck.shift();
+      flipped = false;
+      render();
     }
 
     function finish() {
       done = true;
-      document.removeEventListener("keydown", onKey);
-      var total = questions.length;
-      var score = questions.reduce(function (m, q, i) { return m + (chosen[i] === q.answer ? 1 : 0); }, 0);
-      var pct = Math.round(score / total * 100);
-      var passed = pct >= pm;
-      var now = new Date().toISOString();
       var st = loadState();
-      var firstPass = passed && !st.certificates[t.id];
-      st.attempts.push({
-        topicId: t.id, score: score, total: total, pct: pct, passed: passed,
-        date: now, seconds: Math.round((Date.now() - started) / 1000)
-      });
-      if (passed) {
-        var prev = st.certificates[t.id];
-        if (!prev || pct > prev.pct) st.certificates[t.id] = { pct: pct, date: now };
-      }
+      st.cards[t.id] = { known: knownFirstTime, total: cards.length, date: new Date().toISOString() };
       saveState(st);
-
-      var html = storageBanner() +
-        '<section class="card result ' + (passed ? "is-pass" : "is-fail") + '">' +
-        "<h1>" + (passed ? (firstPass ? "Passed. Certificate earned." : "Passed.") : "Not passed yet") + "</h1>" +
-        '<p class="big">' + score + " / " + total + " · " + pct + "%</p>" +
-        progressBar(pct, pm) +
-        "<p>" + (passed ? "The pass mark was " + pm + "%." : "You need " + pm + "% to pass. Have another look at the resources and try again.") + "</p>" +
-        '<div class="actions">' +
-        (passed ? '<a class="btn primary" href="#/certificate/' + encodeURIComponent(t.id) + '">View certificate</a>' : "") +
-        '<a class="btn' + (passed ? "" : " primary") + '" href="#/quiz/' + encodeURIComponent(t.id) + '" id="retry">Try again</a>' +
-        '<a class="btn" href="#/topic/' + encodeURIComponent(t.id) + '">Back to topic</a>' +
-        "</div></section>";
-
-      if (passed && subjectComplete(st, s)) {
-        html += '<div class="banner gold">You have passed every topic in ' + esc(s.title) +
-          '. <a href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Get your Element certificate</a>.</div>';
-      }
-
-      html += '<section class="review-list"><h2>Your answers</h2>' + questions.map(function (q, i) {
-        var right = chosen[i] === q.answer;
-        return '<div class="card review ' + (right ? "is-right" : "is-wrong") + '">' +
-          '<div class="review-head"><span class="review-mark" aria-hidden="true">' + (right ? "✓" : "✗") + "</span>" +
-          '<p class="question"><span class="sr-only">' + (right ? "Correct. " : "Incorrect. ") + "</span>" +
-          (i + 1) + ". " + esc(q.q) + "</p></div>" +
-          '<p class="' + (right ? "ok" : "bad") + '">Your answer: ' + esc(q.options[chosen[i]]) + "</p>" +
-          (right ? "" : '<p class="ok">Correct answer: ' + esc(q.options[q.answer]) + "</p>") +
-          (q.explanation ? '<p class="muted">' + esc(q.explanation) + "</p>" : "") + "</div>";
-      }).join("") + "</section>";
-
-      app.innerHTML = html;
-      renderWho();
-      window.scrollTo(0, 0);
-      // Same hash as current page, so force a re-render.
-      document.getElementById("retry").addEventListener("click", function (e) { e.preventDefault(); route(); });
+      app.innerHTML = '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Flashcards</nav>" +
+        '<section class="card result is-pass"><h1>Deck finished</h1>' +
+        '<p class="big">' + knownFirstTime + " / " + cards.length + "</p><p>known first time</p>" +
+        '<div class="actions"><button class="btn" id="restart" type="button">Go again</button>' +
+        '<a class="btn primary" href="#/quiz/' + encodeURIComponent(t.id) + '">Take the quiz</a>' +
+        '<a class="btn" href="#/topic/' + encodeURIComponent(t.id) + '">Back to topic</a></div></section>' +
+        '<section class="card"><h2>All cards</h2><dl class="card-list">' + cards.map(function (c) {
+          return "<dt>" + esc(c.front) + "</dt><dd>" + esc(c.back) + "</dd>";
+        }).join("") + "</dl></section>";
+      document.getElementById("restart").addEventListener("click", function () { done = false; start(); });
     }
 
     function onKey(e) {
-      if (done || (e.target && /input|textarea|select/i.test(e.target.tagName))) return;
-      var n = parseInt(e.key, 10);
-      if (n >= 1 && n <= questions[idx].options.length) { e.preventDefault(); choose(n - 1); }
-      else if (e.key === "Enter" && chosen[idx] !== null && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); next(); }
+      if (done || (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName))) return;
+      if (e.key === " " || e.key === "Enter") {
+        if (e.target && e.target.tagName === "BUTTON" && e.target.id !== "card") return;
+        e.preventDefault(); flip();
+      } else if (flipped && e.key === "1") answer(false);
+      else if (flipped && e.key === "2") answer(true);
     }
-
     document.addEventListener("keydown", onKey);
     cleanup = function () { document.removeEventListener("keydown", onKey); };
-    renderQuestion();
+    start();
   }
 
   function viewProgress() {
@@ -646,18 +1148,32 @@
       stat(Object.keys(state.certificates).length, "certificates") +
       "</div>";
 
+    var missedN = missedPool(state).length;
+    html += '<section class="card"><div class="subject-head"><h2>Practise my mistakes</h2></div>' +
+      (missedN ? "<p>" + missedN + " question" + (missedN === 1 ? "" : "s") + " you got wrong and haven't got right since.</p>" +
+        '<a class="btn primary" href="#/mistakes">Practise them</a>'
+        : '<p class="muted">Nothing to practise. Questions you get wrong in quizzes and tests show up here.</p>') + "</section>";
+
+    html += '<section class="card"><h2>Element tests</h2><div class="table-wrap"><table><thead><tr><th>Element</th><th>Tests taken</th><th>Best</th><th>Last</th><th></th></tr></thead><tbody>' +
+      CONTENT.subjects.map(function (s) {
+        var list = state.tests.filter(function (x) { return x.subjectId === s.id; });
+        var best = list.reduce(function (m, x) { return Math.max(m, x.pct); }, 0);
+        return "<tr><td>" + esc(s.title) + "</td><td>" + list.length + "</td><td>" + (list.length ? best + "%" : "–") + "</td><td>" +
+          (list.length ? list[list.length - 1].pct + "%" : "–") + '</td><td><a href="#/test/' + encodeURIComponent(s.id) + '">Take test</a></td></tr>';
+      }).join("") + "</tbody></table></div></section>";
+
     CONTENT.subjects.forEach(function (s) {
       html += '<section class="card"><div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
-        (subjectComplete(state, s) ? '<a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Subject certificate</a>' : "") +
+        (subjectComplete(state, s) ? '<a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Element certificate</a>' : "") +
         "</div>" +
-        '<div class="table-wrap"><table><thead><tr><th>Topic</th><th>Attempts</th><th>Best</th><th>Last</th><th>Written</th><th>Status</th></tr></thead><tbody>';
+        '<div class="table-wrap"><table><thead><tr><th>Topic</th><th>Attempts</th><th>Best</th><th>Cards</th><th>Written</th><th>Status</th></tr></thead><tbody>';
       s.topics.forEach(function (t) {
         var st = topicStats(state, t.id);
         html += "<tr>" +
           '<td><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a></td>" +
           "<td>" + st.attempts + "</td>" +
           "<td>" + (st.best == null ? "–" : st.best + "%") + "</td>" +
-          "<td>" + (st.last ? st.last.pct + "%" : "–") + "</td>" +
+          "<td>" + (state.cards[t.id] ? state.cards[t.id].known + "/" + state.cards[t.id].total : "–") + "</td>" +
           "<td>" + (function () {
             var ps = practiceStats(state, t);
             return ps.total ? ps.marked + "/" + ps.total + (ps.possible ? ' <span class="muted">(' + ps.got + "/" + ps.possible + ")</span>" : "") : "–";
@@ -744,6 +1260,11 @@
         var c = incoming.certificates[k], mine = st.certificates[k];
         if (!mine || c.pct > mine.pct) st.certificates[k] = c;
       });
+      var seenTests = {};
+      st.tests.forEach(function (x) { seenTests[x.subjectId + x.date] = true; });
+      incoming.tests.forEach(function (x) { if (!seenTests[x.subjectId + x.date]) st.tests.push(x); });
+      Object.keys(incoming.missed).forEach(function (k) { if (!(k in st.missed)) st.missed[k] = incoming.missed[k]; });
+      Object.keys(incoming.cards).forEach(function (k) { if (!st.cards[k]) st.cards[k] = incoming.cards[k]; });
       Object.keys(incoming.practice).forEach(function (k) {
         var mine = st.practice[k], inc = incoming.practice[k];
         if (!mine || (!mine.text && inc.text) || (mine.mark === null && inc.mark !== null)) st.practice[k] = inc;
@@ -888,6 +1409,9 @@
     if (page === "") viewHome();
     else if (page === "topic") viewTopic(parts[1]);
     else if (page === "quiz") viewQuiz(parts[1]);
+    else if (page === "test") viewTest(parts[1]);
+    else if (page === "cards") viewCards(parts[1]);
+    else if (page === "mistakes") viewMistakes();
     else if (page === "progress") viewProgress();
     else if (page === "certificate" && parts[1] === "subject") viewSubjectCertificate(parts[2]);
     else if (page === "certificate") viewCertificate(parts[1]);

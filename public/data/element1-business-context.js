@@ -19,7 +19,17 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Public sector", "Organisations owned and funded by the government, providing services to the public on a not-for-profit basis (e.g. NHS, BBC)."],
+          ["Private sector", "Businesses owned by individuals or groups, aiming to make a profit for their owners or shareholders (e.g. Tesco)."],
+          ["Voluntary (third) sector", "Not-for-profit organisations that reinvest any surplus and aim for social impact (e.g. charities, social enterprises)."],
+          ["Not-for-profit", "Any surplus money is reinvested in the organisation's purpose rather than paid to owners."],
+          ["Social enterprise", "An organisation in the voluntary sector that trades to achieve social aims and reinvests its surplus."]
+        ],
         questions: [
+          { type: "sort", q: "Sort each organisation into its sector.", categories: ["Public", "Private", "Voluntary"], items: [["NHS", 0], ["BBC", 0], ["Armed forces", 0], ["Tesco", 1], ["Barclays Bank", 1], ["Oxfam", 2], ["A social enterprise", 2]], explanation: "Public: owned and funded by government. Private: owned by individuals or groups for profit. Voluntary: not-for-profit, surplus reinvested." },
+          { type: "multi", q: "Select all the features of a voluntary sector organisation.", options: ["Not-for-profit", "Any surplus is reinvested", "Aims for social impact", "Often run by volunteers", "Owned by the government", "Aims to maximise profit for shareholders"], answers: [0, 1, 2, 3], explanation: "Voluntary organisations are not-for-profit, reinvest any surplus, aim for social impact and are often run by volunteers." },
+          { type: "type", q: "The voluntary sector is also known as the ______ sector.", accept: ["third"], explanation: "The voluntary or third sector." },
           { q: "Which of the following is an example of a public sector organisation?", options: ["Tesco", "NHS", "Oxfam", "Barclays Bank"], answer: 1, explanation: "The NHS is owned and funded by the government. Tesco and Barclays are private sector. Oxfam is a charity (voluntary sector)." },
           { q: "A private sector business is best described as:", options: ["Owned by the government to provide services to the public", "Owned by individuals or groups with the aim of making a profit", "A not-for-profit organisation that helps the community", "Run by volunteers to address social issues"], answer: 1, explanation: "Private sector businesses are owned by individuals or groups and aim to make a profit." },
           { q: "Which sector do charities and social enterprises belong to?", options: ["Private sector", "Public sector", "Voluntary or third sector", "Mixed sector"], answer: 2, explanation: "Charities and social enterprises are in the voluntary or third sector." },
@@ -46,7 +56,21 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Turnover", "The value of total sales a business makes over a year."],
+          ["Balance sheet total", "The total value of a business's assets; one of the three Companies Act size measures."],
+          ["Micro-entity", "Not more than 10 employees (workbook money limits: £632,000 turnover, £316,000 balance sheet)."],
+          ["Small company", "Not more than 50 employees (workbook money limits: £10.2m turnover, £5.1m balance sheet)."],
+          ["Medium company", "Not more than 250 employees (workbook money limits: £36m turnover, £18m balance sheet)."],
+          ["Mission statement", "Sets out the scope and purpose of an organisation."],
+          ["Vision statement", "Looks to the future: where the organisation will be if it fulfils its mission."],
+          ["Problems of growth", "Harder co-ordination, integration and communication as the business gets bigger."]
+        ],
         questions: [
+          { type: "multi", q: "Select the three ways business size is measured under the Companies Act.", options: ["Turnover", "Balance sheet total", "Number of employees", "Customer satisfaction", "Number of products", "Age of the business"], answers: [0, 1, 2], explanation: "Turnover, balance sheet total and number of employees." },
+          { type: "sort", q: "Does each statement describe a mission statement or a vision statement?", categories: ["Mission", "Vision"], items: [["Sets out the scope and purpose of the organisation", 0], ["What the organisation does now and why", 0], ["Looks to the future", 1], ["Where the organisation will be if it fulfils its mission", 1]], explanation: "Mission = purpose now. Vision = where it is heading." },
+          { type: "order", q: "Put these company sizes in order, smallest first.", items: ["Micro-entity", "Small", "Medium", "Large"], explanation: "Micro-entity (up to 10 employees), small (up to 50), medium (up to 250), large." },
+          { type: "type", q: "What is the value of total sales a business makes over a year called?", accept: ["turnover", "sales turnover", "sales revenue", "revenue"], explanation: "Turnover." },
           { q: "According to the Companies Act 2006 figures in the workbook, a small business has a turnover of no more than:", options: ["£632,000", "£10.2m", "£36m", "£5.1m"], answer: 1, explanation: "Small: turnover not more than £10.2m. (£5.1m is the small balance sheet limit.) Workbook figure: the limit rose to £15m from April 2025." },
           { q: "Which of the following is NOT a way businesses are measured in terms of size?", options: ["Turnover", "Number of employees", "Customer satisfaction score", "Balance sheet total"], answer: 2, explanation: "Size is measured by turnover, balance sheet total and number of employees." },
           { q: "A ______ statement sets out the scope and purpose of an organisation.", options: ["vision", "mission", "financial", "value"], answer: 1, explanation: "A mission statement sets out scope and purpose." },
@@ -75,7 +99,19 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["CSR (Corporate Social Responsibility)", "A business's commitment to having a positive social, economic and environmental impact."],
+          ["Carroll's CSR pyramid", "From the base: Economic (be profitable), Legal (obey the law), Ethical (be ethical), Philanthropic (be a good corporate citizen)."],
+          ["Sustainability", "The long-term maintenance of systems according to environmental, economic and social considerations."],
+          ["Philanthropy", "When private profits are used to benefit the wider public without the business receiving anything in return."],
+          ["Carbon footprint", "The amount of greenhouse gases a business produces, measured in equivalent tons of CO₂."],
+          ["GDP", "Gross Domestic Product: the measure of the UK's economic growth, affected by business output."],
+          ["Business ethics", "The moral principles that guide how a business and its people behave."]
+        ],
         questions: [
+          { type: "order", q: "Put Carroll's CSR pyramid in order, from the base to the top.", items: ["Economic", "Legal", "Ethical", "Philanthropic"], explanation: "Be profitable, obey the law, be ethical, be a good corporate citizen." },
+          { type: "match", q: "Match each term to its definition.", pairs: [["CSR", "A business's responsibility to have a positive impact on society, the economy and the environment"], ["Sustainability", "Long-term maintenance of systems according to environmental, economic and social considerations"], ["Philanthropy", "Using private profits to benefit the public without receiving anything in return"], ["Carbon footprint", "Greenhouse gases produced, measured in equivalent tons of CO₂"], ["GDP", "The measure of the UK's economic growth"]], explanation: "" },
+          { type: "type", q: "What does GDP stand for?", accept: ["gross domestic product"], explanation: "Gross Domestic Product." },
           { q: "What does CSR stand for?", options: ["Company Social Regulation", "Corporate Social Responsibility", "Customer Service Requirement", "Central Strategy Review"], answer: 1, explanation: "CSR is Corporate Social Responsibility." },
           { q: "Carroll's CSR pyramid places which responsibility at the base?", options: ["Ethical", "Legal", "Economic", "Philanthropic"], answer: 2, explanation: "Economic (be profitable) is the base. Then legal, ethical, and philanthropic at the top." },
           { q: "Carbon footprint measures:", options: ["The total cost of a business's raw materials", "The amount of greenhouse gases produced by a business, measured in equivalent tons of CO₂", "The number of staff a business employs", "The amount of waste produced by a business per year"], answer: 1, explanation: "Carbon footprint is greenhouse gas output in equivalent tons of CO₂." },
@@ -104,7 +140,23 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Sole trader", "A business owned by one person; easy and cheap to set up; unlimited liability."],
+          ["Partnership", "Typically 2 to 20 owners sharing responsibility and capital; unlimited liability."],
+          ["Private Limited Company (Ltd)", "Shares sold privately (e.g. family and friends); limited liability; registered with Companies House."],
+          ["Public Limited Company (PLC)", "Shares sold to the public; minimum £50,000 share capital; risk of takeover."],
+          ["Franchisor", "The business that owns the brand and grants a licence to sell it."],
+          ["Franchisee", "The person or business that buys a licence to sell the franchisor's brand."],
+          ["Limited liability", "Owners can only lose the money they invested; personal assets are safe."],
+          ["Unlimited liability", "Owners must pay business debts from personal funds if the business can't."],
+          ["Co-operative", "Owned and controlled by members who share profits and losses (consumer, worker or producer)."],
+          ["Charity", "A not-for-profit organisation registered with the Charity Commission."]
+        ],
         questions: [
+          { type: "sort", q: "Does each legal structure have limited or unlimited liability?", categories: ["Limited", "Unlimited"], items: [["Sole trader", 1], ["Partnership", 1], ["Private limited company (Ltd)", 0], ["Public limited company (PLC)", 0]], explanation: "Sole traders and partners are personally liable for debts. Shareholders in a Ltd or PLC can only lose what they invested." },
+          { type: "match", q: "Match each legal structure to its description.", pairs: [["Sole trader", "One owner, easy to set up, unlimited liability"], ["Partnership", "Typically 2 to 20 owners who share responsibility"], ["Private limited company", "Shares sold privately, must register with Companies House"], ["Public limited company", "Shares sold to the public, minimum £50,000 share capital"], ["Franchise", "Licence to sell an established brand or business idea"], ["Charity", "Not-for-profit, registered with the Charity Commission"]], explanation: "" },
+          { type: "multi", q: "Select all the features of a co-operative.", options: ["Owned and controlled by its members", "Profits and losses shared among members", "Can be a consumer, worker or producer co-operative", "Shares sold on the stock exchange", "Owned by one person"], answers: [0, 1, 2], explanation: "Co-operatives are owned, financed and controlled by members, who share profits and losses." },
+          { type: "type", q: "What is the minimum share capital for a PLC, in pounds?", accept: ["50000", "50k"], explanation: "£50,000.", placeholder: "e.g. 10000" },
           { q: "Which of the following is a key feature of a sole trader?", options: ["Limited liability", "Must register with Companies House", "Unlimited liability", "Can sell shares on the stock exchange"], answer: 2, explanation: "Sole traders have unlimited liability: they pay business debts from their own money." },
           { q: "A Private Limited Company (Ltd) can sell shares to:", options: ["Anyone on the open stock market", "Family and friends only", "The government only", "No one, shares are not permitted"], answer: 1, explanation: "A Ltd sells shares privately, not on the open market. That is what a PLC does." },
           { q: "What is the minimum share capital for a Public Limited Company (PLC)?", options: ["£10,000", "£25,000", "£50,000", "£100,000"], answer: 2, explanation: "A PLC needs at least £50,000 share capital." },
@@ -135,7 +187,21 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Aim", "A large, general goal, e.g. become market leader."],
+          ["Objective", "A precise, measurable step towards an aim, e.g. increase market share by 5% in one year."],
+          ["SMART", "Specific, Measurable, Achievable, Relevant, Timebound."],
+          ["SWOT", "Strengths, Weaknesses, Opportunities, Threats."],
+          ["PESTLE", "Political, Economic, Social, Technological, Legal, Environmental: used to analyse the organisation's environment."],
+          ["PDCA", "Plan, Do, Check, Act."],
+          ["Functional objectives", "Departmental objectives that help achieve corporate objectives; based on KPIs."],
+          ["Long-term objective", "Covers five to ten years."]
+        ],
         questions: [
+          { type: "order", q: "Put the words of SMART in order.", items: ["Specific", "Measurable", "Achievable", "Relevant", "Timebound"], explanation: "" },
+          { type: "order", q: "Put the four steps of developing a business strategy in order.", items: ["Analyse the organisation using PESTLE", "Create operational plans for short-term goals", "Create a business plan with 6-month to 1-year targets", "Create a strategic plan for long-term direction"], explanation: "" },
+          { type: "sort", q: "Is each one an aim or an objective?", categories: ["Aim", "Objective"], items: [["Become market leader", 0], ["Be the most trusted brand in the UK", 0], ["Increase market share by 5% in one year", 1], ["Cut costs by 10% by December", 1]], explanation: "Aims are broad goals. Objectives are precise, measurable steps towards them." },
+          { type: "type", q: "A ______ analysis looks at Strengths, Weaknesses, Opportunities and Threats.", accept: ["swot"], explanation: "SWOT." },
           { q: "What does SMART stand for in relation to objectives?", options: ["Specific, Measurable, Achievable, Relevant, Timebound", "Simple, Manageable, Achievable, Realistic, Timed", "Specific, Monitored, Appropriate, Realistic, Targeted", "Structured, Measurable, Agreed, Reviewed, Timed"], answer: 0, explanation: "Specific, Measurable, Achievable, Relevant, Timebound." },
           { q: "A long-term objective covers a time period of:", options: ["Up to one year", "One to three years", "Up to five years", "Five to ten years"], answer: 3, explanation: "Long-term objectives cover five to ten years." },
           { q: "What does PDCA stand for in business strategy?", options: ["Plan, Define, Check, Act", "Plan, Do, Check, Act", "Prepare, Deliver, Control, Assess", "Plan, Develop, Create, Analyse"], answer: 1, explanation: "Plan, Do, Check, Act." },
@@ -165,7 +231,18 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Governance", "How an organisation is directed and controlled, and how it is held to account."],
+          ["Seven characteristics of good governance", "Diversity, honesty, independence, integrity, prudence, sustainability, transparency."],
+          ["Internal audit", "Broad scope, assesses key risks, advisory; reports to the audit committee."],
+          ["External audit", "Scope set by law; reports on whether the financial statements are true and fair; reports to shareholders at the AGM."],
+          ["AGM", "Annual General Meeting, where the board reports to shareholders."],
+          ["Prudence", "Being careful and avoiding unnecessary risk, especially with money."],
+          ["Transparency", "Being open about decisions and performance."]
+        ],
         questions: [
+          { type: "multi", q: "Select the seven common characteristics of good governance.", options: ["Diversity", "Honesty", "Independence", "Integrity", "Prudence", "Sustainability", "Transparency", "Profitability", "Secrecy", "Growth"], answers: [0, 1, 2, 3, 4, 5, 6], explanation: "Diversity, honesty, independence, integrity, prudence, sustainability, transparency." },
+          { type: "sort", q: "Does each statement describe an internal or an external audit?", categories: ["Internal", "External"], items: [["Reports to the audit committee", 0], ["Advisory role", 0], ["Broad scope covering all risk", 0], ["Reports to shareholders at the AGM", 1], ["Scope set by statute and company law", 1], ["Report shared with the public", 1]], explanation: "" },
           { q: "An internal audit reports to:", options: ["The shareholders", "The audit committee", "The general public", "The Financial Conduct Authority"], answer: 1, explanation: "Internal audits report to the audit committee. External audits report to shareholders." },
           { q: "Which of the following is NOT a common characteristic of good governance shared by public and private sectors?", options: ["Transparency", "Profitability", "Integrity", "Accountability"], answer: 1, explanation: "Profit is not a governance principle, and public sector bodies do not aim for profit." },
           { q: "Which of these is one of the seven characteristics of good governance?", options: ["Prudence", "Growth", "Secrecy", "Market share"], answer: 0, explanation: "The seven: diversity, honesty, independence, integrity, prudence, sustainability, transparency." },
@@ -192,7 +269,23 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["GDPR", "Protects personal data; it must be kept securely and not for longer than needed. Enforced by the ICO."],
+          ["ICO", "Information Commissioner's Office: enforces data protection law."],
+          ["Equality Act 2010", "Protects against discrimination based on nine protected characteristics."],
+          ["Direct discrimination", "Treating someone less favourably because of a protected characteristic."],
+          ["Indirect discrimination", "A policy that applies to everyone but has a worse effect on people who share a protected characteristic."],
+          ["Health and Safety at Work Act 1974", "Employers must keep people safe, e.g. risk assessments and safe equipment. Enforced by the HSE."],
+          ["Competition Act 1998", "Prohibits anti-competitive agreements and abuse of a dominant position."],
+          ["Trade Descriptions Act 1968", "Products and services must be described accurately."],
+          ["Bribery Act 2010", "Giving someone a financial advantage to act improperly is a criminal offence."],
+          ["Consumer Rights Act 2015", "Goods must be satisfactory quality, fit for purpose and as described; 30-day right to reject."]
+        ],
         questions: [
+          { type: "match", q: "Match each law to what it does.", pairs: [["GDPR", "Protects personal data and gives individuals rights over it"], ["Equality Act 2010", "Covers nine protected characteristics"], ["Health and Safety at Work Act 1974", "Risk assessments and safe equipment"], ["Competition Act 1998", "Bans anti-competitive agreements and abuse of a dominant position"], ["Trade Descriptions Act 1968", "Products and services must be accurately described"], ["Bribery Act 2010", "Offering a financial advantage to act improperly is a crime"]], explanation: "" },
+          { type: "multi", q: "Select all nine protected characteristics under the Equality Act 2010.", options: ["Age", "Disability", "Gender reassignment", "Marriage and civil partnership", "Pregnancy and maternity", "Race", "Religion or belief", "Sex", "Sexual orientation", "Height", "Social class", "Political party"], answers: [0, 1, 2, 3, 4, 5, 6, 7, 8], explanation: "Height, social class and political party are not protected characteristics." },
+          { type: "sort", q: "Is each example direct or indirect discrimination?", categories: ["Direct", "Indirect"], items: [["Refusing to hire someone because of their religion", 0], ["Paying a woman less than a man for the same job", 0], ["A rule that everyone must work Saturdays, which disadvantages people of some religions", 1], ["Requiring all office staff to be over 6ft tall", 1]], explanation: "Direct: treated less favourably because of a characteristic. Indirect: a rule that applies to all but hits one group harder." },
+          { type: "type", q: "Which organisation enforces GDPR? Give its initials.", accept: ["ico", "information commissioners office"], explanation: "The Information Commissioner's Office (ICO)." },
           { q: "The General Data Protection Regulation (GDPR) is enforced by:", options: ["The Competition and Markets Authority", "The Information Commissioner's Office (ICO)", "The Serious Fraud Office", "The Equality and Human Rights Commission"], answer: 1, explanation: "The ICO enforces data protection law." },
           { q: "The Equality Act 2010 is based on how many protected characteristics?", options: ["Six", "Seven", "Eight", "Nine"], answer: 3, explanation: "There are nine protected characteristics." },
           { q: "The Health and Safety at Work Act requires employers to provide how many main provisions?", options: ["Four", "Five", "Six", "Seven"], answer: 2, explanation: "The workbook gives six main provisions." },
@@ -224,7 +317,16 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Stakeholder", "Any individual or group with an interest in the business."],
+          ["Internal stakeholder", "Inside the business, e.g. employees and managers."],
+          ["External stakeholder", "Outside the business, e.g. customers, suppliers, government, local community, finance providers."],
+          ["Shareholder's interest", "That their investment is safe and what their dividend will be."],
+          ["Stakeholder conflict", "When stakeholders want different things, e.g. shareholders want growth but residents don't want a new store's traffic."]
+        ],
         questions: [
+          { type: "sort", q: "Is each one an internal or external stakeholder?", categories: ["Internal", "External"], items: [["Employees", 0], ["Managers", 0], ["Customers", 1], ["Suppliers", 1], ["Local community", 1], ["Government", 1], ["Finance providers", 1]], explanation: "" },
+          { type: "match", q: "Match each stakeholder to its main interest.", pairs: [["Shareholders", "A safe investment and a good dividend"], ["Employees", "Job security and fair pay"], ["Customers", "Quality products at fair prices"], ["Suppliers", "Being paid on time and repeat orders"], ["Government", "Tax revenue and legal compliance"], ["Local community", "Local jobs and limited noise and pollution"]], explanation: "" },
           { q: "Which of the following is an INTERNAL stakeholder?", options: ["Customers", "Suppliers", "Employees", "Local community"], answer: 2, explanation: "Employees work inside the business." },
           { q: "Why are shareholders interested in a business?", options: ["They want to ensure products are safe for the public", "They want to ensure their share investment is safe and know their dividend", "They need to check compliance with legislation", "They want to ensure the business can pay its bills"], answer: 1, explanation: "Shareholders care about the safety of their investment and their dividend." },
           { q: "Managers are which type of stakeholder?", options: ["Internal", "External"], answer: 0, explanation: "Managers work inside the business, so they are internal." },
@@ -250,7 +352,23 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Big Data", "Large, diverse sets of information described by volume, velocity, variety and veracity."],
+          ["IoT", "Internet of Things: everyday devices connected to the internet."],
+          ["Robotics", "Machines performing tasks previously done by humans."],
+          ["AI", "Artificial intelligence: computer systems doing tasks that normally need human thinking."],
+          ["Cloud-based software", "Software stored and run from the internet rather than the business's own network."],
+          ["Biometrics", "Automated recognition of people from biological and behavioural characteristics."],
+          ["Digitisation", "Converting text, pictures or sound into a digital form."],
+          ["Digitalisation", "Using digital tools and technology to add value and generate revenue."],
+          ["Cyber attack stages", "Survey, Delivery, Breach, Affect."],
+          ["Industry 4.0", "The fourth industrial revolution: AI, robotics, IoT and data combining to change how businesses work."]
+        ],
         questions: [
+          { type: "order", q: "Put the four stages of a cyber attack in order.", items: ["Survey", "Delivery", "Breach", "Affect"], explanation: "" },
+          { type: "match", q: "Match each technology term to its definition.", pairs: [["Digitisation", "Converting text, pictures or sound into digital form"], ["Digitalisation", "Using digital tools to add value and generate revenue"], ["Transformation", "Operating differently through new technology-led business designs"], ["Cloud-based software", "Software run from the internet, not the business's own network"], ["Biometrics", "Recognising people from biological and behavioural characteristics"], ["Hybrid infrastructure", "Public and private cloud combined with on-premises data centres"]], explanation: "" },
+          { type: "multi", q: "Select the four Vs that describe Big Data.", options: ["Volume", "Velocity", "Variety", "Veracity", "Vision", "Version"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "type", q: "Write out what IoT stands for.", accept: ["internet of things"], explanation: "Internet of Things." },
           { q: "Which of the following best describes 'Big Data'?", options: ["A type of cloud storage system", "Large and diverse sets of information summarised by volume, velocity, variety and veracity", "A software tool used to analyse customer data", "A form of artificial intelligence"], answer: 1, explanation: "Big Data is described by the four Vs: volume, velocity, variety, veracity." },
           { q: "What does IoT stand for?", options: ["Integration of Technology", "Internet of Things", "Impact of Transformation", "Industry of Technology"], answer: 1, explanation: "Internet of Things: everyday devices connected to the internet." },
           { q: "Which technology involves machines performing tasks previously completed by humans?", options: ["Cloud computing", "Biometrics", "Robotics", "5G"], answer: 2, explanation: "Robotics." },
@@ -281,7 +399,18 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Organisational culture", "The expectations and practices that guide how people in a business act."],
+          ["Organisational values", "The core beliefs of a business that act as guiding principles."],
+          ["Strong culture", "Promotes greater commitment from staff."],
+          ["Weak culture", "Lower commitment and loyalty, and high staff turnover."],
+          ["Hybrid working", "Spending some time working at home and some in the office."],
+          ["Resistance to change", "Staff opposing change; can lead to strikes and work-to-rule."],
+          ["Internal branding", "Reinforces internal culture among staff."]
+        ],
         questions: [
+          { type: "sort", q: "Does each one reinforce internal or external culture?", categories: ["Internal", "External"], items: [["Staff training sessions", 0], ["Internal newsletters", 0], ["Team meetings", 0], ["Internal branding", 0], ["Mission statement on the company website", 1], ["Social media posts about the company's values", 1]], explanation: "" },
+          { type: "type", q: "Working partly at home and partly in the office is called ______ working.", accept: ["hybrid"], explanation: "Hybrid working." },
           { q: "Organisational culture is best described as:", options: ["The financial targets set by managers for departments", "The expectations and practices that guide and inform the actions of individuals who work for a business", "The legal requirements a business must meet", "The marketing strategy used to promote a business to customers"], answer: 1, explanation: "Culture is the expectations and practices that guide how people act at work." },
           { q: "Which of the following is an example of reinforcing EXTERNAL culture?", options: ["Staff training sessions", "Internal newsletters", "Mission statements on the company website", "Team meetings"], answer: 2, explanation: "A website faces the public. The others are internal." },
           { q: "Organisational ______ are the main core beliefs of a business that act as guiding principles.", options: ["objectives", "values", "policies", "KPIs"], answer: 1, explanation: "Values are core beliefs and guiding principles." },
@@ -312,7 +441,18 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Formal communication", "Follows established systems and procedures, e.g. reports, presentations."],
+          ["Informal communication", "Ad hoc, e.g. brief notes, informal meet-ups."],
+          ["Channel richness", "How much a channel carries (voice, face, instant feedback). Video conferencing is high; reports are low."],
+          ["Choosing a method", "Consider content (is it confidential?), the audience, and file size."],
+          ["Intranet", "An internal website: a one-stop shop for information, but needs maintaining."],
+          ["Email etiquette", "Professional address, no exclamation marks, spell check, no jargon, careful with reply-all, reread before sending."]
+        ],
         questions: [
+          { type: "sort", q: "Is each one formal or informal communication?", categories: ["Formal", "Informal"], items: [["Formal report", 0], ["Presentation", 0], ["Board meeting minutes", 0], ["Brief note", 1], ["Informal meet-up", 1], ["Chat by the coffee machine", 1]], explanation: "" },
+          { type: "multi", q: "Select all the rules of good email etiquette.", options: ["Use a professional email address", "Use spell check", "Avoid jargon", "Reread before sending", "Use lots of exclamation marks", "Reply-all to every email"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "match", q: "Match each channel to a disadvantage.", pairs: [["Email", "There can be too many and they go unread"], ["Social media", "Negative comments can damage reputation"], ["Video conferencing", "Needs a good internet connection"], ["Intranet", "Needs maintaining and updating"], ["Mobile apps", "Security issues"], ["Voice mail", "Differences in language"]], explanation: "" },
           { q: "Which communication channel would be MOST appropriate for sharing confidential legal information with a senior manager?", options: ["Social media post", "Formal report", "Instant messaging", "Bulletin board"], answer: 1, explanation: "A formal report is controlled and suitable for confidential content." },
           { q: "Which of the following is a HIGH richness communication channel?", options: ["Formal report", "Press release", "Video conferencing", "Bulletin"], answer: 2, explanation: "Video conferencing carries voice, face and instant feedback, so it is rich." },
           { q: "A disadvantage of using email in a business is:", options: ["It cannot be personalised", "There can be too many and they may go unread", "It cannot reach large numbers of people", "It is too expensive"], answer: 1, explanation: "Email overload means messages get missed." },

@@ -19,7 +19,22 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Sales turnover", "Total money received from selling goods or services in a period."],
+          ["Gross profit", "Sales revenue − cost of sales."],
+          ["Net profit", "Sales revenue − (cost of goods sold + all expenses)."],
+          ["Break-even", "The point where the business makes no profit and no loss."],
+          ["VAT", "Value Added Tax on products and services sold by VAT-registered businesses."],
+          ["Corporation tax", "Tax paid on company profits."],
+          ["Assets", "Items owned by the business that have monetary value."],
+          ["Liabilities", "Debts the business owes, such as loans."],
+          ["Retained profit", "Profit kept in the business after all payments."],
+          ["Adjustment", "A correction made to the accounts, e.g. a payment not yet received."]
+        ],
         questions: [
+          { type: "sort", q: "Is each one an asset or a liability?", categories: ["Asset", "Liability"], items: [["Machinery", 0], ["Cash in the bank", 0], ["Stock", 0], ["Bank loan", 1], ["Money owed to suppliers", 1], ["Overdraft", 1]], explanation: "Assets are things the business owns. Liabilities are debts it owes." },
+          { type: "type", q: "Sales revenue is £50,000 and cost of sales is £20,000. What is the gross profit in pounds?", accept: ["30000"], explanation: "£50,000 − £20,000 = £30,000.", placeholder: "e.g. 12000" },
+          { type: "type", q: "Revenue is £40,000 and total costs are £46,000. How much is the loss in pounds?", accept: ["6000"], explanation: "£46,000 − £40,000 = £6,000 loss.", placeholder: "e.g. 12000" },
           { q: "What is 'sales turnover'?", options: ["The profit made after all expenses", "The total money received from selling goods/services in a given period", "The amount of tax paid by the business", "The closing balance of a bank account"], answer: 1, explanation: "Turnover is total sales income for the period." },
           { q: "Which of the following BEST describes 'net profit'?", options: ["Sales revenue minus cost of sales only", "Total money received from customers", "Sales revenue minus cost of goods sold AND all expenses", "The amount left in retained profit"], answer: 2, explanation: "Net profit deducts cost of sales and all expenses. Option A is gross profit." },
           { q: "What is VAT?", options: ["A tax on business profits", "A tax on employee wages", "Value Added Tax on products and services sold by VAT-registered businesses", "A type of bank loan"], answer: 2, explanation: "VAT is charged on sales by VAT-registered businesses." },
@@ -56,7 +71,21 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Income statement", "Shows revenue and expenses; also called the profit and loss account."],
+          ["Balance sheet", "What the business owns and owes (assets, liabilities, equity) at a point in time."],
+          ["Management accounts", "Informal reports for managers' decisions, monthly or quarterly."],
+          ["Cash flow statement", "Money in and out, split into operating, investing and financing activities."],
+          ["Annual report", "Formal document: chair's statement, directors' report, balance sheet, income statement, auditor's report."],
+          ["Year-end report", "Filed with HMRC at the end of the tax year; a statutory requirement."],
+          ["Working capital", "Current assets − current liabilities."],
+          ["Five areas of financial reporting", "Assets, Revenue, Equity, Liabilities, Expenses."]
+        ],
         questions: [
+          { type: "order", q: "Put the parts of a balance sheet in order, as the workbook gives them.", items: ["Non-current (fixed) assets", "Current assets", "Working capital", "Net assets", "Total liabilities"], explanation: "" },
+          { type: "match", q: "Match each financial report to its description.", pairs: [["Balance sheet", "What the business owns and owes at a point in time"], ["Income statement", "Revenue and expenses; also called profit and loss account"], ["Management accounts", "Informal reports for managers, monthly or quarterly"], ["Cash flow statement", "Money in and out: operating, investing and financing"], ["Annual report", "Formal document with chair's statement and auditor's report"], ["Year-end report", "Statutory filing with HMRC at the end of the tax year"]], explanation: "" },
+          { type: "multi", q: "Select the five areas of financial reporting.", options: ["Assets", "Revenue", "Equity", "Liabilities", "Expenses", "Marketing", "Wages", "Audits"], answers: [0, 1, 2, 3, 4], explanation: "" },
+          { type: "type", q: "Revenue is £90,000, cost of sales £40,000 and expenses £15,000. What is the net profit in pounds?", accept: ["35000"], explanation: "£90,000 − (£40,000 + £15,000) = £35,000.", placeholder: "e.g. 12000" },
           { q: "Which of the following is NOT a purpose of financial reporting?", options: ["To track and analyse financial activities", "To market the business's products", "To comply with UK legal requirements", "To report the health of the business to investors"], answer: 1, explanation: "Marketing is not a purpose of financial reporting." },
           { q: "Which of the following shows the FIVE areas of financial reporting?", options: ["Assets, Revenue, Equity, Liabilities, Expenses", "Profit, Loss, Tax, Wages, Loans", "Sales, Costs, Budgets, Cash flow, Audits", "Income, Expenditure, Capital, Surplus, Deficit"], answer: 0, explanation: "Assets, Revenue, Equity, Liabilities, Expenses." },
           { q: "What is an income statement also known as?", options: ["Balance sheet", "Cash flow statement", "Profit and loss account", "Annual report"], answer: 2, explanation: "Profit and loss account." },
@@ -88,7 +117,22 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Internal finance", "Savings, retained profit, selling assets, owner's capital."],
+          ["External finance", "e.g. bank loans, overdrafts, crowdfunding, angel investors, leasing, hire purchase."],
+          ["Short-term funding", "Repaid within one year, e.g. overdraft, credit card."],
+          ["Long-term funding", "Borrowed over a long period, typically 5+ years, e.g. bank loan, mortgage, venture capital."],
+          ["Angel investor", "A wealthy entrepreneur who provides funding for a share of profits."],
+          ["Crowdfunding", "Many investors each give small amounts to fund a business."],
+          ["Invoice factoring", "Selling an invoice to a factoring company for quick cash."],
+          ["Hire purchase", "Pay a deposit, then the rest over an agreed period; you own it at the end."],
+          ["Leasing", "Using equipment while ownership stays with the leasing company."],
+          ["Overdraft", "The bank lets you withdraw beyond your balance up to an agreed limit."]
+        ],
         questions: [
+          { type: "sort", q: "Is each source of finance internal or external?", categories: ["Internal", "External"], items: [["Savings", 0], ["Retained profit", 0], ["Selling assets", 0], ["Owner's capital", 0], ["Bank loan", 1], ["Overdraft", 1], ["Crowdfunding", 1], ["Angel investor", 1], ["Leasing", 1]], explanation: "" },
+          { type: "sort", q: "Is each source of finance short-term or long-term?", categories: ["Short-term", "Long-term"], items: [["Overdraft", 0], ["Credit card", 0], ["Invoice factoring", 0], ["Bank loan", 1], ["Mortgage", 1], ["Venture capital", 1]], explanation: "Short-term is repaid within a year. Long-term is typically 5+ years (bank loans 3 to 10 years)." },
+          { type: "match", q: "Match each source of finance to its description.", pairs: [["Angel investor", "Wealthy entrepreneur funding a business for a share of profits"], ["Retained profit", "Profit reinvested rather than paid to owners"], ["Overdraft", "Withdraw beyond the balance up to an agreed limit"], ["Invoice factoring", "Sell an invoice for quick cash"], ["Hire purchase", "Deposit, then pay the rest over an agreed period"], ["Leasing", "Use equipment while the provider keeps ownership"]], explanation: "" },
           { q: "Which of the following is an INTERNAL source of finance?", options: ["Bank loan", "Crowdfunding", "Retained profit", "Venture capital"], answer: 2, explanation: "Retained profit comes from inside the business." },
           { q: "What is 'short-term funding'?", options: ["Finance borrowed for more than five years", "Finance that will have to be paid back within one year", "Profit kept in the business", "Money raised through selling shares"], answer: 1, explanation: "Paid back within one year." },
           { q: "Which source of finance involves a group of investors providing small amounts to fund a new business?", options: ["Invoice factoring", "Overdraft", "Crowdfunding", "Hire purchase"], answer: 2, explanation: "Crowdfunding." },
@@ -120,7 +164,18 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Fixed cost", "Stays the same over a period whatever the output, e.g. rent, insurance."],
+          ["Variable cost", "Changes with business activity, e.g. raw materials, electricity."],
+          ["Capital expenditure", "Money spent to buy, improve or maintain fixed assets, e.g. machinery, vehicles."],
+          ["Staff payroll", "Wages, salaries and employer pension contributions."],
+          ["Bank fees", "Exchange transaction fees, overdraft fees, loan application and processing fees."],
+          ["Loan interest", "Can be at a fixed or a variable rate."]
+        ],
         questions: [
+          { type: "sort", q: "Is each cost fixed or variable?", categories: ["Fixed", "Variable"], items: [["Rent", 0], ["Insurance", 0], ["Software subscription", 0], ["Company vehicles", 0], ["Raw materials", 1], ["Electricity", 1], ["Stationery", 1]], explanation: "Fixed costs stay the same whatever the output. Variable costs change with activity." },
+          { type: "multi", q: "Select all the bank fees.", options: ["Exchange transaction fees", "Overdraft fees", "Loan application and processing fees", "Staff payroll", "Rent"], answers: [0, 1, 2], explanation: "" },
+          { type: "type", q: "Money spent buying or maintaining fixed assets is called ______ expenditure.", accept: ["capital"], explanation: "Capital expenditure." },
           { q: "Which of the following is a FIXED cost?", options: ["Raw materials", "Electricity bills", "Rent for premises", "Overtime wages"], answer: 2, explanation: "Rent stays the same regardless of output." },
           { q: "Capital expenditure is best described as:", options: ["Money spent on day-to-day running costs", "Money used to purchase or maintain fixed assets", "Tax paid on company profits", "Staff wages and salaries"], answer: 1, explanation: "Capital expenditure is on fixed assets." },
           { q: "Bank fees include all of the following EXCEPT:", options: ["Exchange transaction fees", "Overdraft fees", "Staff payroll costs", "Loan application and processing fees"], answer: 2, explanation: "Payroll is not a bank fee." },
@@ -153,7 +208,23 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Double-entry bookkeeping", "Every credit entry has a matching debit entry in another account."],
+          ["Spend authorisation", "A request saying what to buy, why and how much; prevents fraud and protects cash flow."],
+          ["Audit log", "A record of every stage of the authorisation process."],
+          ["Budget", "A spending plan; can be tracked weekly, monthly or annually."],
+          ["Gross profit margin", "(Gross profit ÷ sales revenue) × 100."],
+          ["Net profit margin", "(Net profit ÷ sales revenue) × 100."],
+          ["Break-even (units)", "Fixed costs ÷ (selling price per unit − variable cost per unit)."],
+          ["Closing balance", "Opening balance + net cash flow. It becomes next month's opening balance."],
+          ["Net cash flow", "Total inflows − total outflows."]
+        ],
         questions: [
+          { type: "type", q: "Fixed costs are £6,000, the selling price is £20 per unit and variable cost is £8 per unit. What is the break-even point in units?", accept: ["500"], explanation: "£6,000 ÷ (£20 − £8) = £6,000 ÷ £12 = 500 units.", placeholder: "Number of units" },
+          { type: "type", q: "Revenue is £80,000 and net profit is £12,000. What is the net profit margin as a percentage?", accept: ["15"], explanation: "(12,000 ÷ 80,000) × 100 = 15%.", placeholder: "e.g. 25" },
+          { type: "type", q: "Revenue is £200,000 and gross profit is £70,000. What is the gross profit margin as a percentage?", accept: ["35"], explanation: "(70,000 ÷ 200,000) × 100 = 35%.", placeholder: "e.g. 25" },
+          { type: "type", q: "A month opens with £1,500, inflows are £4,000 and outflows are £4,800. What is the closing balance in pounds?", accept: ["700"], explanation: "Net cash flow = 4,000 − 4,800 = −£800. Closing = 1,500 − 800 = £700.", placeholder: "e.g. 2500" },
+          { type: "multi", q: "Select what a spend authorisation request must include.", options: ["What is being bought", "Why it is needed", "How much it costs", "The employee's bank details", "The annual accounts"], answers: [0, 1, 2], explanation: "" },
           { q: "What is the main purpose of tracking revenue against expenditure?", options: ["To prepare for external audits only", "To highlight any risk of expenditure exceeding revenue", "To calculate employee bonuses", "To set the business's marketing budget"], answer: 1, explanation: "To spot overspending risk early." },
           { q: "Double-entry bookkeeping ensures that:", options: ["All receipts are stored digitally", "Every credit entry has a corresponding debit entry in another account", "Budgets are always met", "External auditors have full access to accounts"], answer: 1, explanation: "Every credit has a matching debit." },
           { q: "Which software package is NOT typically used for financial recording?", options: ["Sage", "QuickBooks", "Photoshop", "Wave"], answer: 2, explanation: "Photoshop edits images." },

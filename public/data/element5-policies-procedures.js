@@ -19,7 +19,22 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Policy", "Sets out corporate values and rules; senior managers are responsible. e.g. health and safety policy."],
+          ["Procedure", "How to carry out a specific task, step by step. e.g. fire evacuation procedure."],
+          ["Version control", "Records when a policy was approved, who approved it and when it is next due for review."],
+          ["Formalisation", "Making sure every member of the workforce completes a task the same way."],
+          ["Workflow", "The accurate and timely completion of required tasks, monitored by managers."],
+          ["Mandatory policy", "Required by law, e.g. a written health and safety policy with five or more employees."],
+          ["Non-mandatory policy", "Not required by law, e.g. a hybrid working policy."],
+          ["RIDDOR", "Reporting of Injuries, Diseases and Dangerous Occurrences Regulations (2013); monitored by the HSE."],
+          ["Why review policies", "Laws change, to stay relevant to the business, to reflect best practice."]
+        ],
         questions: [
+          { type: "order", q: "Put the policy development steps in order, as the workbook gives them.", items: ["Identify the need for the policy", "Write the policy", "Test the procedure and hold an initial meeting", "Consult with unions, staff and the board", "Issue for final approval", "Formally implement the policy"], explanation: "" },
+          { type: "sort", q: "Does each statement describe a policy or a procedure?", categories: ["Policy", "Procedure"], items: [["Sets out values and rules", 0], ["Senior managers are responsible for it", 0], ["Has version controls and explains its purpose", 0], ["Step-by-step fire evacuation", 1], ["Used for repetitive tasks", 1], ["Has a start point and a target end point", 1]], explanation: "" },
+          { type: "match", q: "Match each term to its description.", pairs: [["Policy", "Sets out corporate values and rules"], ["Procedure", "Order of steps for a repetitive task"], ["Version control", "When a policy was approved and is due for review"], ["Formalisation", "Everyone completes the same task in the same way"], ["Workflow", "Accurate and timely completion of tasks, monitored by managers"]], explanation: "" },
+          { type: "type", q: "Which organisation monitors compliance with RIDDOR? Give its initials.", accept: ["hse", "health and safety executive"], explanation: "The Health and Safety Executive (HSE)." },
           { q: "What is the main difference between a policy and a procedure?", options: ["A policy details how to complete a task; a procedure states the business values", "A policy sets out values and rules; a procedure details how to carry out a specific task", "Policies are written by employees; procedures are written by managers", "There is no difference between a policy and a procedure"], answer: 1, explanation: "Policy = values and rules. Procedure = how to do a task." },
           { q: "Which of the following is a characteristic of a policy?", options: ["It must identify the starting point and target end point of a task", "It should be used by individuals for repetitive work", "It must have clear headings, version controls and explain its purpose", "It replaces the need for any procedures in the workplace"], answer: 2, explanation: "A and B describe procedures." },
           { q: "Which organisation type focuses its policies and procedures on maximising profit for owners and shareholders?", options: ["Not-for-profit", "Philanthropic", "Social enterprise", "For-profit"], answer: 3, explanation: "For-profit." },
@@ -66,7 +81,22 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["KPI", "Key Performance Indicator: a measure of progress towards an objective."],
+          ["Strategic KPI", "Measures overall success against strategic objectives, e.g. market leadership in 3 years."],
+          ["Financial KPI", "Measures success in money terms, e.g. increase revenue by 15%."],
+          ["Operational KPI", "Measures the work of managers, teams and individuals, e.g. quality control."],
+          ["High-level KPI", "Set at strategic level across the organisation, e.g. increase annual turnover."],
+          ["Low-level KPI", "Set for an individual or team, e.g. weekly sales target of £5,000."],
+          ["Cascading", "Passing KPI information down until everyone who needs it has it."],
+          ["RAG rating", "Red (major issue), Amber (concern), Green (on track)."],
+          ["Logic model", "Shows the relationship between resources, actions and outcomes."],
+          ["Metrics", "Quantitative information used to measure progress against goals."]
+        ],
         questions: [
+          { type: "sort", q: "Is each KPI strategic, financial or operational?", categories: ["Strategic", "Financial", "Operational"], items: [["Achieve market leadership in the region within 3 years", 0], ["Increase customer base by 7%", 0], ["Increase annual revenue by 15% over 2 years", 1], ["Total products produced in summer months", 2], ["Quality control of products", 2]], explanation: "" },
+          { type: "match", q: "Match each KPI method to its description.", pairs: [["Cost-effect analysis", "Compares an activity's cost with how well it meets the outcome"], ["Process flow analysis", "Identifies the parts of a process and puts them in order"], ["Logic model", "A graph of resources, actions and outcomes"], ["RAG rating", "Red, amber, green traffic light system"], ["Cascading", "Sharing KPI information down through all levels"]], explanation: "" },
+          { type: "type", q: "In a RAG rating, which colour means a KPI is on track?", accept: ["green"], explanation: "Green. Amber is a concern; red is a major issue." },
           { q: "Which type of KPI measures the organisation's overall success against its strategic objectives?", options: ["Operational KPI", "Financial KPI", "Strategic KPI", "Quantitative KPI"], answer: 2, explanation: "Strategic KPI." },
           { q: "What does 'RAG rating' stand for in the context of KPIs?", options: ["Revenue, Assets, Growth", "Red, Amber, Green: a traffic light system to identify issues", "Review, Analyse, Generate", "Report, Adjust, Goal"], answer: 1, explanation: "Red, Amber, Green." },
           { q: "Which of the following BEST describes 'cascading' in the context of KPIs?", options: ["Reducing the number of KPIs each year", "Passing information from one group to another until everyone who needs it has received it", "Setting KPIs only at board level", "Measuring KPIs using financial data only"], answer: 1, explanation: "Cascading passes information down through the organisation." },

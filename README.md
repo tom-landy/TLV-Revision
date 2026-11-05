@@ -9,7 +9,10 @@ No build step, no server, no database. Plain HTML, CSS and JavaScript in `public
 ## What students get
 
 - **Topics**: 28 sections across Elements 1 to 5, each with key points and a link to the Element workbook.
-- **Quizzes** with questions and answer order shuffled every attempt, instant feedback with an explanation, and a review of wrong answers at the end. Keys 1 to 4 pick an answer.
+- **Quizzes**: 10 questions per attempt, mixing multiple choice with match-up, put in order, sort into groups, select all that apply, and type the answer. Nothing is marked until the end, then every question is reviewed. Multi-part questions get partial credit.
+- **Flashcards** for every topic (228 cards): turn over, mark "Got it" or "Not yet"; missed cards come back round.
+- **Element tests**: 20 mixed questions across a whole Element, with weak topics flagged.
+- **Practise my mistakes**: questions answered wrongly in any quiz or test come back until they're answered right.
 - **Exam practice**: the workbook's short-answer and extended questions. Students write an answer, open the mark scheme and give themselves a mark. Saved in the browser. Does not count towards certificates.
 - **Progress**: attempts, best and last score per topic, written questions self-marked, overall stats.
 - **Certificates**: one per topic when they reach the pass mark, plus an Element certificate when every topic in an Element is passed. Prints on one A4 landscape page, or saves as PDF from the print dialog.
@@ -62,14 +65,22 @@ Content is in `public/data/`, one file per Element (`element1-business-context.j
     { type: "link",  title: "BBC Bitesize", url: "https://www.bbc.co.uk/bitesize" },
     { type: "docx",  title: "Workbook", url: "files/element1-business-context-workbook.docx" }
   ],
+  cards: [                        // flashcards: [front, back]
+    ["Public sector", "Owned and funded by the government..."]
+  ],
   questions: [                    // auto-marked quiz
     {
       q: "Which of the following is an example of a public sector organisation?",
       options: ["Tesco", "NHS", "Oxfam", "Barclays Bank"],
       answer: 1,                  // index of the correct option, counting from 0
-      explanation: "Shown after the student answers."
+      explanation: "Shown in the review at the end."
     },
-    { q: "True or false: ...", options: ["True", "False"], answer: 0, explanation: "..." }
+    { q: "True or false: ...", options: ["True", "False"], answer: 0, explanation: "..." },
+    { type: "multi", q: "Select all...", options: ["A", "B", "C", "D"], answers: [0, 2] },
+    { type: "type", q: "What does GDP stand for?", accept: ["gross domestic product"] },
+    { type: "match", q: "Match each...", pairs: [["Term", "Its description"], ["Term 2", "Description 2"], ["Term 3", "Description 3"]] },
+    { type: "order", q: "Put these in order.", items: ["First", "Second", "Third"] },
+    { type: "sort", q: "Fixed or variable?", categories: ["Fixed", "Variable"], items: [["Rent", 0], ["Raw materials", 1]] }
   ],
   practice: [                     // written exam practice, self-marked
     {
@@ -86,7 +97,10 @@ Rules:
 
 - **Do not change a topic `id` once students have used it.** Progress is saved against the id.
 - **Do not reorder `practice` items once live.** Saved written answers are matched by position. To be safe, give an item its own `id`.
-- `answer` counts from 0. The first option is 0.
+- `answer` and `answers` count from 0. The first option is 0.
+- Question wording must be unique within a topic: the mistakes list finds questions by their text. Editing a question's wording drops it from students' mistakes lists, which is harmless.
+- Typed answers ignore capitals, £, commas, % and apostrophes, and accept a number followed by a unit ("48 hours"). List every acceptable wording in `accept`; the first is shown as the correct answer.
+- Each quiz includes up to 4 non-multiple-choice questions, so topics with many of them still get a mix.
 - Options are shuffled each attempt, except two-option questions (True/False) and any question with `shuffle: false`.
 - Mark schemes: a blank line starts a new paragraph; lines starting `- ` become a bullet list.
 - Each quiz draws up to `questionsPerQuiz` questions (default 10) at random.

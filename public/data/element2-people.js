@@ -19,7 +19,21 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Legislation", "Laws passed by parliament; breaking them can lead to prosecution."],
+          ["Regulations", "Linked to laws; help people apply the law."],
+          ["Duty of care", "Employers are legally and morally obliged to protect anyone associated with the business from harm."],
+          ["Redundancy", "When a role is no longer needed; 2+ years' service means a redundancy payment."],
+          ["Working Time Regulations 1998", "Maximum 48 hours a week, with some exceptions."],
+          ["Pensions Act 2008", "Employers must have a workplace pension scheme and contribute to it."],
+          ["Employment Rights Act 1996", "Gives employees the right to written terms of employment (since April 2020, on or before day one)."],
+          ["Disciplinary steps (workbook)", "Verbal warning, written warning, retraining, dismissal as a last resort."]
+        ],
         questions: [
+          { type: "match", q: "Match each law to what it requires.", pairs: [["Equality Act 2010", "No discrimination on nine protected characteristics"], ["Employment Rights Act 1996", "Written terms of employment (workbook: within two months)"], ["GDPR 2018", "Controls how personal data is stored and used"], ["Health and Safety at Work Act 1974", "Workplaces safe and healthy for everyone, including visitors"], ["Working Time Regulations 1998", "Maximum 48 hours a week, with exceptions"], ["Pensions Act 2008", "Employers must provide a workplace pension scheme"], ["Maternity and Parental Leave Regulations 1999", "Unpaid leave to care for children up to age 18"]], explanation: "" },
+          { type: "order", q: "Put the disciplinary steps in order, as the workbook gives them.", items: ["Verbal warning", "Written warning", "Retraining", "Dismissal or other sanctions"], explanation: "" },
+          { type: "type", q: "What is the maximum number of hours a week under the Working Time Regulations?", accept: ["48"], explanation: "48 hours, with some exceptions.", placeholder: "Number of hours" },
+          { type: "multi", q: "Select everything an employer must do by law.", options: ["Follow a duty of care to staff", "Provide a workplace pension scheme", "Keep the workplace safe and healthy", "Not discriminate on protected characteristics", "Provide a company car", "Pay an annual bonus"], answers: [0, 1, 2, 3], explanation: "" },
           { q: "What is the key difference between legislation and regulations?", options: ["Legislation is a set of guidelines; regulations are laws passed by parliament", "Legislation is passed by parliament and known as the law; regulations assist individuals to apply the law", "Regulations are more serious than legislation", "There is no difference between legislation and regulations"], answer: 1, explanation: "Legislation is the law. Regulations help people apply it." },
           { q: "Under the Working Time Regulations 1998, the maximum hours an individual can work per week is:", options: ["35 hours", "40 hours", "48 hours", "60 hours"], answer: 2, explanation: "48 hours a week, with some exceptions." },
           { q: "The Equality Act 2010 protects individuals against discrimination on the basis of how many protected characteristics?", options: ["Six", "Seven", "Eight", "Nine"], answer: 3, explanation: "Nine protected characteristics." },
@@ -57,7 +71,22 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Person specification", "The skills, experience, qualifications and attributes the employee will need."],
+          ["Job description", "The tasks and responsibilities of the role."],
+          ["Shortlisting", "Reviewing applications against the person specification to choose who to interview."],
+          ["Internal recruitment", "Filling a job with existing staff. Cheaper and quicker, but a smaller pool and no fresh ideas."],
+          ["External recruitment", "Filling a job from outside. Wider pool and fresh ideas, but costs more and takes longer."],
+          ["Permanent contract", "Employed for an unlimited length of time until they leave."],
+          ["Fixed-term contract", "A set start and end date, e.g. covering maternity leave."],
+          ["Zero-hours contract", "No set hours; work offered at the employer's discretion."],
+          ["Freelance", "Self-employed, works short-term for a business and pays own taxes."]
+        ],
         questions: [
+          { type: "order", q: "Put the recruitment process in order, as the workbook gives it.", items: ["Identify a vacancy", "Develop a person specification", "Develop a job description", "Advertise the position", "Shortlist candidates", "Testing", "Conduct interviews", "Obtain references", "Offer the position", "Issue the contract"], explanation: "" },
+          { type: "match", q: "Match each contract type to its description.", pairs: [["Permanent", "Employed for an unlimited time until they leave"], ["Temporary", "Start and finish date, used at busy times like Christmas"], ["Fixed-term", "Pre-defined start and end date, e.g. maternity cover"], ["Part-time", "Fewer hours than full-time"], ["Zero-hours", "No set hours; work at the employer's discretion"], ["Freelance", "Self-employed, short-term, pays own taxes"], ["Outsourced/agency", "An agency sources workers for a project"]], explanation: "" },
+          { type: "sort", q: "Is each one internal or external recruitment?", categories: ["Internal", "External"], items: [["Company intranet post", 0], ["Promoting an existing employee", 0], ["Staff noticeboard", 0], ["Job website", 1], ["Recruitment agency", 1], ["Headhunting", 1], ["Newspaper advert", 1]], explanation: "" },
+          { type: "type", q: "The document listing the skills, experience and qualifications needed for a job is the ______ specification.", accept: ["person"], explanation: "Person specification." },
           { q: "Which of the following is an example of INTERNAL recruitment?", options: ["Advertising on a job website", "Using a recruitment agency", "Posting on the company intranet", "Headhunting"], answer: 2, explanation: "The intranet only reaches existing staff." },
           { q: "At which stage of the recruitment process does a business review applications against the person specification?", options: ["Advertising the position", "Shortlisting candidates", "Conducting interviews", "Issuing the contract"], answer: 1, explanation: "Shortlisting." },
           { q: "A zero-hours contract means:", options: ["The employee works exactly zero hours per week", "The hours are not stated and work is at the employer's discretion", "The employee works part-time hours only", "The contract has no end date"], answer: 1, explanation: "Hours are not guaranteed; work is offered as needed." },
@@ -93,7 +122,17 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Equality", "Everyone has the same opportunities and is not discriminated against."],
+          ["Diversity", "Having people from a wide range of backgrounds and characteristics."],
+          ["Inclusion", "Including every person who might be excluded or marginalised, e.g. due to disability."],
+          ["Benefits of EDI", "Innovation, creativity, new talent, motivation and retention, reputation."],
+          ["Employment tribunal", "Employees can claim discrimination there without any required length of service."],
+          ["Fair recruitment", "e.g. a diverse interview panel, the same questions for everyone, inclusive adverts."]
+        ],
         questions: [
+          { type: "multi", q: "Select the five benefits of an equal, diverse and inclusive workforce.", options: ["Promotes innovation", "Enhances creativity", "Opportunities for new talent", "Improves motivation and retention", "Enhances reputation", "Lower wage bill", "Removes the need for recruitment"], answers: [0, 1, 2, 3, 4], explanation: "" },
+          { type: "sort", q: "Does each statement describe equality or inclusion?", categories: ["Equality", "Inclusion"], items: [["Everyone has the same opportunities", 0], ["No one is discriminated against", 0], ["People who might be marginalised are actively involved", 1], ["Changing how meetings run so a disabled colleague can take part fully", 1]], explanation: "" },
           { q: "Which of the following best describes 'inclusion' in the workplace?", options: ["Ensuring all employees earn the same wage", "Including every person who might be excluded or marginalised due to disability or other characteristics", "Recruiting only from internal sources", "Ensuring all employees have the same qualifications"], answer: 1, explanation: "Inclusion means not leaving anyone out." },
           { q: "Which of the following is NOT a benefit of an equal, diverse and inclusive workforce?", options: ["Promotes innovation", "Reduces the need for recruitment", "Improves motivation and retention of staff", "Enhances reputation"], answer: 1, explanation: "Recruitment is still needed. The others are listed benefits." },
           { q: "Which of these is one of the five benefits of an equal, diverse and inclusive workforce?", options: ["Lower wage bill", "Enhances reputation", "Fewer laws to follow", "No need for training"], answer: 1, explanation: "The five: innovation, creativity, new talent, motivation and retention, reputation." },
@@ -121,7 +160,18 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Wellbeing", "Being comfortable, healthy and happy."],
+          ["Resilience", "The ability to adapt when faced with difficult or challenging circumstances."],
+          ["Wellbeing initiative", "A plan of action to improve a situation or issue the business faces."],
+          ["Employee assistance scheme", "A free, confidential, employer-funded service including counselling and advice."],
+          ["Business benefits of wellbeing", "Better performance, less absence, lower staff turnover, better reputation, more applicants."],
+          ["Drawbacks of wellbeing initiatives", "Cost, training needed, confidentiality issues, hard to measure."]
+        ],
         questions: [
+          { type: "sort", q: "Is each one mainly a benefit to the business or to the employee?", categories: ["Business", "Employee"], items: [["Reduced absence rates", 0], ["Lower staff turnover", 0], ["Better reputation", 0], ["Improved fitness", 1], ["Variety within work", 1], ["Feeling happier and healthier", 1]], explanation: "" },
+          { type: "multi", q: "Select all the disadvantages of wellbeing initiatives for a business.", options: ["They cost money", "Staff need training to lead them", "Confidentiality issues", "Their effect is hard to measure", "Reduced absence", "Improved reputation"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "type", q: "Being comfortable, healthy and happy is called ______.", accept: ["wellbeing", "well-being", "well being"], explanation: "Wellbeing." },
           { q: "Resilience in the workplace is best defined as:", options: ["The ability to work long hours without getting tired", "The ability of an individual to adapt when faced with difficult or challenging circumstances", "The ability to manage a team effectively", "The ability to always meet targets on time"], answer: 1, explanation: "Resilience is adapting to difficulty." },
           { q: "Which of the following is a benefit of wellbeing initiatives FOR THE BUSINESS?", options: ["Improved fitness levels for employees", "Increased motivation at work", "Reduced absence rates", "Variety within work"], answer: 2, explanation: "Lower absence benefits the business directly. The others mainly benefit the employee." },
           { q: "An employee assistance scheme is:", options: ["A government grant given to businesses", "A free and confidential service funded by employers that includes counselling and advice", "A compulsory mental health assessment", "A pension contribution scheme"], answer: 1, explanation: "Free, confidential, employer-funded support." },
@@ -149,7 +199,24 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Directive", "Sets specific objectives and allocates tasks; staff not involved in decisions. Common in the military."],
+          ["Autocratic", "The leader makes all decisions and has all the power."],
+          ["Authoritative", "In charge, decides without consulting others; results-driven."],
+          ["Participative", "Encourages ideas from the team; decisions made together."],
+          ["Democratic", "Invites others to take part in decision-making."],
+          ["Delegative", "Delegates tasks and lets team members make decisions."],
+          ["Laissez-faire", "Staff complete tasks their own way; the leader provides resources."],
+          ["Pacesetting", "Sets high standards and expects staff to meet and exceed them."],
+          ["Affiliative", "Focuses on a positive, harmonious environment; resolves conflict quickly."],
+          ["Coaching", "Encourages collaboration, empowerment and fulfilment."],
+          ["Direct report", "An employee who reports directly to their manager."],
+          ["Indirect report", "Managed by their boss but also reports to someone else for a task or project."]
+        ],
         questions: [
+          { type: "match", q: "Match each management style to its description.", pairs: [["Directive", "Sets specific objectives and allocates tasks; staff not involved in decisions"], ["Autocratic", "The leader makes all decisions and takes no advice"], ["Participative", "Encourages ideas and makes decisions with the team"], ["Laissez-faire", "Staff do tasks their own way and learn from mistakes"], ["Pacesetting", "Sets high standards and expects staff to exceed them"]], explanation: "" },
+          { type: "match", q: "Match each leadership style to its description.", pairs: [["Delegative", "Hands tasks to team members and lets them decide"], ["Democratic", "Invites others into the decision-making process"], ["Affiliative", "Builds a positive, harmonious environment and resolves conflict quickly"], ["Authoritative", "In charge, decides without consulting; results-driven"], ["Coaching", "Encourages collaboration, empowerment and fulfilment"]], explanation: "" },
+          { type: "sort", q: "Is each one an output or an outcome?", categories: ["Output", "Outcome"], items: [["Running five training sessions", 0], ["Sending 200 customer surveys", 0], ["Staff feeling more confident", 1], ["Customers trusting the brand more", 1]], explanation: "Outputs are the activities completed. Outcomes are the reasons for them: the results and human elements." },
           { q: "Which management style is most commonly found in military or uniformed settings?", options: ["Participative", "Delegative", "Directive", "Pacesetting"], answer: 2, explanation: "Directive: clear orders, no employee involvement in decisions." },
           { q: "A participative management style is best described as:", options: ["The manager makes all decisions alone", "The manager encourages ideas from the team and they work together to make decisions", "The manager delegates tasks to team members and takes no responsibility", "The manager sets very high standards and expects employees to exceed them"], answer: 1, explanation: "Participative means deciding together." },
           { q: "Which leadership style encourages collaboration, empowerment and fulfilment?", options: ["Autocratic", "Laissez-faire", "Coaching", "Affiliative"], answer: 2, explanation: "Coaching." },
@@ -181,7 +248,19 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["CPD", "Continuing Professional Development: ongoing learning throughout a career."],
+          ["Learning Development Plan (LDP)", "A formal record of CPD activities completed."],
+          ["On-the-job training", "Training at the workplace while doing the job."],
+          ["Mentoring", "An experienced team member paired with a newer one; long-term development."],
+          ["Coaching", "Performance-driven training to help someone improve specific skills."],
+          ["Appraisal", "A performance review of an employee over a period of time."],
+          ["Induction", "Introducing new staff to the business, their role, policies and health and safety."]
+        ],
         questions: [
+          { type: "sort", q: "Does each statement describe mentoring or coaching?", categories: ["Mentoring", "Coaching"], items: [["A long-term working relationship", 0], ["An experienced colleague paired with a newer one", 0], ["Supports career aspirations", 0], ["Driven by performance", 1], ["Focused on improving specific skills", 1], ["Improves productivity and confidence", 1]], explanation: "" },
+          { type: "multi", q: "Select all the examples of CPD activities.", options: ["Attending a training course", "Joining a webinar", "Going to a conference", "Job shadowing", "Taking annual leave", "Having a lunch break"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "type", q: "Write out what CPD stands for.", accept: ["continuing professional development", "continuous professional development"], explanation: "Continuing Professional Development." },
           { q: "What does CPD stand for?", options: ["Continued Personal Development", "Continuing Professional Development", "Current Professional Development", "Company Personnel Direction"], answer: 1, explanation: "Continuing Professional Development." },
           { q: "Which type of training takes place at the employee's workplace while they carry out their job?", options: ["External training", "Internal training", "On-the-job training", "Conference training"], answer: 2, explanation: "On-the-job training." },
           { q: "A Learning Development Plan (LDP) is:", options: ["A government scheme to fund employee training", "A formal document that details CPD activities completed so employee and employer can refer to a record of training", "An appraisal form used once a year", "A plan for new employees in their first week"], answer: 1, explanation: "An LDP is a formal record of CPD." },
@@ -210,7 +289,23 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Shaper", "Belbin action role: thrives on pressure and challenges; overcomes obstacles."],
+          ["Implementer", "Belbin action role: reliable and efficient; sees ideas through."],
+          ["Completer Finisher", "Belbin action role: keeps to schedule; output to the highest standard."],
+          ["Co-ordinator", "Belbin people role: good leader; identifies goals, delegates, encourages decisions."],
+          ["Team Worker", "Belbin people role: co-operates, listens well, avoids conflict."],
+          ["Resource Investigator", "Belbin people role: seeks opportunities; enthusiastic communicator."],
+          ["Plant", "Belbin cerebral role: creative, imaginative, solves problems."],
+          ["Monitor Evaluator", "Belbin cerebral role: looks at the whole project; judges options accurately."],
+          ["Specialist", "Belbin cerebral role: has the required skills; can be single-minded."],
+          ["Maslow's hierarchy", "From the base: physiological, safety, love and belonging, esteem, self-actualisation."],
+          ["Herzberg's hygiene factors", "e.g. salary and working conditions: keep people in the job but don't motivate them."]
+        ],
         questions: [
+          { type: "order", q: "Put Maslow's hierarchy of needs in order, from the base to the top.", items: ["Physiological needs", "Safety needs", "Love and belonging", "Esteem", "Self-actualisation"], explanation: "" },
+          { type: "sort", q: "Put each Belbin role in its category.", categories: ["Action", "People", "Cerebral"], items: [["Shaper", 0], ["Implementer", 0], ["Completer Finisher", 0], ["Co-ordinator", 1], ["Team Worker", 1], ["Resource Investigator", 1], ["Plant", 2], ["Monitor Evaluator", 2], ["Specialist", 2]], explanation: "" },
+          { type: "sort", q: "In Herzberg's theory, is each one a hygiene factor or a motivator?", categories: ["Hygiene factor", "Motivator"], items: [["Salary", 0], ["Working conditions", 0], ["Job security", 0], ["Recognition", 1], ["Achievement", 1], ["Responsibility", 1]], explanation: "Hygiene factors stop dissatisfaction but don't motivate. Motivators lead to satisfaction." },
           { q: "According to Belbin, which team role 'thrives on pressure and challenges, and likes to overcome obstacles'?", options: ["Plant", "Shaper", "Monitor Evaluator", "Implementer"], answer: 1, explanation: "Shaper." },
           { q: "Which Belbin role is described as 'creative, imaginative and able to solve problems'?", options: ["Shaper", "Resource Investigator", "Plant", "Specialist"], answer: 2, explanation: "Plant." },
           { q: "Maslow's hierarchy of needs places which need at the very top?", options: ["Esteem", "Safety needs", "Physiological needs", "Self-actualisation"], answer: 3, explanation: "Self-actualisation is at the top." },

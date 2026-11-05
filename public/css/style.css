@@ -185,6 +185,63 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
 .review .question { font-size: 1rem; font-weight: 600; margin: 0 0 6px; }
 .review p { margin-bottom: 4px; }
 
+/* Quiz types */
+.type-hint { margin: -8px 0 14px; font-size: .9rem; color: var(--muted); }
+.option.is-multi .key { border-radius: 4px; }
+.option.is-multi.selected .key::after { content: "✓"; }
+.option.is-multi.selected .key { font-size: 0; }
+.option.is-multi.selected .key::after { font-size: .9rem; }
+.typed { font-size: 1.1rem; padding: 12px 14px; max-width: 480px; }
+.match { display: grid; gap: 10px; }
+.match-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(160px, 240px); gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.match-row label { margin: 0; font-weight: 500; }
+.match-row select { width: 100%; }
+.order { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.order li { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); }
+.order-n { flex: none; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; background: var(--bg); font-weight: 700; font-size: .85rem; color: var(--muted); }
+.order-text { flex: 1; }
+.order-btns { display: flex; gap: 6px; flex: none; }
+.icon-btn { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: 1.1rem; cursor: pointer; }
+.icon-btn:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
+.icon-btn:disabled { opacity: .3; cursor: default; }
+.sort { display: grid; gap: 10px; }
+.sort-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.sort-text { font-weight: 500; flex: 1 1 200px; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.seg-btn { min-height: 38px; padding: 6px 12px; border-radius: 8px; border: 2px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer; }
+.seg-btn:hover { border-color: var(--brand); }
+.seg-btn.selected { border-color: var(--brand); background: var(--brand); color: var(--brand-ink); }
+.review.is-part { border-left-color: var(--gold); }
+.is-part .review-mark { color: var(--gold); }
+.review-head .badge { margin-left: auto; }
+.review-items { margin: 4px 0 8px; padding-left: 1.3em; }
+.review-items li { margin-bottom: 3px; }
+
+/* Flashcards */
+.cards-wrap { max-width: 680px; margin: 0 auto; }
+.flashcard {
+  width: 100%; min-height: 280px; margin: 12px 0 16px; padding: 28px; border-radius: 16px;
+  border: 2px solid var(--line); border-top: 6px solid var(--subject); background: var(--surface); color: var(--text);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center;
+  font: inherit; cursor: pointer; box-shadow: var(--shadow);
+}
+.flashcard.is-flipped { background: color-mix(in srgb, var(--subject) 7%, var(--surface)); }
+.fc-label { text-transform: uppercase; letter-spacing: .6px; font-size: .75rem; font-weight: 700; color: var(--subject); }
+.fc-text { font-size: 1.35rem; font-weight: 600; line-height: 1.4; }
+.flashcard.is-flipped .fc-text { font-size: 1.1rem; font-weight: 500; }
+.fc-hint { font-size: .85rem; color: var(--muted); }
+.fc-actions { display: flex; gap: 12px; justify-content: center; }
+.fc-actions .btn { min-width: 140px; }
+.card-list dt { font-weight: 700; margin-top: 10px; }
+.card-list dd { margin: 2px 0 0; color: var(--muted); }
+.panel-h { margin-top: 20px; }
+.head-action { margin-left: auto; }
+.small-btn { min-height: 34px; padding: 4px 12px; font-size: .88rem; }
+@media (max-width: 600px) {
+  .match-row { grid-template-columns: 1fr; }
+  .fc-text { font-size: 1.15rem; }
+}
+
 /* Exam practice */
 .eyebrow { text-transform: uppercase; letter-spacing: .6px; font-size: .78rem; font-weight: 700; color: var(--subject); margin-bottom: .3em; }
 .panel-note { margin: 12px 0 0; }

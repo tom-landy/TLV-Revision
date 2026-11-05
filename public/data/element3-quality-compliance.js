@@ -19,7 +19,20 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Quality assurance", "A process or system to make sure quality is maintained and meets standards."],
+          ["Quality improvement", "Every member of staff aims to continuously improve quality."],
+          ["Kaizen", "A Japanese concept of gradual and continuous improvement."],
+          ["PDSA", "Plan, Do, Study, Act: a cycle for improving a specific process."],
+          ["Fishbone diagram", "A cause and effect diagram used to find what is causing a problem."],
+          ["Process checklist", "A series of steps that makes a task consistent whoever completes it."],
+          ["Customer satisfaction", "How much products or services meet customer expectations."]
+        ],
         questions: [
+          { type: "order", q: "Put the PDSA cycle in order.", items: ["Plan", "Do", "Study", "Act"], explanation: "" },
+          { type: "order", q: "Put the steps of a fishbone (cause and effect) analysis in order.", items: ["Identify the problem", "Draw the problem as a horizontal backbone", "Add the causes as bones", "Analyse and investigate the causes"], explanation: "" },
+          { type: "match", q: "Match each quality term to its meaning.", pairs: [["Quality assurance", "A system to make sure quality is maintained and meets standards"], ["Quality improvement", "Investigating what needs to change to improve quality"], ["Kaizen", "Gradual and continuous improvement across the business"], ["Process checklist", "Steps that make a task consistent whoever does it"], ["Fishbone diagram", "Visual cause and effect analysis of a problem"], ["Customer satisfaction", "How far products or services meet customer expectations"]], explanation: "" },
+          { type: "type", q: "What is the Japanese name for gradual and continuous improvement?", accept: ["kaizen"], explanation: "Kaizen." },
           { q: "Quality assurance is best described as:", options: ["A process where every member of staff aims to continuously improve quality", "A process or system followed to ensure the quality of services or products is being maintained and meets quality standards", "A Japanese philosophy of gradual and continuous improvement", "A method of measuring customer complaints"], answer: 1, explanation: "Assurance maintains quality. Option A describes quality improvement; C is Kaizen." },
           { q: "Which of the following is NOT one of the four quality assurance activities a business can carry out?", options: ["Process checklists", "Quality standards", "Staff appraisals", "Audits"], answer: 2, explanation: "Staff appraisals review people, not product or service quality." },
           { q: "Kaizen is best described as:", options: ["A one-off quality check carried out by external auditors", "A Japanese concept that focuses on gradual and continuous improvement", "A method of handling customer complaints", "A government regulation for quality in manufacturing"], answer: 1, explanation: "Kaizen means gradual, continuous improvement." },
@@ -55,7 +68,20 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["BSI", "British Standards Institution: improves quality and safety of products, services and systems in the UK."],
+          ["Kitemark", "A symbol on products tested and certified by the BSI."],
+          ["ISO", "International Organization for Standardization: develops voluntary international standards."],
+          ["EFQM", "European Foundation for Quality Management: apply, complete a matrix, assessors visit."],
+          ["Investors in People", "A people-based accreditation for how well an organisation leads, supports and develops people."],
+          ["Benefits of accreditation", "Brand awareness, help with tenders, trust with customers."],
+          ["Process map", "Shows how a process flows from input to output, with decisions at each step."],
+          ["Tender", "A formal bid to supply goods or do a job; accreditation helps win them."]
+        ],
         questions: [
+          { type: "match", q: "Match each organisation or award to its description.", pairs: [["BSI", "Improves quality and safety in the UK; known for its Kitemark"], ["ISO", "International experts developing voluntary international standards"], ["EFQM", "Apply, complete a business matrix, visit from assessors"], ["BSI Kitemark", "Symbol on products tested and certified by the BSI"], ["Investors in People", "People-based accreditation for leading and developing staff"]], explanation: "" },
+          { type: "multi", q: "Select all the benefits of quality accreditation.", options: ["Increased brand awareness", "Helps win tenders", "Builds trust with customers", "No more internal audits needed", "Exempt from inspections"], answers: [0, 1, 2], explanation: "" },
+          { type: "type", q: "Write out what BSI stands for.", accept: ["british standards institution"], explanation: "British Standards Institution." },
           { q: "What does BSI stand for?", options: ["Business Standards Institute", "British Standards Institution", "British Safety Inspection", "Bureau of Standards and Inspections"], answer: 1, explanation: "British Standards Institution." },
           { q: "What does EFQM stand for?", options: ["European Foundation for Quality Management", "External Foundation for Quality Monitoring", "European Framework for Quality Measures", "Established Foundation for Quality Methods"], answer: 0, explanation: "European Foundation for Quality Management." },
           { q: "Which of the following is a benefit of a business obtaining quality accreditation?", options: ["The business no longer needs to carry out internal audits", "The business develops trust with customers and stakeholders", "The business is exempt from inspections", "The business can set its own quality standards"], answer: 1, explanation: "Accreditation builds trust. Audits and inspections still happen." },
@@ -86,7 +112,21 @@
           },
           WORKBOOK
         ],
+        cards: [
+          ["Regulatory body", "Develops and maintains standards in a sector and makes sure they are applied."],
+          ["Inspection", "Compares a business's activities with the regulator's standards; can be unannounced."],
+          ["Compliance", "Meeting the standards and requirements set by the regulator."],
+          ["Prohibition notice", "Serious risk of injury: stop the activity until the risk is investigated."],
+          ["Closure notice", "Close immediately for the stated period, usually 48 hours at first."],
+          ["Suspension", "The business or individual cannot carry out business activities."],
+          ["Ofsted", "Regulator for education."],
+          ["Care Quality Commission (CQC)", "Regulator for health and social care."],
+          ["Preparing for inspection", "Appoint a team, gather documents, choose a host, support the inspector with minimal disruption."]
+        ],
         questions: [
+          { type: "match", q: "Match each regulator to its sector.", pairs: [["Ofsted", "Education"], ["Care Quality Commission", "Health and social care"], ["Financial Conduct Authority", "Financial services"], ["Health and Safety Executive", "Workplace health and safety"]], explanation: "" },
+          { type: "match", q: "Match each term to its meaning.", pairs: [["Prohibition notice", "Stop the risky activity until it is investigated"], ["Closure notice", "Close immediately, usually for 48 hours at first"], ["Suspension", "Prevented from offering services or products"], ["Inspection", "Tells the regulator whether obligations are being met"], ["Compliance", "Meeting the regulator's standards and requirements"]], explanation: "" },
+          { type: "type", q: "How many hours does a closure notice usually last at first?", accept: ["48"], explanation: "Usually 48 hours, before a magistrates' court can consider longer.", placeholder: "Number of hours" },
           { q: "What is the purpose of a regulatory body?", options: ["To set the prices that businesses can charge", "To develop and maintain standards in a specific sector and ensure they are consistently applied", "To manage the recruitment of staff in public sector organisations", "To provide financial support to struggling businesses"], answer: 1, explanation: "Regulators set and enforce sector standards." },
           { q: "What is a prohibition notice?", options: ["A notice issued by the government to increase taxes", "A notice issued by inspectors requiring a business to stop its activities until a risk is investigated", "A notice given to employees about workplace rules", "A document sent to customers about a product recall"], answer: 1, explanation: "Stop activities until the risk is investigated." },
           { q: "How long does a typical closure notice last before a magistrates' court can consider a longer period?", options: ["24 hours", "48 hours", "72 hours", "One week"], answer: 1, explanation: "Usually 48 hours." },
