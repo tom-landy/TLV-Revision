@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: tlv-revision
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./public
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      # Content changes should reach students straight away.
+      - path: /data/*
+        name: Cache-Control
+        value: no-cache
+      - path: /js/*
+        name: Cache-Control
+        value: no-cache
+      - path: /css/*
+        name: Cache-Control
+        value: no-cache
