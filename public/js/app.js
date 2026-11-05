@@ -353,10 +353,23 @@
 
     if ((t.practice || []).length) {
       var ps = practiceStats(state, t);
-      html += '<section id="practice" class="practice"><div class="subject-head"><h2>Exam practice</h2>' +
+      html += '<section id="practice" class="practice">' +
+        '<header class="print-only print-head">' +
+        '<p class="print-site">' + esc(SETTINGS.siteName) + (SETTINGS.tagline ? " · " + esc(SETTINGS.tagline) : "") + "</p>" +
+        "<h1>" + esc(t.title) + "</h1>" +
+        '<p class="print-sub">' + esc(s.title) + " · Exam practice</p>" +
+        '<dl class="print-meta"><div><dt>Name</dt><dd>' + esc(state.student.name || "") + "</dd></div>" +
+        "<div><dt>Date</dt><dd>" + esc(fmtDate(new Date().toISOString())) + "</dd></div>" +
+        '<div><dt>Self-marked</dt><dd id="printTotal">' + printTotal(ps) + "</dd></div></dl>" +
+        "</header>" +
+        '<div class="subject-head no-print"><h2>Exam practice</h2>' +
         '<span class="muted small" id="practiceSummary">' + practiceSummary(ps) + "</span></div>" +
-        '<p class="muted">Write your answer, then open the mark scheme and give yourself a mark. ' +
-        "Answers save in this browser. These marks do not count towards the quiz certificate.</p>";
+        '<p class="muted no-print">Write your answer, then open the mark scheme and give yourself a mark. ' +
+        "Answers save in this browser. These marks do not count towards the quiz certificate.</p>" +
+        '<div class="practice-toolbar no-print">' +
+        '<button class="btn" type="button" id="printPractice">Print my answers</button>' +
+        '<label class="check"><input type="checkbox" id="printSchemes"' + (printSchemes ? " checked" : "") + "> Include mark schemes when printing</label>" +
+        "</div>";
       t.practice.forEach(function (item, i) {
         var key = practiceKey(t, item, i);
         var saved = state.practice[key] || { text: "", mark: null };
@@ -365,9 +378,10 @@
         for (var m = 0; m <= marks; m++) {
           opts += '<option value="' + m + '"' + (saved.mark === m ? " selected" : "") + ">" + m + "</option>";
         }
-        html += '<article class="card practice-item" data-key="' + esc(key) + '" data-i="' + i + '">' +
-          '<div class="practice-q"><p class="question">' + esc(item.q) + "</p>" +
+        html += '<article class="card practice-item" data-key="' + esc(key) + '" data-i="' + i + '" data-marks="' + marks + '">' +
+          '<div class="practice-q"><p class="question"><span class="qnum">' + (i + 1) + ".</span> " + esc(item.q) + "</p>" +
           '<span class="badge">' + marks + " mark" + (marks === 1 ? "" : "s") + "</span></div>" +
+          printAnswerHtml(saved.text, marks) +
           '<label class="sr-only" for="pa-' + i + '">Your answer</label>' +
           '<textarea class="answer" id="pa-' + i + '" rows="' + Math.min(10, 2 + marks) + '" placeholder="Write your answer here">' + esc(saved.text) + "</textarea>" +
           '<details class="scheme"' + (saved.mark !== null ? " open" : "") + "><summary>Show mark scheme</summary>" +
@@ -376,7 +390,11 @@
           '<div class="row self-mark"><label for="pm-' + i + '">My mark</label>' +
           '<select id="pm-' + i + '" class="mark">' + opts + "</select>" +
           '<span class="muted small">out of ' + marks + "</span></div>" +
-          "</details></article>";
+          "</details>" +
+          '<div class="print-only print-scheme"><p class="print-label">Mark scheme' + (item.suggested ? " (suggested, not from the workbook)" : "") + "</p>" +
+          formatScheme(item.answer) + "</div>" +
+          '<p class="print-only print-mark">' + printMarkText(saved.mark, marks) + "</p>" +
+          "</article>";
       });
       html += "</section>";
     }
@@ -389,8 +407,18 @@
       document.getElementById("practice").scrollIntoView({ behavior: "smooth" });
     });
 
+    var pp = document.getElementById("printPractice");
+    if (pp) pp.addEventListener("click", function () { window.print(); });
+    var pcb = document.getElementById("printSchemes");
+    if (pcb) pcb.addEventListener("change", function () {
+      printSchemes = pcb.checked;
+      document.body.classList.toggle("print-schemes", printSchemes);
+    });
+    document.body.classList.toggle("print-schemes", printSchemes);
+
     app.querySelectorAll(".practice-item").forEach(function (card) {
       var key = card.getAttribute("data-key");
+      var marks = Number(card.getAttribute("data-marks"));
       var ta = card.querySelector(".answer");
       var sel = card.querySelector(".mark");
       var timer = null;
@@ -398,13 +426,37 @@
         var stt = loadState();
         stt.practice[key] = { text: ta.value, mark: sel.value === "" ? null : Number(sel.value) };
         saveState(stt);
+        var stats = practiceStats(stt, t);
         var sum = document.getElementById("practiceSummary");
-        if (sum) sum.innerHTML = practiceSummary(practiceStats(stt, t));
+        if (sum) sum.innerHTML = practiceSummary(stats);
+        var pt = document.getElementById("printTotal");
+        if (pt) pt.textContent = printTotal(stats);
+        card.querySelector(".print-mark").textContent = printMarkText(sel.value === "" ? null : Number(sel.value), marks);
       }
-      ta.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(save, 400); });
+      ta.addEventListener("input", function () {
+        // Keep the printable copy current straight away, so Ctrl+P mid-typing prints everything.
+        card.querySelector(".print-answer").outerHTML = printAnswerHtml(ta.value, marks);
+        clearTimeout(timer); timer = setTimeout(save, 400);
+      });
       ta.addEventListener("blur", function () { clearTimeout(timer); save(); });
       sel.addEventListener("change", save);
     });
+  }
+
+  var printSchemes = false;
+
+  function printAnswerHtml(text, marks) {
+    if (text && text.trim()) return '<div class="print-only print-answer">' + esc(text) + "</div>";
+    var lines = Math.max(3, Math.min(14, marks * 2));
+    return '<div class="print-only print-answer is-blank" style="--lines:' + lines + '"></div>';
+  }
+
+  function printMarkText(mark, marks) {
+    return typeof mark === "number" ? "Self-mark: " + mark + " / " + marks : "Mark: ____ / " + marks;
+  }
+
+  function printTotal(ps) {
+    return ps.possible ? ps.got + " / " + ps.possible + " marks (" + ps.marked + " of " + ps.total + " questions)" : "Not yet";
   }
 
   function practiceSummary(ps) {
@@ -452,63 +504,69 @@
       };
     });
 
-    var idx = 0, score = 0, chosen = [], started = Date.now(), locked = false;
+    var idx = 0, started = Date.now(), done = false;
+    var chosen = questions.map(function () { return null; });
+
+    function answeredCount() {
+      return chosen.filter(function (c) { return c !== null; }).length;
+    }
 
     function renderQuestion() {
       var q = questions[idx];
-      locked = false;
+      var last = idx === questions.length - 1;
       app.innerHTML =
         '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Quiz</nav>" +
         '<section class="card quiz" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
         '<div class="quiz-top"><span>Question ' + (idx + 1) + " of " + questions.length + "</span>" +
-        "<span>Score " + score + "</span></div>" +
-        progressBar(Math.round(idx / questions.length * 100)) +
+        '<span id="answered">' + answeredCount() + " answered</span></div>" +
+        progressBar(Math.round(answeredCount() / questions.length * 100)) +
         '<h2 class="question">' + esc(q.q) + "</h2>" +
-        '<div class="options" role="group" aria-label="Answers">' +
+        '<div class="options" role="radiogroup" aria-label="Answers">' +
         q.options.map(function (o, i) {
-          return '<button class="option" data-i="' + i + '"><span class="key">' + (i + 1) + "</span>" + esc(o) + "</button>";
+          var sel = chosen[idx] === i;
+          return '<button type="button" class="option' + (sel ? " selected" : "") + '" role="radio" aria-checked="' + sel + '" data-i="' + i + '">' +
+            '<span class="key">' + (i + 1) + "</span>" + esc(o) + "</button>";
         }).join("") +
         "</div>" +
-        '<div class="feedback" id="feedback" aria-live="polite"></div>' +
-        '<div class="quiz-actions"><button class="btn primary" id="nextBtn" hidden>' +
-        (idx === questions.length - 1 ? "See results" : "Next question") + "</button></div>" +
+        '<p class="small muted quiz-hint">Answers are marked when you finish. You can go back and change them until then.</p>' +
+        '<div class="quiz-actions">' +
+        (idx > 0 ? '<button class="btn" id="backBtn" type="button">Back</button>' : "<span></span>") +
+        '<button class="btn primary" id="nextBtn" type="button"' + (chosen[idx] === null ? " disabled" : "") + ">" +
+        (last ? "Finish and mark" : "Next question") + "</button></div>" +
         "</section>";
       app.querySelectorAll(".option").forEach(function (b) {
         b.addEventListener("click", function () { choose(Number(b.getAttribute("data-i"))); });
       });
       document.getElementById("nextBtn").addEventListener("click", next);
-      app.querySelector(".option").focus();
+      var back = document.getElementById("backBtn");
+      if (back) back.addEventListener("click", function () { idx--; renderQuestion(); });
+      var focusEl = app.querySelector(".option.selected") || app.querySelector(".option");
+      focusEl.focus();
     }
 
     function choose(i) {
-      if (locked) return;
-      locked = true;
-      var q = questions[idx];
-      var right = i === q.answer;
-      if (right) score++;
-      chosen.push(i);
+      chosen[idx] = i;
       app.querySelectorAll(".option").forEach(function (b, bi) {
-        b.disabled = true;
-        if (bi === q.answer) b.classList.add("correct");
-        else if (bi === i) b.classList.add("wrong");
+        b.classList.toggle("selected", bi === i);
+        b.setAttribute("aria-checked", String(bi === i));
       });
-      document.getElementById("feedback").innerHTML =
-        '<p class="' + (right ? "ok" : "bad") + '"><strong>' + (right ? "Correct." : "Not quite.") + "</strong> " +
-        esc(q.explanation) + "</p>";
-      var nb = document.getElementById("nextBtn");
-      nb.hidden = false;
-      nb.focus();
+      document.getElementById("nextBtn").disabled = false;
+      document.getElementById("answered").textContent = answeredCount() + " answered";
+      var bar = app.querySelector(".quiz .bar span");
+      if (bar) bar.style.width = Math.round(answeredCount() / questions.length * 100) + "%";
     }
 
     function next() {
-      idx++;
-      if (idx < questions.length) renderQuestion();
+      if (chosen[idx] === null) return;
+      if (idx < questions.length - 1) { idx++; renderQuestion(); }
       else finish();
     }
 
     function finish() {
+      done = true;
       document.removeEventListener("keydown", onKey);
       var total = questions.length;
+      var score = questions.reduce(function (m, q, i) { return m + (chosen[i] === q.answer ? 1 : 0); }, 0);
       var pct = Math.round(score / total * 100);
       var passed = pct >= pm;
       var now = new Date().toISOString();
@@ -524,9 +582,6 @@
       }
       saveState(st);
 
-      var wrong = questions.map(function (q, i) { return { q: q, pick: chosen[i] }; })
-        .filter(function (x) { return x.pick !== x.q.answer; });
-
       var html = storageBanner() +
         '<section class="card result ' + (passed ? "is-pass" : "is-fail") + '">' +
         "<h1>" + (passed ? (firstPass ? "Passed. Certificate earned." : "Passed.") : "Not passed yet") + "</h1>" +
@@ -541,27 +596,32 @@
 
       if (passed && subjectComplete(st, s)) {
         html += '<div class="banner gold">You have passed every topic in ' + esc(s.title) +
-          '. <a href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Get your subject certificate</a>.</div>';
+          '. <a href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Get your Element certificate</a>.</div>';
       }
 
-      if (wrong.length) {
-        html += '<section><h2>Review</h2>' + wrong.map(function (x) {
-          return '<div class="card review"><p class="question">' + esc(x.q.q) + "</p>" +
-            '<p class="bad">Your answer: ' + esc(x.q.options[x.pick]) + "</p>" +
-            '<p class="ok">Correct answer: ' + esc(x.q.options[x.q.answer]) + "</p>" +
-            (x.q.explanation ? '<p class="muted">' + esc(x.q.explanation) + "</p>" : "") + "</div>";
-        }).join("") + "</section>";
-      }
+      html += '<section class="review-list"><h2>Your answers</h2>' + questions.map(function (q, i) {
+        var right = chosen[i] === q.answer;
+        return '<div class="card review ' + (right ? "is-right" : "is-wrong") + '">' +
+          '<div class="review-head"><span class="review-mark" aria-hidden="true">' + (right ? "✓" : "✗") + "</span>" +
+          '<p class="question"><span class="sr-only">' + (right ? "Correct. " : "Incorrect. ") + "</span>" +
+          (i + 1) + ". " + esc(q.q) + "</p></div>" +
+          '<p class="' + (right ? "ok" : "bad") + '">Your answer: ' + esc(q.options[chosen[i]]) + "</p>" +
+          (right ? "" : '<p class="ok">Correct answer: ' + esc(q.options[q.answer]) + "</p>") +
+          (q.explanation ? '<p class="muted">' + esc(q.explanation) + "</p>" : "") + "</div>";
+      }).join("") + "</section>";
+
       app.innerHTML = html;
       renderWho();
+      window.scrollTo(0, 0);
       // Same hash as current page, so force a re-render.
       document.getElementById("retry").addEventListener("click", function (e) { e.preventDefault(); route(); });
     }
 
     function onKey(e) {
-      if (e.target && /input|textarea/i.test(e.target.tagName)) return;
+      if (done || (e.target && /input|textarea|select/i.test(e.target.tagName))) return;
       var n = parseInt(e.key, 10);
-      if (!locked && n >= 1 && n <= questions[idx].options.length) { e.preventDefault(); choose(n - 1); }
+      if (n >= 1 && n <= questions[idx].options.length) { e.preventDefault(); choose(n - 1); }
+      else if (e.key === "Enter" && chosen[idx] !== null && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); next(); }
     }
 
     document.addEventListener("keydown", onKey);
@@ -834,7 +894,16 @@
     else viewNotFound();
 
     document.body.classList.toggle("cert-page", page === "certificate");
+    document.body.classList.toggle("topic-page", page === "topic");
+    setPrintPage(page === "certificate");
     window.scrollTo(0, 0);
+  }
+
+  // Chrome ignores named @page rules here, so swap the default page size per route.
+  function setPrintPage(landscape) {
+    var el = document.getElementById("print-page");
+    if (!el) { el = document.createElement("style"); el.id = "print-page"; document.head.appendChild(el); }
+    el.textContent = landscape ? "@page { size: A4 landscape; margin: 0; }" : "@page { size: A4 portrait; margin: 16mm 15mm; }";
   }
 
   window.addEventListener("hashchange", route);

@@ -161,11 +161,11 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
   flex: none; width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center;
   background: var(--bg); font-size: .85rem; font-weight: 700; color: var(--muted);
 }
-.option.correct { border-color: var(--ok); background: var(--ok-bg); }
-.option.wrong { border-color: var(--bad); background: var(--bad-bg); }
-.option:disabled:not(.correct):not(.wrong) { opacity: .6; }
-.feedback { min-height: 1.5em; margin-top: 16px; }
-.quiz-actions { display: flex; justify-content: flex-end; }
+.option.selected { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, var(--surface)); box-shadow: 0 0 0 1px var(--brand); }
+.option.selected .key { background: var(--brand); color: var(--brand-ink); }
+.quiz-hint { margin: 14px 0 0; }
+.quiz-actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
 
 .result { max-width: 760px; margin: 0 auto 20px; text-align: center; }
 .result.is-pass { border-top: 6px solid var(--ok); }
@@ -174,6 +174,14 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
 .result .bar { max-width: 420px; margin: 12px auto 16px; }
 .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .result + section, .result + .banner + section, .result + .banner { max-width: 760px; margin-left: auto; margin-right: auto; }
+.review-list { max-width: 760px; margin: 0 auto; }
+.review { border-left: 5px solid var(--line); }
+.review.is-right { border-left-color: var(--ok); }
+.review.is-wrong { border-left-color: var(--bad); }
+.review-head { display: flex; gap: 10px; align-items: baseline; }
+.review-mark { font-weight: 800; font-size: 1.1rem; }
+.is-right .review-mark { color: var(--ok); }
+.is-wrong .review-mark { color: var(--bad); }
 .review .question { font-size: 1rem; font-weight: 600; margin: 0 0 6px; }
 .review p { margin-bottom: 4px; }
 
@@ -191,6 +199,12 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
 .self-mark { border-top: 1px solid var(--line); padding-top: 10px; }
 .self-mark label { margin: 0; }
 select { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; min-height: 38px; }
+
+.practice-toolbar { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 16px; }
+.check { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; margin: 0; cursor: pointer; }
+.check input { width: 18px; height: 18px; accent-color: var(--brand); }
+.qnum { color: var(--muted); }
+.print-only { display: none; }
 
 /* Progress */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 16px; }
@@ -249,13 +263,55 @@ tr:last-child td { border-bottom: 0; }
 }
 
 /* Print */
-@page { size: A4 landscape; margin: 0; }
+/* @page size is set per page by js/app.js (landscape for certificates, portrait otherwise). */
 @media print {
-  body { background: #fff; }
+  /* Printed pages always use light colours, whatever the screen theme. */
+  :root {
+    --bg: #fff; --surface: #fff; --text: #111; --muted: #555; --line: #bbb;
+    --brand: #1f4e79; --ok: #1a7f37; --bad: #b42318;
+  }
+  body { background: #fff; color: #111; font-size: 11pt; }
   .no-print, .site-header, .site-footer { display: none !important; }
   main { padding: 0; max-width: none; }
-  body:not(.cert-page) main { padding: 10mm; }
-  .card { box-shadow: none; break-inside: avoid; }
+  .card { box-shadow: none; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Certificate: its own landscape page with no margin */
   .cert-wrap { overflow: visible; }
   .certificate { zoom: 1 !important; box-shadow: none; margin: 0; width: 297mm; height: 209mm; }
+
+  /* Topic page prints only the exam practice worksheet */
+  .topic-page .crumbs, .topic-page .page-head, .topic-page .two-col, .topic-page .banner { display: none !important; }
+  .topic-page .practice { margin: 0; }
+  .topic-page .print-only { display: block; }
+  .print-head { border-bottom: 2px solid #111; padding-bottom: 4mm; margin-bottom: 6mm; }
+  .print-site { font-size: 9pt; color: #555; text-transform: uppercase; letter-spacing: .5px; margin: 0 0 2mm; }
+  .print-head h1 { font-size: 18pt; margin: 0 0 1mm; }
+  .print-sub { margin: 0 0 4mm; color: #333; }
+  .print-meta { display: flex; flex-wrap: wrap; gap: 4mm 12mm; margin: 0; }
+  .print-meta div { display: flex; gap: 2mm; }
+  .print-meta dt { font-weight: 700; }
+  .print-meta dd { margin: 0; min-width: 40mm; border-bottom: 1px solid #999; }
+
+  .practice-item { border: 0; border-bottom: 1px solid #ccc; border-radius: 0; padding: 0 0 5mm; margin: 0 0 5mm; }
+  .practice-item:last-child { border-bottom: 0; }
+  .practice-q { break-after: avoid; }
+  .practice-q .question { font-size: 11pt; margin-bottom: 2mm; }
+  .practice-q .badge { background: none; border: 1px solid #999; color: #111; }
+  .practice-item textarea, .practice-item details { display: none !important; }
+  .print-answer { white-space: pre-wrap; overflow-wrap: anywhere; border-left: 3px solid #1f4e79; padding: 1mm 0 1mm 4mm; margin: 2mm 0; line-height: 1.5; }
+  .print-answer.is-blank {
+    border: 0; padding: 0; break-inside: avoid;
+    height: calc(var(--lines) * 8mm);
+    background: repeating-linear-gradient(to bottom, transparent 0, transparent calc(8mm - 1px), #bbb calc(8mm - 1px), #bbb 8mm);
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  .print-scheme { display: none !important; }
+  .print-schemes .print-scheme { display: block !important; background: #f3f5f8; border-radius: 2mm; padding: 2mm 4mm; margin: 2mm 0; font-size: 10pt; break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-label { font-weight: 700; margin: 0 0 1mm; }
+  .print-scheme ul { margin: 0 0 1mm; padding-left: 5mm; }
+  .print-mark { text-align: right; font-weight: 700; margin: 2mm 0 0; }
+
+  /* Other pages: plain and readable */
+  .result, .review { break-inside: avoid; }
 }
