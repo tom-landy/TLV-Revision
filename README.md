@@ -2,13 +2,13 @@
 
 A static revision site for TLV students on the City & Guilds T Level in Management and Administration: key points per topic, quizzes, written exam practice with mark schemes, progress tracking and printable certificates.
 
-Content is based on the TLV revision workbooks for Elements 1 to 5 (the original Word files are in `public/files/` and linked from each topic).
+Elements 1 to 5 are based on the TLV revision workbooks (the original Word files are in `public/files/` and linked from each topic). Element 6 (Project and Change Management) was written for the site from the C&G Core textbook chapter 6, with exam practice built from the Paper 2 past-paper questions (8715-032, Summer 2023, Autumn 2023, Summer 2024).
 
 No build step, no server, no database. Plain HTML, CSS and JavaScript in `public/`.
 
 ## What students get
 
-- **Topics**: 28 sections across Elements 1 to 5, each with key points and a link to the Element workbook.
+- **Topics**: 34 sections across Elements 1 to 6, each with key points (and, for Elements 1 to 5, a link to the workbook).
 - **Quizzes**: 10 questions per attempt, mixing multiple choice with match-up, put in order, sort into groups, select all that apply, and type the answer. Nothing is marked until the end, then every question is reviewed. Multi-part questions get partial credit.
 - **Flashcards** for every topic (228 cards): turn over, mark "Got it" or "Not yet"; missed cards come back round.
 - **Element tests**: 20 mixed questions across a whole Element, with weak topics flagged.
@@ -113,6 +113,12 @@ Rules:
 - 37 written questions had no answer in the workbook. They have a suggested answer marked `suggested: true`, shown to students as "Suggested answer. Not from the original workbook." Staff should check these.
 - Open table exercises that had no single right answer became written practice items.
 
+### Element 6
+
+- Notes, quiz questions and flashcards are written in our own words from the textbook. The textbook PDF itself is not on the site: it is a licensed copy.
+- Exam practice includes the 16 Paper 2 past-paper questions on project and change management (one, on ADKAR, sits under Policies and Procedures in the workbook). Each is labelled with its exam series. Mark schemes are condensed from the answers booklet.
+- The textbook spells PERT as "Program Evaluation and Review Technique"; the Summer 2023 paper says "Project Evaluation Review Technique". The site mentions both.
+
 ### Things staff should check
 
 - **Company size thresholds (1.2).** The workbook uses the old Companies Act figures (small: £10.2m turnover). These rose from 6 April 2025 (micro £1m / £500k, small £15m / £7.5m, medium £54m / £27m). The quiz keeps the workbook figures and notes the change.
@@ -130,6 +136,6 @@ public/index.html      page shell
 public/css/style.css   styles, including print styles for certificates
 public/js/app.js       routing, quizzes, progress, certificates
 public/data/settings.js site settings
-public/data/element*.js topics, key points, quiz and written questions, one file per Element
+public/data/element*.js topics, key points, flashcards, quiz and written questions, one file per Element
 public/files/          the original Element workbooks (Word)
 ```
