@@ -1,15 +1,18 @@
 # TLV Revision
 
-A static revision site for TLV students: resources per topic, multiple-choice quizzes, progress tracking and printable certificates.
+A static revision site for TLV students on the City & Guilds T Level in Management and Administration: key points per topic, quizzes, written exam practice with mark schemes, progress tracking and printable certificates.
+
+Content is based on the TLV revision workbooks for Elements 1 to 5 (the original Word files are in `public/files/` and linked from each topic).
 
 No build step, no server, no database. Plain HTML, CSS and JavaScript in `public/`.
 
 ## What students get
 
-- **Topics** grouped by subject, each with notes and links.
+- **Topics**: 28 sections across Elements 1 to 5, each with key points and a link to the Element workbook.
 - **Quizzes** with questions and answer order shuffled every attempt, instant feedback with an explanation, and a review of wrong answers at the end. Keys 1 to 4 pick an answer.
-- **Progress**: attempts, best and last score per topic, overall stats.
-- **Certificates**: one per topic when they reach the pass mark, plus a subject certificate when every topic in a subject is passed. Prints on one A4 landscape page, or saves as PDF from the print dialog.
+- **Exam practice**: the workbook's short-answer and extended questions. Students write an answer, open the mark scheme and give themselves a mark. Saved in the browser. Does not count towards certificates.
+- **Progress**: attempts, best and last score per topic, written questions self-marked, overall stats.
+- **Certificates**: one per topic when they reach the pass mark, plus an Element certificate when every topic in an Element is passed. Prints on one A4 landscape page, or saves as PDF from the print dialog.
 - **Backup code** to move progress between devices.
 
 ## Limits you should know about
@@ -46,26 +49,34 @@ To set it up by hand instead: **New > Static Site**, pick the repo, leave the bu
 
 ## Adding and editing content
 
-All content is in `public/data/content.js`. Edit it, push, and Render redeploys.
+Content is in `public/data/`, one file per Element (`element1-business-context.js` and so on). Site name, pass mark and certificate signatory are in `public/data/settings.js`. Edit, push, and Render redeploys.
 
 ```js
 {
-  id: "science-cells",            // unique, never change once live
-  title: "Cell biology",
+  id: "1.1",                      // unique, never change once live
+  title: "1.1 Types of organisation",
   summary: "One line shown on the topic card.",
   passMark: 80,                   // optional, % needed to pass
   resources: [
-    { type: "notes", title: "Key facts", body: "Paragraph one.\n\nParagraph two." },
+    { type: "notes", title: "Key points", body: "Paragraph one.\n\nParagraph two." },
     { type: "link",  title: "BBC Bitesize", url: "https://www.bbc.co.uk/bitesize" },
-    { type: "video", title: "Explainer", url: "https://..." },
-    { type: "pdf",   title: "Worksheet", url: "files/cells-worksheet.pdf" }
+    { type: "docx",  title: "Workbook", url: "files/element1-business-context-workbook.docx" }
   ],
-  questions: [
+  questions: [                    // auto-marked quiz
     {
-      q: "Where does photosynthesis take place?",
-      options: ["Mitochondria", "Chloroplasts", "Nucleus", "Vacuole"],
+      q: "Which of the following is an example of a public sector organisation?",
+      options: ["Tesco", "NHS", "Oxfam", "Barclays Bank"],
       answer: 1,                  // index of the correct option, counting from 0
       explanation: "Shown after the student answers."
+    },
+    { q: "True or false: ...", options: ["True", "False"], answer: 0, explanation: "..." }
+  ],
+  practice: [                     // written exam practice, self-marked
+    {
+      q: "State two features of a voluntary sector organisation.",
+      marks: 2,
+      answer: "Any two from:\n- not-for-profit\n- surplus reinvested",
+      suggested: true             // optional: shows "Suggested answer, not from the workbook"
     }
   ]
 }
@@ -73,13 +84,29 @@ All content is in `public/data/content.js`. Edit it, push, and Render redeploys.
 
 Rules:
 
-- **Do not change a topic `id` once students have used it.** Progress is saved against the id, so a renamed id looks like a new, unstarted topic.
-- `answer` counts from 0. The first option is 0, the second is 1.
-- Each quiz draws `settings.questionsPerQuiz` questions (default 10) at random from the topic's bank. Write more questions than that and retakes are less repetitive.
-- For PDFs or images, put the file in `public/files/` and link to it as `files/name.pdf`.
-- Site name, organisation name, default pass mark and the certificate signatory are in `settings` at the top of the file.
+- **Do not change a topic `id` once students have used it.** Progress is saved against the id.
+- **Do not reorder `practice` items once live.** Saved written answers are matched by position. To be safe, give an item its own `id`.
+- `answer` counts from 0. The first option is 0.
+- Options are shuffled each attempt, except two-option questions (True/False) and any question with `shuffle: false`.
+- Mark schemes: a blank line starts a new paragraph; lines starting `- ` become a bullet list.
+- Each quiz draws up to `questionsPerQuiz` questions (default 10) at random.
+- Put PDFs or other files in `public/files/` and link to them as `files/name.pdf`.
 
-The sample subjects (Maths, Science, English) are placeholders written to show the format. Replace them with TLV's actual topics.
+## How the workbooks were converted
+
+- Multiple choice, fill in the blank, match-up, true/false, ordering, labelling and classification exercises became auto-marked quiz questions. Fill-in blanks use the word bank as options where there was one.
+- Short-answer and extended questions became written exam practice with the workbook's mark scheme.
+- 37 written questions had no answer in the workbook. They have a suggested answer marked `suggested: true`, shown to students as "Suggested answer. Not from the original workbook." Staff should check these.
+- Open table exercises that had no single right answer became written practice items.
+
+### Things staff should check
+
+- **Company size thresholds (1.2).** The workbook uses the old Companies Act figures (small: £10.2m turnover). These rose from 6 April 2025 (micro £1m / £500k, small £15m / £7.5m, medium £54m / £27m). The quiz keeps the workbook figures and notes the change.
+- **Contract of employment timing (2.1).** The workbook says within two months. Since April 2020 the written statement of main terms is due on or before day one. The quiz keeps the workbook answer and notes the change.
+- **Management styles match-up (2.5).** The workbook answer key pairs directive with "all decisions made by the leader" and autocratic with "sets objectives and allocates tasks". That looks swapped, since the same workbook says directive is the military style. The quiz uses directive = sets objectives and allocates tasks, autocratic = all decisions by the leader.
+- **Cash flow forecast (4.5).** The workbook's model answer has wrong opening balances from February (it shows £680 instead of £3,620). The site uses corrected figures: closing balances £3,620, £5,470, £7,470, £7,010, £9,910.
+- **Health and safety policy (5.1).** The workbook says "more than five employees". The legal threshold is five or more. The quiz question was reworded to "at least five".
+- **Shareholders (1.8).** The workbook classes shareholders as external stakeholders, which some textbooks don't. The classification quiz leaves shareholders out.
 
 ## Files
 
@@ -88,5 +115,7 @@ render.yaml            Render static site config
 public/index.html      page shell
 public/css/style.css   styles, including print styles for certificates
 public/js/app.js       routing, quizzes, progress, certificates
-public/data/content.js subjects, topics, resources, questions
+public/data/settings.js site settings
+public/data/element*.js topics, key points, quiz and written questions, one file per Element
+public/files/          the original Element workbooks (Word)
 ```

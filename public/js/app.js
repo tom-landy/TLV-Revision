@@ -32,7 +32,7 @@
   var memoryState = null;
 
   function emptyState() {
-    return { version: 1, student: { name: "" }, attempts: [], certificates: {} };
+    return { version: 1, student: { name: "" }, attempts: [], certificates: {}, practice: {} };
   }
 
   function loadState() {
@@ -68,7 +68,31 @@
         if (c && typeof c.pct === "number" && c.date) out.certificates[k] = { pct: c.pct, date: c.date };
       });
     }
+    if (s.practice && typeof s.practice === "object") {
+      Object.keys(s.practice).forEach(function (k) {
+        var p = s.practice[k];
+        if (!p || typeof p !== "object") return;
+        out.practice[k] = {
+          text: typeof p.text === "string" ? p.text.slice(0, 20000) : "",
+          mark: typeof p.mark === "number" ? p.mark : null
+        };
+      });
+    }
     return out;
+  }
+
+  function practiceKey(topic, item, i) {
+    return item.id || (topic.id + "#" + i);
+  }
+
+  function practiceStats(state, topic) {
+    var items = topic.practice || [];
+    var marked = 0, got = 0, possible = 0;
+    items.forEach(function (item, i) {
+      var p = state.practice[practiceKey(topic, item, i)];
+      if (p && typeof p.mark === "number") { marked++; got += p.mark; possible += item.marks || 0; }
+    });
+    return { total: items.length, marked: marked, got: got, possible: possible };
   }
 
   // ---------- Helpers ----------
@@ -189,6 +213,7 @@
   function nameForm(redirect) {
     return '<form class="card name-form" id="nameForm">' +
       "<h2>Welcome to " + esc(SETTINGS.siteName) + "</h2>" +
+      (SETTINGS.tagline ? '<p class="eyebrow">' + esc(SETTINGS.tagline) + "</p>" : "") +
       "<p>Enter your name as you want it to appear on your certificates.</p>" +
       '<label for="studentName">Your full name</label>' +
       '<div class="row"><input id="studentName" name="studentName" maxlength="80" autocomplete="name" required placeholder="e.g. Sam Patel">' +
@@ -226,7 +251,8 @@
     if (!state.student.name) {
       html += nameForm("");
     } else {
-      html += '<section class="hero"><h1>Hi ' + esc(state.student.name.split(" ")[0]) + "</h1>" +
+      html += '<section class="hero">' + (SETTINGS.tagline ? '<p class="eyebrow">' + esc(SETTINGS.tagline) + "</p>" : "") +
+        "<h1>Hi " + esc(state.student.name.split(" ")[0]) + "</h1>" +
         "<p>You have passed <strong>" + passedCount + "</strong> of <strong>" + allTopics.length +
         "</strong> topics.</p>" + progressBar(allTopics.length ? Math.round(passedCount / allTopics.length * 100) : 0) +
         "</section>";
@@ -252,7 +278,8 @@
           esc((s.title + " " + t.title + " " + (t.summary || "")).toLowerCase()) + '">' +
           "<h3>" + esc(t.title) + "</h3>" +
           '<p class="muted">' + esc(t.summary || "") + "</p>" +
-          '<div class="card-foot">' + status + '<span class="muted small">' + t.questions.length + " questions</span></div>" +
+          '<div class="card-foot">' + status + '<span class="muted small">' + t.questions.length + " quiz" +
+          ((t.practice || []).length ? " · " + t.practice.length + " written" : "") + "</span></div>" +
           "</a>";
       });
       html += "</div></section>";
@@ -302,7 +329,7 @@
             return "<p>" + esc(p).replace(/\n/g, "<br>") + "</p>";
           }).join("") + "</article>";
       } else {
-        var label = { video: "Video", pdf: "PDF", link: "Link" }[r.type] || "Link";
+        var label = { video: "Video", pdf: "PDF", link: "Link", docx: "Word" }[r.type] || "Link";
         html += '<a class="card resource" href="' + esc(safeUrl(r.url)) + '" target="_blank" rel="noopener">' +
           '<span class="tag">' + label + "</span> " + esc(r.title || r.url) +
           '<span class="ext" aria-hidden="true">↗</span></a>';
@@ -318,10 +345,81 @@
       html += '<p><span class="badge pass">Passed</span></p>' +
         '<a class="btn" href="#/certificate/' + encodeURIComponent(t.id) + '">View certificate</a> ';
     }
-    html += '<a class="btn primary" href="#/quiz/' + encodeURIComponent(t.id) + '">' + (st.attempts ? "Try again" : "Start quiz") + "</a>" +
-      "</aside></div>";
+    html += '<a class="btn primary" href="#/quiz/' + encodeURIComponent(t.id) + '">' + (st.attempts ? "Try again" : "Start quiz") + "</a>";
+    if ((t.practice || []).length) {
+      html += '<p class="small muted panel-note">Then try the <a href="#practice" id="toPractice">written exam questions</a> below.</p>';
+    }
+    html += "</aside></div>";
+
+    if ((t.practice || []).length) {
+      var ps = practiceStats(state, t);
+      html += '<section id="practice" class="practice"><div class="subject-head"><h2>Exam practice</h2>' +
+        '<span class="muted small" id="practiceSummary">' + practiceSummary(ps) + "</span></div>" +
+        '<p class="muted">Write your answer, then open the mark scheme and give yourself a mark. ' +
+        "Answers save in this browser. These marks do not count towards the quiz certificate.</p>";
+      t.practice.forEach(function (item, i) {
+        var key = practiceKey(t, item, i);
+        var saved = state.practice[key] || { text: "", mark: null };
+        var marks = item.marks || 0;
+        var opts = '<option value="">–</option>';
+        for (var m = 0; m <= marks; m++) {
+          opts += '<option value="' + m + '"' + (saved.mark === m ? " selected" : "") + ">" + m + "</option>";
+        }
+        html += '<article class="card practice-item" data-key="' + esc(key) + '" data-i="' + i + '">' +
+          '<div class="practice-q"><p class="question">' + esc(item.q) + "</p>" +
+          '<span class="badge">' + marks + " mark" + (marks === 1 ? "" : "s") + "</span></div>" +
+          '<label class="sr-only" for="pa-' + i + '">Your answer</label>' +
+          '<textarea class="answer" id="pa-' + i + '" rows="' + Math.min(10, 2 + marks) + '" placeholder="Write your answer here">' + esc(saved.text) + "</textarea>" +
+          '<details class="scheme"' + (saved.mark !== null ? " open" : "") + "><summary>Show mark scheme</summary>" +
+          (item.suggested ? '<p class="small muted">Suggested answer. Not from the original workbook.</p>' : "") +
+          formatScheme(item.answer) +
+          '<div class="row self-mark"><label for="pm-' + i + '">My mark</label>' +
+          '<select id="pm-' + i + '" class="mark">' + opts + "</select>" +
+          '<span class="muted small">out of ' + marks + "</span></div>" +
+          "</details></article>";
+      });
+      html += "</section>";
+    }
 
     app.innerHTML = html;
+
+    var toP = document.getElementById("toPractice");
+    if (toP) toP.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.getElementById("practice").scrollIntoView({ behavior: "smooth" });
+    });
+
+    app.querySelectorAll(".practice-item").forEach(function (card) {
+      var key = card.getAttribute("data-key");
+      var ta = card.querySelector(".answer");
+      var sel = card.querySelector(".mark");
+      var timer = null;
+      function save() {
+        var stt = loadState();
+        stt.practice[key] = { text: ta.value, mark: sel.value === "" ? null : Number(sel.value) };
+        saveState(stt);
+        var sum = document.getElementById("practiceSummary");
+        if (sum) sum.innerHTML = practiceSummary(practiceStats(stt, t));
+      }
+      ta.addEventListener("input", function () { clearTimeout(timer); timer = setTimeout(save, 400); });
+      ta.addEventListener("blur", function () { clearTimeout(timer); save(); });
+      sel.addEventListener("change", save);
+    });
+  }
+
+  function practiceSummary(ps) {
+    return ps.marked + " of " + ps.total + " self-marked" + (ps.possible ? " · " + ps.got + "/" + ps.possible + " marks" : "");
+  }
+
+  // Mark schemes: blank line = new paragraph, lines starting "- " = bullet list.
+  function formatScheme(text) {
+    return String(text || "").split(/\n\s*\n/).map(function (block) {
+      var lines = block.split("\n");
+      if (lines.every(function (l) { return /^\s*- /.test(l); })) {
+        return "<ul>" + lines.map(function (l) { return "<li>" + esc(l.replace(/^\s*- /, "")) + "</li>"; }).join("") + "</ul>";
+      }
+      return "<p>" + esc(block).replace(/\n/g, "<br>") + "</p>";
+    }).join("");
   }
 
   function viewQuiz(topicId) {
@@ -344,7 +442,8 @@
 
     var pm = passMarkFor(t);
     var questions = shuffle(t.questions).slice(0, Math.min(t.questions.length, SETTINGS.questionsPerQuiz)).map(function (q) {
-      var order = shuffle(q.options.map(function (_, i) { return i; }));
+      var idxs = q.options.map(function (_, i) { return i; });
+      var order = (q.shuffle === false || q.options.length === 2) ? idxs : shuffle(idxs);
       return {
         q: q.q,
         options: order.map(function (i) { return q.options[i]; }),
@@ -491,7 +590,7 @@
       html += '<section class="card"><div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
         (subjectComplete(state, s) ? '<a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Subject certificate</a>' : "") +
         "</div>" +
-        '<div class="table-wrap"><table><thead><tr><th>Topic</th><th>Attempts</th><th>Best</th><th>Last</th><th>Status</th></tr></thead><tbody>';
+        '<div class="table-wrap"><table><thead><tr><th>Topic</th><th>Attempts</th><th>Best</th><th>Last</th><th>Written</th><th>Status</th></tr></thead><tbody>';
       s.topics.forEach(function (t) {
         var st = topicStats(state, t.id);
         html += "<tr>" +
@@ -499,6 +598,10 @@
           "<td>" + st.attempts + "</td>" +
           "<td>" + (st.best == null ? "–" : st.best + "%") + "</td>" +
           "<td>" + (st.last ? st.last.pct + "%" : "–") + "</td>" +
+          "<td>" + (function () {
+            var ps = practiceStats(state, t);
+            return ps.total ? ps.marked + "/" + ps.total + (ps.possible ? ' <span class="muted">(' + ps.got + "/" + ps.possible + ")</span>" : "") : "–";
+          })() + "</td>" +
           "<td>" + (st.passed
             ? '<a class="badge pass" href="#/certificate/' + encodeURIComponent(t.id) + '">Certificate</a>'
             : st.attempts ? '<span class="badge">Pass mark ' + passMarkFor(t) + "%</span>" : '<span class="muted">Not started</span>') +
@@ -538,7 +641,7 @@
       '<p id="backupMsg" class="small" aria-live="polite"></p></section>';
 
     html += '<section class="card danger-zone"><h2>Start again</h2>' +
-      '<p class="small">Deletes your name, scores and certificates from this browser.</p>' +
+      '<p class="small">Deletes your name, scores, written answers and certificates from this browser.</p>' +
       '<button class="btn danger" id="resetAll" type="button">Delete all progress</button></section>';
 
     app.innerHTML = html;
@@ -580,6 +683,10 @@
       Object.keys(incoming.certificates).forEach(function (k) {
         var c = incoming.certificates[k], mine = st.certificates[k];
         if (!mine || c.pct > mine.pct) st.certificates[k] = c;
+      });
+      Object.keys(incoming.practice).forEach(function (k) {
+        var mine = st.practice[k], inc = incoming.practice[k];
+        if (!mine || (!mine.text && inc.text) || (mine.mark === null && inc.mark !== null)) st.practice[k] = inc;
       });
       if (!st.student.name && incoming.student.name) st.student.name = incoming.student.name;
       saveState(st);
@@ -660,9 +767,9 @@
       back: "#/topic/" + encodeURIComponent(t.id),
       colour: s.colour || "#1f4e79",
       name: state.student.name,
-      reason: "has successfully completed the " + esc(s.title) + " quiz",
+      reason: "has passed the revision quiz for",
       topic: t.title,
-      detail: "with a score of " + cert.pct + "%",
+      detail: esc(s.title) + " · score " + cert.pct + "%",
       date: cert.date,
       code: certCode([state.student.name, t.id, cert.date, cert.pct])
     });
@@ -694,7 +801,7 @@
       back: "#/progress",
       colour: s.colour || "#1f4e79",
       name: state.student.name,
-      reason: "has passed every topic in",
+      reason: "has passed every revision quiz in",
       topic: s.title,
       detail: s.topics.length + " topics · average score " + avg + "%",
       date: date,

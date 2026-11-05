@@ -177,6 +177,21 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
 .review .question { font-size: 1rem; font-weight: 600; margin: 0 0 6px; }
 .review p { margin-bottom: 4px; }
 
+/* Exam practice */
+.eyebrow { text-transform: uppercase; letter-spacing: .6px; font-size: .78rem; font-weight: 700; color: var(--subject); margin-bottom: .3em; }
+.panel-note { margin: 12px 0 0; }
+.practice { margin-top: 32px; }
+.practice-q { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.practice-q .question { font-size: 1rem; font-weight: 600; margin: 0 0 10px; }
+.practice-item textarea.answer { font-family: inherit; font-size: .95rem; margin: 0 0 10px; }
+.scheme summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 4px 0; }
+.scheme[open] { background: var(--bg); border-radius: 10px; padding: 8px 14px 12px; }
+.scheme ul { margin: 0 0 .8em; padding-left: 1.2em; }
+.scheme li { margin-bottom: .3em; }
+.self-mark { border-top: 1px solid var(--line); padding-top: 10px; }
+.self-mark label { margin: 0; }
+select { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; min-height: 38px; }
+
 /* Progress */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 16px; }
 .stats .card { margin: 0; }
