@@ -115,6 +115,10 @@ Rules:
 - 37 written questions had no answer in the workbook. They have a suggested answer marked `suggested: true`, shown to students as "Suggested answer. Not from the original workbook." Staff should check these.
 - Open table exercises that had no single right answer became written practice items.
 
+### Mock test coverage (November 2026)
+
+Every question topic in the Element 1 & 2 Paper 1 mock and the Element 6 Paper 2 mock is covered on the site. The mock questions themselves are NOT on the site: the site has equivalent questions with different scenarios and numbers, so the mock stays unseen. Added for this: topic 1.12 Organisational structures; CICs, LLPs, asset locks, joint and several liability, royalties (1.4); circular economy (1.3); board roles, Chair vs CEO (1.6); Modern Slavery Act and employee H&S duties (1.7); employment status and Uber v Aslam, annual leave (2.1); agency fees vs internal promotion (2.2); TOWS (6.1); PDCA and TQM principles (6.2); Kotter's steps under exam names, nudge defaults, ADKAR and Kübler-Ross scenarios (6.3); PRINCE2 stage boundaries, Agile vs PRINCE2, payback period (6.4).
+
 ### Element 6
 
 - Notes, quiz questions and flashcards are written in our own words from the textbook. The textbook PDF itself is not on the site: it is a licensed copy.
