@@ -66,6 +66,10 @@ What gets counted:
 
 What it can't tell you: which student did what. That needs logins and a server.
 
+## Podcasts
+
+Episodes are listed in `public/data/podcasts.js` and the files go in `public/audio/` with exactly the listed names. Each episode appears in the Podcasts tab and on its topic page once its file is uploaded, with a play button and a download button. Plays and downloads are counted in GoatCounter (`podcast-played/E1`, `podcast-download/E1`).
+
 ## Adding and editing content
 
 Content is in `public/data/`, one file per Element (`element1-business-context.js` and so on). Site name, pass mark and certificate signatory are in `public/data/settings.js`. Edit, push, and Render redeploys.

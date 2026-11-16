@@ -242,9 +242,18 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
   .fc-text { font-size: 1.15rem; }
 }
 
-/* Podcast */
-.podcast audio { width: 100%; margin: 4px 0 6px; }
-.podcast p { margin: 0; }
+/* Podcasts */
+.podcast audio { width: 100%; margin: 8px 0 6px; }
+.podcast-head { display: flex; align-items: center; gap: 10px; }
+.podcast-head h3 { margin: 0; }
+.podcast-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.podcast-more { margin-top: 10px; }
+.podcast-more summary { cursor: pointer; font-weight: 600; color: var(--brand); }
+.podcast-more ul { margin: 8px 0; padding-left: 1.2em; font-size: .92rem; }
+.podcast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; align-items: start; }
+.podcast-grid .card { margin: 0; }
+.podcast-group .podcast { box-shadow: none; padding: 12px 14px; margin: 10px 0; }
+@media (max-width: 400px) { .podcast-grid { grid-template-columns: 1fr; } }
 
 /* Exam practice */
 .eyebrow { text-transform: uppercase; letter-spacing: .6px; font-size: .78rem; font-weight: 700; color: var(--subject); margin-bottom: .3em; }

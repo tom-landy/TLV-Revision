@@ -514,27 +514,86 @@
     return ps.possible ? ps.got + " / " + ps.possible + " marks (" + ps.marked + " of " + ps.total + " questions)" : "Not yet";
   }
 
-  // Podcast: if audio/<topic id>.mp3 (or .m4a) exists, show a player. Nothing to configure.
+  // ---------- Podcasts ----------
+  // Episodes are listed in data/podcasts.js; each only shows once its file is in audio/.
+  var PODCASTS = (window.TLV_PODCASTS || []).filter(function (e) { return topicIndex[e.topic]; });
+  var podcastChecks = {};
+
+  function podcastUrl(e) { return "audio/" + encodeURIComponent(e.file); }
+
+  function podcastAvailable(e) {
+    if (!podcastChecks[e.id]) {
+      podcastChecks[e.id] = !window.fetch ? Promise.resolve(false) :
+        fetch(podcastUrl(e), { method: "HEAD" }).then(function (r) {
+          var type = r.headers.get("content-type") || "";
+          return r.ok && type.indexOf("text/html") !== 0;
+        }).catch(function () { return false; });
+    }
+    return podcastChecks[e.id];
+  }
+
+  function podcastCardHtml(e, full) {
+    var ext = (e.file.split(".").pop() || "").toUpperCase();
+    return '<article class="card podcast" data-ep="' + esc(e.id) + '">' +
+      '<div class="podcast-head"><span class="badge">' + esc(e.id) + "</span><h3>" + esc(e.title) + "</h3></div>" +
+      (full ? '<p class="small muted">' + esc(e.lesson) + ' · <a href="#/topic/' + encodeURIComponent(e.topic) + '">' + esc(topicIndex[e.topic].topic.title) + "</a></p>" : "") +
+      '<audio controls preload="none" src="' + esc(podcastUrl(e)) + '">Your browser cannot play this audio.</audio>' +
+      '<div class="podcast-actions"><a class="btn small-btn" href="' + esc(podcastUrl(e)) + '" download="' + esc(e.file) + '">Download (' + esc(ext) + ")</a></div>" +
+      (full ? '<details class="podcast-more"><summary>What it covers</summary><ul>' +
+        e.covers.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>" +
+        (e.scenario ? '<p class="small"><strong>Scenario:</strong> ' + esc(e.scenario) + "</p>" : "") + "</details>" : "") +
+      "</article>";
+  }
+
+  function bindPodcastCard(card, e) {
+    var audio = card.querySelector("audio"), counted = false;
+    audio.addEventListener("play", function () {
+      if (counted) return; counted = true;
+      track("podcast-played/" + e.id, "Podcast played: " + e.id + " " + e.title, true);
+    });
+    card.querySelector("a[download]").addEventListener("click", function () {
+      track("podcast-download/" + e.id, "Podcast downloaded: " + e.id + " " + e.title, true);
+    });
+  }
+
+  // Topic page: show this topic's episodes that have been uploaded.
   function loadPodcast(t) {
     var box = document.getElementById("podcast");
-    if (!box || !window.fetch) return;
-    var tries = ["audio/" + t.id + ".mp3", "audio/" + t.id + ".m4a"];
-    (function next(i) {
-      if (i >= tries.length) return;
-      fetch(tries[i], { method: "HEAD" }).then(function (r) {
-        var type = r.headers.get("content-type") || "";
-        if (!r.ok || type.indexOf("text/html") === 0) return next(i + 1);
-        if (!document.body.contains(box)) return; // student moved on
-        box.innerHTML = '<div class="card podcast no-print"><h3>Listen: topic podcast</h3>' +
-          '<audio controls preload="none" src="' + esc(tries[i]) + '">Your browser cannot play this audio.</audio>' +
-          '<p class="small muted">AI-generated summary. If it disagrees with the key points, trust the key points.</p></div>';
-        var audio = box.querySelector("audio"), counted = false;
-        audio.addEventListener("play", function () {
-          if (counted) return; counted = true;
-          track("podcast-played/" + t.id, "Podcast played: " + t.title, true);
-        });
-      }).catch(function () { next(i + 1); });
-    })(0);
+    var eps = PODCASTS.filter(function (e) { return e.topic === t.id; });
+    if (!box || !eps.length) return;
+    Promise.all(eps.map(podcastAvailable)).then(function (ok) {
+      var live = eps.filter(function (_, i) { return ok[i]; });
+      if (!live.length || !document.body.contains(box)) return;
+      box.innerHTML = '<section class="card podcast-group no-print"><h3>Listen: topic podcast' + (live.length > 1 ? "s" : "") + "</h3>" +
+        live.map(function (e) { return podcastCardHtml(e, false); }).join("") +
+        '<p class="small muted">AI-generated. If a podcast disagrees with the key points, trust the key points. <a href="#/podcasts">All podcasts</a></p></section>';
+      live.forEach(function (e) { bindPodcastCard(box.querySelector('[data-ep="' + e.id + '"]'), e); });
+    });
+  }
+
+  function viewPodcasts() {
+    setTitle("Podcasts");
+    markNav("podcasts");
+    var html = "<h1>Podcasts</h1>" +
+      '<p class="muted">Listen here or download to your phone. AI-generated summaries: if one disagrees with the key points on a topic page, trust the key points.</p>' +
+      '<div id="podcastList"><p class="muted">Loading…</p></div>';
+    app.innerHTML = html;
+    Promise.all(PODCASTS.map(podcastAvailable)).then(function (ok) {
+      var list = document.getElementById("podcastList");
+      if (!list) return;
+      var live = PODCASTS.filter(function (_, i) { return ok[i]; });
+      if (!live.length) { list.innerHTML = '<div class="card"><p>No podcasts yet. Check back soon.</p></div>'; return; }
+      var out = "";
+      CONTENT.subjects.forEach(function (s) {
+        var eps = live.filter(function (e) { return topicIndex[e.topic].subject === s; });
+        if (!eps.length) return;
+        out += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '"><div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
+          '<span class="muted">' + eps.length + " episode" + (eps.length === 1 ? "" : "s") + "</span></div>" +
+          '<div class="podcast-grid">' + eps.map(function (e) { return podcastCardHtml(e, true); }).join("") + "</div></section>";
+      });
+      list.innerHTML = out;
+      live.forEach(function (e) { bindPodcastCard(list.querySelector('[data-ep="' + e.id + '"]'), e); });
+    });
   }
 
   function practiceSummary(ps) {
@@ -1467,7 +1526,7 @@
     var page = parts[0] || "";
 
     if (page === "toggle-goatcounter") page = ""; // GoatCounter's own "don't count me" switch
-    var known = { "": 1, topic: 1, quiz: 1, test: 1, cards: 1, mistakes: 1, progress: 1, certificate: 1 };
+    var known = { "": 1, topic: 1, quiz: 1, test: 1, cards: 1, mistakes: 1, progress: 1, certificate: 1, podcasts: 1 };
     var trackPath = known[page] ? "/" + parts.filter(function (x) { return x; }).join("/") : "/not-found";
 
     if (page === "") viewHome();
@@ -1477,6 +1536,7 @@
     else if (page === "cards") viewCards(parts[1]);
     else if (page === "mistakes") viewMistakes();
     else if (page === "progress") viewProgress();
+    else if (page === "podcasts") viewPodcasts();
     else if (page === "certificate" && parts[1] === "subject") viewSubjectCertificate(parts[2]);
     else if (page === "certificate") viewCertificate(parts[1]);
     else viewNotFound();

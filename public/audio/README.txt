@@ -1,9 +1,10 @@
-Topic podcasts go in this folder.
+Podcast files go in this folder.
 
-Name each file after its topic number, exactly:
-  1.4.mp3   -> plays on topic 1.4
-  6.3.mp3   -> plays on topic 6.3
-(.m4a also works, e.g. 2.1.m4a)
+Upload each file with EXACTLY the name listed in public/data/podcasts.js
+(e.g. "E1. Why_Organisational_Inertia_Guarantees_Failure.m4a").
+An episode appears on the site (Podcasts tab + its topic page) as soon as its file is here.
 
-One file per topic. The player appears on that topic's page automatically.
-Keep each file under 25 MB (GitHub's browser upload limit). MP3, mono, 64 kbps is plenty for speech.
+New episode? Upload the file here, then add an entry to public/data/podcasts.js
+(copy an existing one and change id, file, topic, title, lesson, covers, scenario).
+
+Keep each file under 25 MB (GitHub's browser upload limit). .m4a and .mp3 both work.
