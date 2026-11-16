@@ -10,7 +10,11 @@ window.TLV_CONTENT = {
     defaultPassMark: 80,
     certificateSignatory: "TLV Teaching Team",
     // Max questions per quiz attempt, drawn at random from the topic's bank.
-    questionsPerQuiz: 10
+    questionsPerQuiz: 10,
+    // Anonymous usage counts with GoatCounter (no cookies, no names sent).
+    // Sign up free at goatcounter.com, then put your code here, e.g. "tlv-revision"
+    // for tlv-revision.goatcounter.com. Leave empty to turn counting off.
+    goatcounter: ""
   },
   subjects: []
 };

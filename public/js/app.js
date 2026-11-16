@@ -7,6 +7,37 @@
     CONTENT.settings || {}
   );
   var STORAGE_KEY = "tlv-revision-v1";
+
+  // ---------- Anonymous usage counts (GoatCounter) ----------
+  // Only page paths (e.g. /topic/1.4) and events (e.g. quiz-finished/1.4/pass) are sent.
+  // Never names, answers or scores.
+  var analyticsQueue = [];
+  var analyticsOn = !!SETTINGS.goatcounter;
+  (function loadAnalytics() {
+    if (!analyticsOn) return;
+    var endpoint = /^https?:/.test(SETTINGS.goatcounter) ? SETTINGS.goatcounter : "https://" + SETTINGS.goatcounter + ".goatcounter.com/count";
+    var sc = document.createElement("script");
+    sc.async = true;
+    sc.src = "https://gc.zgo.at/count.js";
+    sc.setAttribute("data-goatcounter", endpoint);
+    sc.setAttribute("data-goatcounter-settings", '{"no_onload": true}');
+    sc.onload = function () {
+      var q = analyticsQueue; analyticsQueue = [];
+      q.forEach(sendCount);
+    };
+    document.head.appendChild(sc);
+  })();
+
+  function sendCount(c) {
+    try { window.goatcounter.count(c); } catch (e) { /* blocked or offline: ignore */ }
+  }
+
+  function track(path, title, isEvent) {
+    if (!analyticsOn) return;
+    var c = { path: path, title: title || path, event: !!isEvent };
+    if (window.goatcounter && window.goatcounter.count) sendCount(c);
+    else if (analyticsQueue.length < 50) analyticsQueue.push(c);
+  }
   var app = document.getElementById("app");
 
   // ---------- Content lookup ----------
@@ -431,7 +462,7 @@
     });
 
     var pp = document.getElementById("printPractice");
-    if (pp) pp.addEventListener("click", function () { window.print(); });
+    if (pp) pp.addEventListener("click", function () { track("print-practice/" + t.id, "Printed exam practice: " + t.title, true); window.print(); });
     var pcb = document.getElementById("printSchemes");
     if (pcb) pcb.addEventListener("change", function () {
       printSchemes = pcb.checked;
@@ -928,6 +959,7 @@
         }
         recordMistakes(st, questions, responses);
         saveState(st);
+        track("quiz-finished/" + t.id + "/" + (passed ? "pass" : "fail"), "Quiz finished: " + t.title + (passed ? " (pass)" : " (not passed)"), true);
         var html = storageBanner() + resultCard({
           passed: passed, score: score, total: total, pct: pct, passMark: pm,
           heading: passed ? (firstPass ? "Passed. Certificate earned." : "Passed.") : "Not passed yet",
@@ -971,6 +1003,7 @@
       finish: function (score, total, responses) {
         var pct = Math.round(score / total * 100);
         var st = loadState();
+        track("test-finished/" + s.id, "Element test finished: " + s.title, true);
         st.tests.push({ subjectId: s.id, score: Math.round(score * 10) / 10, total: total, pct: pct, date: new Date().toISOString(), seconds: Math.round((Date.now() - started) / 1000) });
         recordMistakes(st, questions, responses);
         saveState(st);
@@ -1027,6 +1060,7 @@
         var st = loadState();
         recordMistakes(st, questions, responses);
         saveState(st);
+        track("mistakes-finished", "Mistakes practice finished", true);
         var left = missedPool(st).length;
         return resultCard({
           score: score, total: total, pct: pct, heading: "Mistakes practice",
@@ -1105,6 +1139,7 @@
       done = true;
       var st = loadState();
       st.cards[t.id] = { known: knownFirstTime, total: cards.length, date: new Date().toISOString() };
+      track("flashcards-finished/" + t.id, "Flashcards finished: " + t.title, true);
       saveState(st);
       app.innerHTML = '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Flashcards</nav>" +
         '<section class="card result is-pass"><h1>Deck finished</h1>' +
@@ -1322,7 +1357,7 @@
 
   function bindPrint() {
     var b = document.getElementById("printCert");
-    if (b) b.addEventListener("click", function () { window.print(); });
+    if (b) b.addEventListener("click", function () { track("print-certificate" + location.hash.replace(/^#\/certificate/, ""), "Printed certificate", true); window.print(); });
     fitCertificate();
   }
 
@@ -1399,12 +1434,17 @@
   // ---------- Router ----------
 
   var cleanup = null;
+  var lastTrackedPath = null;
 
   function route() {
     if (cleanup) { cleanup(); cleanup = null; }
     var hash = location.hash.replace(/^#\/?/, "");
     var parts = hash.split("/").map(function (p) { try { return decodeURIComponent(p); } catch (e) { return p; } });
     var page = parts[0] || "";
+
+    if (page === "toggle-goatcounter") page = ""; // GoatCounter's own "don't count me" switch
+    var known = { "": 1, topic: 1, quiz: 1, test: 1, cards: 1, mistakes: 1, progress: 1, certificate: 1 };
+    var trackPath = known[page] ? "/" + parts.filter(function (x) { return x; }).join("/") : "/not-found";
 
     if (page === "") viewHome();
     else if (page === "topic") viewTopic(parts[1]);
@@ -1417,6 +1457,8 @@
     else if (page === "certificate") viewCertificate(parts[1]);
     else viewNotFound();
 
+    if (trackPath !== lastTrackedPath) track(trackPath, document.title); // skip re-renders of the same page
+    lastTrackedPath = trackPath;
     document.body.classList.toggle("cert-page", page === "certificate");
     document.body.classList.toggle("topic-page", page === "topic");
     setPrintPage(page === "certificate");
@@ -1435,5 +1477,9 @@
   loadState();
   document.querySelector(".brand").lastChild.textContent = " " + SETTINGS.siteName.replace(/^TLV\s*/, "");
   renderWho();
+  if (analyticsOn) {
+    var foot = document.querySelector(".site-footer");
+    if (foot) foot.insertAdjacentHTML("beforeend", "<p>We count visits anonymously to see how the site is used. No cookies, and your name is never sent.</p>");
+  }
   route();
 })();

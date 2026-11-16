@@ -52,6 +52,20 @@ The repo includes `render.yaml`, so Render can set it up from the file.
 
 To set it up by hand instead: **New > Static Site**, pick the repo, leave the build command empty, and set the publish directory to `public`.
 
+## Usage tracking (anonymous)
+
+The site can count usage with [GoatCounter](https://www.goatcounter.com): no cookies, no consent banner needed, and no names are sent. It is off until a code is set.
+
+1. Sign up at goatcounter.com and pick a code, e.g. `tlv-revision` (your dashboard is then tlv-revision.goatcounter.com).
+2. Put the code in `public/data/settings.js`: `goatcounter: "tlv-revision"`. Push, and Render redeploys.
+3. To stop your own visits being counted, open the live site with `#toggle-goatcounter` on the end of the address, once per browser.
+
+What gets counted:
+- Page views: `/` (home), `/topic/1.4`, `/quiz/1.4`, `/cards/1.4`, `/test/element-6`, `/progress`, `/certificate/...`
+- Events: `quiz-finished/1.4/pass` or `/fail`, `test-finished/element-6`, `flashcards-finished/1.4`, `mistakes-finished`, `print-practice/1.4`, `print-certificate/...`
+
+What it can't tell you: which student did what. That needs logins and a server.
+
 ## Adding and editing content
 
 Content is in `public/data/`, one file per Element (`element1-business-context.js` and so on). Site name, pass mark and certificate signatory are in `public/data/settings.js`. Edit, push, and Render redeploys.
