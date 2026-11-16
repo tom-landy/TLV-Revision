@@ -523,11 +523,15 @@
 
   function podcastAvailable(e) {
     if (!podcastChecks[e.id]) {
-      podcastChecks[e.id] = !window.fetch ? Promise.resolve(false) :
-        fetch(podcastUrl(e), { method: "HEAD" }).then(function (r) {
+      // Never cache the check (a deleted file must disappear) and give up after 4 seconds,
+      // so the page can never hang on "Loading".
+      var check = !window.fetch ? Promise.resolve(false) :
+        fetch(podcastUrl(e), { method: "HEAD", cache: "no-store" }).then(function (r) {
           var type = r.headers.get("content-type") || "";
-          return r.ok && type.indexOf("text/html") !== 0;
+          return r.ok && type.indexOf("text/html") !== 0 && type.indexOf("text/plain") !== 0;
         }).catch(function () { return false; });
+      var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(false); }, 4000); });
+      podcastChecks[e.id] = Promise.race([check, timeout]);
     }
     return podcastChecks[e.id];
   }
