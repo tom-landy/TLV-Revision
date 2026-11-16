@@ -367,7 +367,7 @@
       '<header class="page-head" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
       "<h1>" + esc(t.title) + "</h1>" +
       '<p class="muted">' + esc(t.summary || "") + "</p></header>" +
-      '<div class="two-col"><section><h2>Resources</h2>';
+      '<div class="two-col"><section><h2>Resources</h2><div id="podcast"></div>';
 
     if (!t.resources || !t.resources.length) html += '<p class="muted">No resources yet.</p>';
     (t.resources || []).forEach(function (r) {
@@ -454,6 +454,7 @@
     }
 
     app.innerHTML = html;
+    loadPodcast(t);
 
     var toP = document.getElementById("toPractice");
     if (toP) toP.addEventListener("click", function (e) {
@@ -511,6 +512,29 @@
 
   function printTotal(ps) {
     return ps.possible ? ps.got + " / " + ps.possible + " marks (" + ps.marked + " of " + ps.total + " questions)" : "Not yet";
+  }
+
+  // Podcast: if audio/<topic id>.mp3 (or .m4a) exists, show a player. Nothing to configure.
+  function loadPodcast(t) {
+    var box = document.getElementById("podcast");
+    if (!box || !window.fetch) return;
+    var tries = ["audio/" + t.id + ".mp3", "audio/" + t.id + ".m4a"];
+    (function next(i) {
+      if (i >= tries.length) return;
+      fetch(tries[i], { method: "HEAD" }).then(function (r) {
+        var type = r.headers.get("content-type") || "";
+        if (!r.ok || type.indexOf("text/html") === 0) return next(i + 1);
+        if (!document.body.contains(box)) return; // student moved on
+        box.innerHTML = '<div class="card podcast no-print"><h3>Listen: topic podcast</h3>' +
+          '<audio controls preload="none" src="' + esc(tries[i]) + '">Your browser cannot play this audio.</audio>' +
+          '<p class="small muted">AI-generated summary. If it disagrees with the key points, trust the key points.</p></div>';
+        var audio = box.querySelector("audio"), counted = false;
+        audio.addEventListener("play", function () {
+          if (counted) return; counted = true;
+          track("podcast-played/" + t.id, "Podcast played: " + t.title, true);
+        });
+      }).catch(function () { next(i + 1); });
+    })(0);
   }
 
   function practiceSummary(ps) {

@@ -242,6 +242,10 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
   .fc-text { font-size: 1.15rem; }
 }
 
+/* Podcast */
+.podcast audio { width: 100%; margin: 4px 0 6px; }
+.podcast p { margin: 0; }
+
 /* Exam practice */
 .eyebrow { text-transform: uppercase; letter-spacing: .6px; font-size: .78rem; font-weight: 700; color: var(--subject); margin-bottom: .3em; }
 .panel-note { margin: 12px 0 0; }
