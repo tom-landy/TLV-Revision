@@ -575,7 +575,7 @@
     setTitle("Podcasts");
     markNav("podcasts");
     var html = "<h1>Podcasts</h1>" +
-      '<p class="muted">Listen here or download to your phone. AI-generated summaries: if one disagrees with the key points on a topic page, trust the key points.</p>' +
+      '<p class="muted">Listen here or download to your device.</p>' +
       '<div id="podcastList"><p class="muted">Loading…</p></div>';
     app.innerHTML = html;
     Promise.all(PODCASTS.map(podcastAvailable)).then(function (ok) {
