@@ -309,8 +309,9 @@
       var done = s.topics.filter(function (t) { return state.certificates[t.id]; }).length;
       var m = s.title.match(/^Element (\d+):\s*(.*)$/);
       return '<button type="button" class="jump-btn" data-jump="' + esc(s.id) + '" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
-        (m ? '<span class="jump-num">E' + m[1] + "</span>" + esc(m[2]) : esc(s.title)) +
-        '<span class="jump-count">' + done + "/" + s.topics.length + "</span></button>";
+        '<span class="jump-top"><span class="jump-num">' + (m ? "E" + m[1] : "") + '</span>' +
+        '<span class="jump-count">' + done + "/" + s.topics.length + "</span></span>" +
+        '<span class="jump-name">' + esc(m ? m[2] : s.title) + "</span></button>";
     }).join("") + "</nav>";
 
     html += '<div class="search"><label for="topicSearch" class="sr-only">Search topics</label>' +
