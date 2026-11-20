@@ -305,12 +305,20 @@
         "</section>";
     }
 
+    html += '<nav class="jump" aria-label="Jump to an Element">' + CONTENT.subjects.map(function (s) {
+      var done = s.topics.filter(function (t) { return state.certificates[t.id]; }).length;
+      var m = s.title.match(/^Element (\d+):\s*(.*)$/);
+      return '<button type="button" class="jump-btn" data-jump="' + esc(s.id) + '" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
+        (m ? '<span class="jump-num">E' + m[1] + "</span>" + esc(m[2]) : esc(s.title)) +
+        '<span class="jump-count">' + done + "/" + s.topics.length + "</span></button>";
+    }).join("") + "</nav>";
+
     html += '<div class="search"><label for="topicSearch" class="sr-only">Search topics</label>' +
       '<input id="topicSearch" type="search" placeholder="Search topics…"></div>';
 
     CONTENT.subjects.forEach(function (s) {
       var done = s.topics.filter(function (t) { return state.certificates[t.id]; }).length;
-      html += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
+      html += '<section class="subject" id="sec-' + esc(s.id) + '" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
         '<div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
         '<span class="muted">' + done + "/" + s.topics.length + " passed</span>" +
         (subjectComplete(state, s) ? ' <a class="badge gold" href="#/certificate/subject/' + encodeURIComponent(s.id) + '">Element certificate</a>' : "") +
@@ -335,6 +343,18 @@
 
     app.innerHTML = html;
     bindNameForm();
+
+    app.querySelectorAll(".jump-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var sec = document.getElementById("sec-" + b.getAttribute("data-jump"));
+        if (!sec) return;
+        if (sec.hidden) { search.value = ""; search.dispatchEvent(new Event("input")); }
+        // Measure the sticky header each time: it is taller on phones.
+        var header = document.querySelector(".site-header");
+        var offset = (header ? header.getBoundingClientRect().height : 0) + 12;
+        window.scrollTo({ top: sec.getBoundingClientRect().top + window.pageYOffset - offset, behavior: "smooth" });
+      });
+    });
 
     var search = document.getElementById("topicSearch");
     search.addEventListener("input", function () {
