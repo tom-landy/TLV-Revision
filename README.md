@@ -4,7 +4,7 @@ A static revision site for TLV students on the City & Guilds T Level in Manageme
 
 Elements 1 to 5 are based on the TLV revision workbooks (the original Word files are in `public/files/` and linked from each topic). Element 6 (Project and Change Management) was written for the site from the C&G Core textbook chapter 6, with exam practice built from the Paper 2 past-paper questions (8715-032, Summer 2023, Autumn 2023, Summer 2024).
 
-**Currently live: Elements 1, 2 and 6** (what has been taught so far). Elements 3, 4 and 5 are built but switched off: to turn one on, uncomment its `<script>` line in `public/index.html`.
+**Currently live: Elements 1 to 6.** To hide an Element, wrap its `<script>` line in `public/index.html` in `<!-- -->`.
 
 No build step, no server, no database. Plain HTML, CSS and JavaScript in `public/`.
 
