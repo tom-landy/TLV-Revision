@@ -70,6 +70,16 @@ What it can't tell you: which student did what. That needs logins and a server.
 
 Episodes are listed in `public/data/podcasts.js` and the files go in `public/audio/` with exactly the listed names. Each episode appears in the Podcasts tab and on its topic page once its file is uploaded, with a play button and a download button. Plays and downloads are counted in GoatCounter (`podcast-played/E1`, `podcast-download/E1`).
 
+## Deep-dive podcasts
+
+One long episode per topic goes in `public/audio/deep-dives/`, named after the topic number: `6.3.m4a` (or `.mp3`). It appears on the topic page and in the Podcasts tab automatically; there is no list to edit. GitHub's website accepts files up to 25 MB, so export long episodes as MP3, mono, 64 kbps (about 0.5 MB a minute). See the README in that folder.
+
+## How quizzes avoid giving answers away
+
+- A failed topic quiz shows which answers were wrong but not the correct answers. These unlock when the student passes, or after their second failed attempt at that topic.
+- Written exam questions keep the mark scheme locked until the student has written at least 15 words.
+- Flashcards have a "Type my answer first" option that shows the student's attempt next to the real answer.
+
 ## Adding and editing content
 
 Content is in `public/data/`, one file per Element (`element1-business-context.js` and so on). Site name, pass mark and certificate signatory are in `public/data/settings.js`. Edit, push, and Render redeploys.

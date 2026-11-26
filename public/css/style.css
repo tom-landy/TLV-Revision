@@ -267,6 +267,19 @@ label { display: block; font-weight: 600; margin: 8px 0 4px; }
 .podcast-group .podcast { box-shadow: none; padding: 12px 14px; margin: 10px 0; }
 @media (max-width: 400px) { .podcast-grid { grid-template-columns: 1fr; } }
 
+.banner.locked { background: color-mix(in srgb, var(--brand) 10%, var(--surface)); color: var(--text); border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--line)); max-width: 760px; margin: 0 auto 16px; }
+.scheme.is-locked summary { color: var(--muted); cursor: not-allowed; }
+.scheme.is-locked summary::after { content: " (locked)"; font-weight: 400; }
+.unlock-hint { margin: -4px 0 8px; transition: color .2s; }
+.unlock-hint.nudge { color: var(--bad); }
+.fc-opts { display: inline-flex; flex-wrap: wrap; gap: 6px 16px; }
+.fc-typed { font-family: inherit; font-size: 1rem; margin: 0 0 12px; }
+.fc-yours { background: var(--bg); border-radius: 10px; padding: 10px 14px; margin: -4px 0 14px; }
+.fc-yours p { margin: 4px 0 0; }
+.podcast.is-deep { border-top: 4px solid var(--subject); }
+.pod-section { margin-top: 8px; }
+.pod-el { margin: 0; padding-left: 12px; border-left: 5px solid var(--subject); font-size: 1.1rem; }
+
 /* Exam practice */
 .eyebrow { text-transform: uppercase; letter-spacing: .6px; font-size: .78rem; font-weight: 700; color: var(--subject); margin-bottom: .3em; }
 .panel-note { margin: 12px 0 0; }

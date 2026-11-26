@@ -459,7 +459,8 @@
           printAnswerHtml(saved.text, marks) +
           '<label class="sr-only" for="pa-' + i + '">Your answer</label>' +
           '<textarea class="answer" id="pa-' + i + '" rows="' + Math.min(10, 2 + marks) + '" placeholder="Write your answer here">' + esc(saved.text) + "</textarea>" +
-          '<details class="scheme"' + (saved.mark !== null ? " open" : "") + "><summary>Show mark scheme</summary>" +
+          '<p class="small muted unlock-hint"' + (schemeUnlocked(saved) ? " hidden" : "") + ">Write at least " + UNLOCK_WORDS + " words to unlock the mark scheme (" + wordCount(saved.text) + " so far).</p>" +
+          '<details class="scheme' + (schemeUnlocked(saved) ? "" : " is-locked") + '"' + (saved.mark !== null ? " open" : "") + "><summary>Show mark scheme</summary>" +
           (item.suggested ? '<p class="small muted">Suggested answer. Not from the original workbook.</p>' : "") +
           formatScheme(item.answer) +
           '<div class="row self-mark"><label for="pm-' + i + '">My mark</label>' +
@@ -509,7 +510,15 @@
         if (pt) pt.textContent = printTotal(stats);
         card.querySelector(".print-mark").textContent = printMarkText(sel.value === "" ? null : Number(sel.value), marks);
       }
+      var hint = card.querySelector(".unlock-hint"), det = card.querySelector(".scheme");
+      det.querySelector("summary").addEventListener("click", function (ev) {
+        if (det.classList.contains("is-locked")) { ev.preventDefault(); hint.classList.add("nudge"); setTimeout(function () { hint.classList.remove("nudge"); }, 600); }
+      });
       ta.addEventListener("input", function () {
+        var n = wordCount(ta.value), open = n >= UNLOCK_WORDS || sel.value !== "";
+        det.classList.toggle("is-locked", !open);
+        hint.hidden = open;
+        if (!open) hint.textContent = "Write at least " + UNLOCK_WORDS + " words to unlock the mark scheme (" + n + " so far).";
         // Keep the printable copy current straight away, so Ctrl+P mid-typing prints everything.
         card.querySelector(".print-answer").outerHTML = printAnswerHtml(ta.value, marks);
         clearTimeout(timer); timer = setTimeout(save, 400);
@@ -520,6 +529,9 @@
   }
 
   var printSchemes = false;
+  var UNLOCK_WORDS = 15;
+  function wordCount(text) { return (String(text || "").trim().match(/\S+/g) || []).length; }
+  function schemeUnlocked(saved) { return saved.mark !== null || wordCount(saved.text) >= UNLOCK_WORDS; }
 
   function printAnswerHtml(text, marks) {
     if (text && text.trim()) return '<div class="print-only print-answer">' + esc(text) + "</div>";
@@ -540,7 +552,30 @@
   var PODCASTS = (window.TLV_PODCASTS || []).filter(function (e) { return topicIndex[e.topic]; });
   var podcastChecks = {};
 
-  function podcastUrl(e) { return "audio/" + encodeURIComponent(e.file); }
+  function podcastUrl(e) { return e.url || "audio/" + encodeURIComponent(e.file); }
+
+  // Deep dives: one per topic, found by name: audio/deep-dives/<topic id>.m4a (or .mp3). No list to edit.
+  var deepDiveChecks = {};
+  function findDeepDive(t) {
+    if (!deepDiveChecks[t.id]) {
+      var base = "audio/deep-dives/" + t.id;
+      var mk = function (ext) {
+        return { id: "Deep dive", url: base + ext, topic: t.id, title: t.title, lesson: "Deep dive",
+          file: "TLV Deep Dive " + t.title.replace(/[^\w .-]/g, "") + ext, covers: [], deep: true };
+      };
+      var a = mk(".m4a"), b = mk(".mp3");
+      deepDiveChecks[t.id] = headOk(a.url).then(function (ok) { return ok ? a : headOk(b.url).then(function (ok2) { return ok2 ? b : null; }); });
+    }
+    return deepDiveChecks[t.id];
+  }
+  function headOk(url) {
+    if (!window.fetch) return Promise.resolve(false);
+    var check = fetch(url, { method: "HEAD", cache: "no-store" }).then(function (r) {
+      var type = r.headers.get("content-type") || "";
+      return r.ok && type.indexOf("text/html") !== 0 && type.indexOf("text/plain") !== 0;
+    }).catch(function () { return false; });
+    return Promise.race([check, new Promise(function (res) { setTimeout(function () { res(false); }, 4000); })]);
+  }
 
   function podcastAvailable(e) {
     if (!podcastChecks[e.id]) {
@@ -559,12 +594,12 @@
 
   function podcastCardHtml(e, full) {
     var ext = (e.file.split(".").pop() || "").toUpperCase();
-    return '<article class="card podcast" data-ep="' + esc(e.id) + '">' +
-      '<div class="podcast-head"><span class="badge">' + esc(e.id) + "</span><h3>" + esc(e.title) + "</h3></div>" +
+    return '<article class="card podcast' + (e.deep ? " is-deep" : "") + '" data-ep="' + esc(e.deep ? "deep-" + e.topic : e.id) + '">' +
+      '<div class="podcast-head"><span class="badge">' + esc(e.deep ? "Deep dive" : e.id) + "</span><h3>" + esc(e.title) + "</h3></div>" +
       (full ? '<p class="small muted">' + esc(e.lesson) + ' · <a href="#/topic/' + encodeURIComponent(e.topic) + '">' + esc(topicIndex[e.topic].topic.title) + "</a></p>" : "") +
       '<audio controls preload="none" src="' + esc(podcastUrl(e)) + '">Your browser cannot play this audio.</audio>' +
       '<div class="podcast-actions"><a class="btn small-btn" href="' + esc(podcastUrl(e)) + '" download="' + esc(e.file) + '">Download (' + esc(ext) + ")</a></div>" +
-      (full ? '<details class="podcast-more"><summary>What it covers</summary><ul>' +
+      (full && e.covers.length ? '<details class="podcast-more"><summary>What it covers</summary><ul>' +
         e.covers.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>" +
         (e.scenario ? '<p class="small"><strong>Scenario:</strong> ' + esc(e.scenario) + "</p>" : "") + "</details>" : "") +
       "</article>";
@@ -574,10 +609,10 @@
     var audio = card.querySelector("audio"), counted = false;
     audio.addEventListener("play", function () {
       if (counted) return; counted = true;
-      track("podcast-played/" + e.id, "Podcast played: " + e.id + " " + e.title, true);
+      track(e.deep ? "deepdive-played/" + e.topic : "podcast-played/" + e.id, (e.deep ? "Deep dive played: " : "Podcast played: " + e.id + " ") + e.title, true);
     });
     card.querySelector("a[download]").addEventListener("click", function () {
-      track("podcast-download/" + e.id, "Podcast downloaded: " + e.id + " " + e.title, true);
+      track(e.deep ? "deepdive-download/" + e.topic : "podcast-download/" + e.id, (e.deep ? "Deep dive downloaded: " : "Podcast downloaded: " + e.id + " ") + e.title, true);
     });
   }
 
@@ -585,14 +620,15 @@
   function loadPodcast(t) {
     var box = document.getElementById("podcast");
     var eps = PODCASTS.filter(function (e) { return e.topic === t.id; });
-    if (!box || !eps.length) return;
-    Promise.all(eps.map(podcastAvailable)).then(function (ok) {
-      var live = eps.filter(function (_, i) { return ok[i]; });
+    if (!box) return;
+    Promise.all([findDeepDive(t)].concat(eps.map(podcastAvailable))).then(function (res) {
+      var deep = res[0], ok = res.slice(1);
+      var live = (deep ? [deep] : []).concat(eps.filter(function (_, i) { return ok[i]; }));
       if (!live.length || !document.body.contains(box)) return;
       box.innerHTML = '<section class="card podcast-group no-print"><h3>Listen: topic podcast' + (live.length > 1 ? "s" : "") + "</h3>" +
         live.map(function (e) { return podcastCardHtml(e, false); }).join("") +
         '<p class="small muted">AI-generated. If a podcast disagrees with the key points, trust the key points. <a href="#/podcasts">All podcasts</a></p></section>';
-      live.forEach(function (e) { bindPodcastCard(box.querySelector('[data-ep="' + e.id + '"]'), e); });
+      live.forEach(function (e) { bindPodcastCard(box.querySelector('[data-ep="' + (e.deep ? "deep-" + e.topic : e.id) + '"]'), e); });
     });
   }
 
@@ -603,12 +639,25 @@
       '<p class="muted">Listen here or download to your device.</p>' +
       '<div id="podcastList"><p class="muted">Loading…</p></div>';
     app.innerHTML = html;
-    Promise.all(PODCASTS.map(podcastAvailable)).then(function (ok) {
+    var allTopics = [];
+    CONTENT.subjects.forEach(function (s) { s.topics.forEach(function (t) { allTopics.push(t); }); });
+    Promise.all([Promise.all(allTopics.map(findDeepDive)), Promise.all(PODCASTS.map(podcastAvailable))]).then(function (res) {
+      var deeps = res[0].filter(function (d) { return d; }), ok = res[1];
       var list = document.getElementById("podcastList");
       if (!list) return;
       var live = PODCASTS.filter(function (_, i) { return ok[i]; });
-      if (!live.length) { list.innerHTML = '<div class="card"><p>No podcasts yet. Check back soon.</p></div>'; return; }
+      if (!live.length && !deeps.length) { list.innerHTML = '<div class="card"><p>No podcasts yet. Check back soon.</p></div>'; return; }
       var out = "";
+      if (deeps.length) {
+        out += '<h2 class="pod-section">Deep dives</h2><p class="muted">One long episode per topic.</p>';
+        CONTENT.subjects.forEach(function (s) {
+          var ds = deeps.filter(function (d) { return topicIndex[d.topic].subject === s; });
+          if (!ds.length) return;
+          out += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '"><div class="subject-head"><h3 class="pod-el">' + esc(s.title) + "</h3></div>" +
+            '<div class="podcast-grid">' + ds.map(function (d) { return podcastCardHtml(d, true); }).join("") + "</div></section>";
+        });
+        if (live.length) out += '<h2 class="pod-section">Short episodes</h2>';
+      }
       CONTENT.subjects.forEach(function (s) {
         var eps = live.filter(function (e) { return topicIndex[e.topic].subject === s; });
         if (!eps.length) return;
@@ -617,7 +666,7 @@
           '<div class="podcast-grid">' + eps.map(function (e) { return podcastCardHtml(e, true); }).join("") + "</div></section>";
       });
       list.innerHTML = out;
-      live.forEach(function (e) { bindPodcastCard(list.querySelector('[data-ep="' + e.id + '"]'), e); });
+      deeps.concat(live).forEach(function (e) { bindPodcastCard(list.querySelector('[data-ep="' + (e.deep ? "deep-" + e.topic : e.id) + '"]'), e); });
     });
   }
 
@@ -873,6 +922,16 @@
     return h;
   }
 
+  // Review without giving the answer away: the student's own answer, or how many parts were right.
+  function reviewHiddenHtml(pq, r, sc) {
+    var cls = sc >= 1 ? "ok" : "bad";
+    if (pq.type === "mcq") return '<p class="' + cls + '">Your answer: ' + esc(pq.options[r]) + "</p>";
+    if (pq.type === "type") return '<p class="' + cls + '">Your answer: ' + esc(r) + "</p>";
+    if (pq.type === "multi") return '<p class="' + cls + '">You selected: ' + esc(r.map(function (i) { return pq.options[i]; }).join(", ")) + "</p>";
+    var parts = pq.type === "match" ? pq.rows.length : pq.type === "order" ? pq.correct.length : pq.items.length;
+    return '<p class="' + cls + '">' + Math.round(sc * parts) + " of " + parts + " parts correct.</p>";
+  }
+
   function fmtPoints(n) {
     var r = Math.round(n * 10) / 10;
     return String(r % 1 === 0 ? r : r.toFixed(1));
@@ -972,6 +1031,9 @@
       var total = questions.length;
       var score = scores.reduce(function (m, x) { return m + x; }, 0);
       var html = opts.finish(score, total, responses);
+      var reveal = opts.reveal ? opts.reveal() : true;
+      if (!reveal) html += '<div class="banner locked">Correct answers unlock when you pass, or after your second attempt. ' +
+        "Check the key points and flashcards for the questions marked ✗, then try again.</div>";
       html += '<section class="review-list"><h2>Your answers</h2>' + questions.map(function (pq, i) {
         var sc = scores[i];
         var cls = sc >= 1 ? "is-right" : sc > 0 ? "is-part" : "is-wrong";
@@ -981,8 +1043,8 @@
           '<div class="review-head"><span class="review-mark" aria-hidden="true">' + mark + "</span>" +
           '<p class="question"><span class="sr-only">' + label + "</span>" + (i + 1) + ". " + esc(pq.q) + "</p>" +
           (pq.type !== "mcq" && pq.type !== "type" ? '<span class="badge">' + fmtPoints(sc) + " / 1</span>" : "") + "</div>" +
-          reviewBodyHtml(pq, responses[i]) +
-          (pq.explanation ? '<p class="muted">' + esc(pq.explanation) + "</p>" : "") + "</div>";
+          (reveal ? reviewBodyHtml(pq, responses[i]) + (pq.explanation ? '<p class="muted">' + esc(pq.explanation) + "</p>" : "")
+            : reviewHiddenHtml(pq, responses[i], sc)) + "</div>";
       }).join("") + "</section>";
       app.innerHTML = html;
       renderWho();
@@ -1044,6 +1106,7 @@
 
     var pm = passMarkFor(t);
     var started = Date.now();
+    var revealAnswers = true;
     var pool = t.questions.map(function (q) { return { q: q, topic: t }; });
     var questions = pickQuestions(pool, SETTINGS.questionsPerQuiz, 4).map(function (x) { return prepQuestion(x.q, x.topic); });
 
@@ -1051,6 +1114,7 @@
       colour: s.colour || "#1f4e79",
       crumbs: '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Quiz</nav>",
       questions: questions,
+      reveal: function () { return revealAnswers; },
       finish: function (score, total, responses) {
         var pct = Math.round(score / total * 100);
         var passed = pct >= pm;
@@ -1067,6 +1131,8 @@
         }
         recordMistakes(st, questions, responses);
         saveState(st);
+        var fails = st.attempts.filter(function (a) { return a.topicId === t.id && !a.passed; }).length;
+        revealAnswers = passed || fails >= 2;
         track("quiz-finished/" + t.id + "/" + (passed ? "pass" : "fail"), "Quiz finished: " + t.title + (passed ? " (pass)" : " (not passed)"), true);
         var html = storageBanner() + resultCard({
           passed: passed, score: score, total: total, pct: pct, passMark: pm,
@@ -1193,6 +1259,7 @@
       return;
     }
     var flipBack = false; // false: term first. true: definition first.
+    var typeFirst = false, typed = "";
     var deck, knownFirstTime, seen, current, flipped, done = false;
 
     function start() {
@@ -1207,28 +1274,44 @@
       app.innerHTML = '<nav class="crumbs"><a href="#/topic/' + encodeURIComponent(t.id) + '">' + esc(t.title) + "</a> › Flashcards</nav>" +
         '<section class="cards-wrap" style="--subject:' + esc(s.colour || "#1f4e79") + '">' +
         '<div class="quiz-top"><span>' + remaining + " card" + (remaining === 1 ? "" : "s") + " left</span>" +
-        '<label class="check small"><input type="checkbox" id="flipMode"' + (flipBack ? " checked" : "") + "> Show definition first</label></div>" +
+        '<span class="fc-opts"><label class="check small"><input type="checkbox" id="typeMode"' + (typeFirst ? " checked" : "") + "> Type my answer first</label>" +
+        '<label class="check small"><input type="checkbox" id="flipMode"' + (flipBack ? " checked" : "") + "> Show definition first</label></span></div>" +
         '<button type="button" class="flashcard' + (flipped ? " is-flipped" : "") + '" id="card" aria-live="polite">' +
         '<span class="fc-label">' + (flipped ? (flipBack ? "Term" : "Definition") : (flipBack ? "Definition" : "Term")) + "</span>" +
         '<span class="fc-text">' + esc(flipped ? (flipBack ? current.front : current.back) : (flipBack ? current.back : current.front)) + "</span>" +
-        (flipped ? "" : '<span class="fc-hint">Tap or press space to turn over</span>') +
+        (flipped ? "" : '<span class="fc-hint">' + (typeFirst ? "Type your answer below, then turn over" : "Tap or press space to turn over") + "</span>") +
         "</button>" +
+        (typeFirst && !flipped ? '<label class="sr-only" for="fcTyped">Your answer</label><textarea id="fcTyped" class="fc-typed" rows="3" placeholder="What do you think it is? Write it here first.">' + esc(typed) + "</textarea>" +
+          '<div class="fc-actions"><button class="btn primary" id="reveal" type="button">Check my answer</button></div>' : "") +
+        (typeFirst && flipped ? '<div class="fc-yours"><span class="fc-label">Your answer</span><p>' + (typed.trim() ? esc(typed) : '<span class="muted">(left blank)</span>') + "</p></div>" : "") +
         '<div class="fc-actions"' + (flipped ? "" : " hidden") + ">" +
         '<button class="btn" id="again" type="button">Not yet <span class="muted small">(1)</span></button>' +
         '<button class="btn primary" id="knew" type="button">Got it <span class="small">(2)</span></button></div>' +
         "</section>";
       document.getElementById("card").addEventListener("click", flip);
       document.getElementById("flipMode").addEventListener("change", function (e) { flipBack = e.target.checked; flipped = false; render(); });
+      document.getElementById("typeMode").addEventListener("change", function (e) { typeFirst = e.target.checked; flipped = false; typed = ""; render(); });
+      var ta = document.getElementById("fcTyped");
+      if (ta) {
+        ta.addEventListener("input", function () { typed = ta.value; });
+        document.getElementById("reveal").addEventListener("click", function () { typed = ta.value; flipped = true; render(); });
+      }
       if (flipped) {
         document.getElementById("again").addEventListener("click", function () { answer(false); });
         document.getElementById("knew").addEventListener("click", function () { answer(true); });
         document.getElementById("knew").focus();
+      } else if (ta) {
+        ta.focus();
       } else {
         document.getElementById("card").focus();
       }
     }
 
-    function flip() { flipped = !flipped; render(); }
+    function flip() {
+      var ta = document.getElementById("fcTyped");
+      if (ta) typed = ta.value;
+      flipped = !flipped; render();
+    }
 
     function answer(knew) {
       if (knew && !seen[current.front]) knownFirstTime++;
@@ -1239,7 +1322,7 @@
       }
       if (!deck.length) return finish();
       current = deck.shift();
-      flipped = false;
+      flipped = false; typed = "";
       render();
     }
 

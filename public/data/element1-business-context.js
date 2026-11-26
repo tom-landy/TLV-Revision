@@ -15,7 +15,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "Public sector: owned and funded by the government, provides services to the public on a not-for-profit basis (e.g. NHS, BBC, armed forces).\n\nPrivate sector: owned by individuals or groups, aims to make a profit for owners or shareholders (e.g. Tesco, Barclays).\n\nVoluntary or third sector: not-for-profit, any surplus is reinvested, aims for social impact rather than profit (e.g. charities such as Oxfam, social enterprises)."
+            body: "Public sector: owned and funded by the government, provides services to the public on a not-for-profit basis (e.g. NHS, BBC, armed forces).\n\nPrivate sector: owned by individuals or groups, aims to make a profit for owners or shareholders (e.g. Tesco, Barclays).\n\nVoluntary or third sector: not-for-profit, any surplus is reinvested, aims for social impact rather than profit (e.g. charities such as Oxfam, social enterprises).\n\nFunding: public sector organisations are funded mainly by taxes; private sector businesses by owners, investors and sales; voluntary organisations by donations, grants, fundraising and trading (e.g. charity shops).\n\nMain aims: public sector, providing services and value for money for taxpayers; private sector, profit and growth; voluntary sector, social aims and helping people.\n\nWhere organisations operate: locally, nationally, internationally (trading with other countries) or globally (multinationals operating in many countries)."
           },
           WORKBOOK
         ],
@@ -24,7 +24,11 @@
           ["Private sector", "Businesses owned by individuals or groups, aiming to make a profit for their owners or shareholders (e.g. Tesco)."],
           ["Voluntary (third) sector", "Not-for-profit organisations that reinvest any surplus and aim for social impact (e.g. charities, social enterprises)."],
           ["Not-for-profit", "Any surplus money is reinvested in the organisation's purpose rather than paid to owners."],
-          ["Social enterprise", "An organisation in the voluntary sector that trades to achieve social aims and reinvests its surplus."]
+          ["Social enterprise", "An organisation in the voluntary sector that trades to achieve social aims and reinvests its surplus."],
+          ["Public sector funding", "Mainly taxes."],
+          ["Voluntary sector funding", "Donations, grants, fundraising and trading."],
+          ["Multinational", "A business that operates in many countries."],
+          ["Value for money", "A key aim in the public sector: getting the most from taxpayers' money."]
         ],
         questions: [
           { type: "sort", q: "Sort each organisation into its sector.", categories: ["Public", "Private", "Voluntary"], items: [["NHS", 0], ["BBC", 0], ["Armed forces", 0], ["Tesco", 1], ["Barclays Bank", 1], ["Oxfam", 2], ["A social enterprise", 2]], explanation: "Public: owned and funded by government. Private: owned by individuals or groups for profit. Voluntary: not-for-profit, surplus reinvested." },
@@ -35,7 +39,16 @@
           { q: "Which sector do charities and social enterprises belong to?", options: ["Private sector", "Public sector", "Voluntary or third sector", "Mixed sector"], answer: 2, explanation: "Charities and social enterprises are in the voluntary or third sector." },
           { q: "The public sector is owned and funded by the ______.", options: ["government", "shareholders", "volunteers", "public"], answer: 0, explanation: "Public sector organisations are owned and funded by the government." },
           { q: "Private sector businesses aim to make a ______ for their owners or shareholders.", options: ["surplus to reinvest", "profit", "public service", "donation"], answer: 1, explanation: "The aim of a private sector business is profit for its owners or shareholders." },
-          { q: "The voluntary or third sector is ______ and any surplus money is reinvested.", options: ["private", "government-funded", "not-for-profit", "profit-making"], answer: 2, explanation: "Voluntary sector organisations are not-for-profit. Any surplus is reinvested." }
+          { q: "The voluntary or third sector is ______ and any surplus money is reinvested.", options: ["private", "government-funded", "not-for-profit", "profit-making"], answer: 2, explanation: "Voluntary sector organisations are not-for-profit. Any surplus is reinvested." },
+          { q: "A council-run leisure centre belongs to which sector?", options: ["Public", "Private", "Voluntary"], answer: 0, explanation: "It is run by local government and funded through taxes and fees." },
+          { q: "A food bank run by a charity belongs to which sector?", options: ["Public", "Private", "Voluntary"], answer: 2, explanation: "" },
+          { q: "A football club owned by shareholders belongs to which sector?", options: ["Public", "Private", "Voluntary"], answer: 1, explanation: "" },
+          { q: "What is the MAIN aim of most private sector businesses?", options: ["Providing free services", "Making a profit", "Raising donations", "Following government policy"], answer: 1, explanation: "" },
+          { q: "A public sector manager is asked to show 'value for money'. What does this mean?", options: ["Maximising profit for shareholders", "Getting the best results from taxpayers' money", "Charging the highest prices", "Raising more donations"], answer: 1, explanation: "" },
+          { q: "A business with factories and offices in 30 countries is best described as:", options: ["A sole trader", "A multinational", "A local business", "A charity"], answer: 1, explanation: "" },
+          { type: "sort", q: "How is each organisation mainly funded?", categories: ["Taxes", "Owners, investors and sales", "Donations and grants"], items: [["NHS hospital", 0], ["State school", 0], ["High street retailer", 1], ["Tech start-up", 1], ["Animal rescue charity", 2], ["Community food bank", 2]], explanation: "" },
+          { type: "sort", q: "Where does each business mainly operate?", categories: ["Local", "National", "Global"], items: [["A village bakery", 0], ["A hairdresser with one salon", 0], ["A UK-wide supermarket chain", 1], ["A fast food brand in 100 countries", 2]], explanation: "" },
+          { q: "True or false: charities can sell goods and services to raise money.", options: ["True", "False"], answer: 0, explanation: "E.g. charity shops, as long as the money goes to the cause." }
         ],
         practice: [
           { q: "State two features of a voluntary sector organisation.", marks: 2, answer: "Any two from:\n- not-for-profit\n- any surplus is reinvested\n- provides a public service or helps people\n- run by volunteers or private individuals\n- aim is social impact rather than profit" },
@@ -127,7 +140,11 @@
           { q: "In Carroll's pyramid, which level is 'obey the law'?", options: ["Level 1 (base)", "Level 2", "Level 3", "Level 4 (top)"], answer: 1, explanation: "Level 2 is Legal, above Economic at the base." },
           { q: "In Carroll's pyramid, which level sits directly above Legal?", options: ["Economic", "Ethical", "Philanthropic", "Nothing, Legal is the top"], answer: 1, explanation: "Economic, Legal, Ethical, Philanthropic, from bottom to top." },
           { q: "Which business activity best shows the circular economy in action?", options: ["A clothing brand publishing a target to be carbon neutral by 2040", "A phone maker taking back old handsets, refurbishing and reselling them", "A supermarket running an advert about its eco values", "A bank sponsoring a local beach clean"], answer: 1, explanation: "Taking back, refurbishing and reselling keeps products in use. Targets, adverts and sponsorship don't change how products are used." },
-          { type: "sort", q: "Is each one a circular economy practice?", categories: ["Circular", "Not circular"], items: [["Furniture company repairing and reselling returned sofas", 0], ["Printer firm remanufacturing used ink cartridges", 0], ["Tool hire shop renting equipment instead of selling it", 0], ["Company announcing a net zero target", 1], ["Hotel advert about its green values", 1], ["Retailer donating to a tree-planting charity", 1]], explanation: "Circular practices keep products and materials in use. Pledges and adverts do not by themselves." }
+          { type: "sort", q: "Is each one a circular economy practice?", categories: ["Circular", "Not circular"], items: [["Furniture company repairing and reselling returned sofas", 0], ["Printer firm remanufacturing used ink cartridges", 0], ["Tool hire shop renting equipment instead of selling it", 0], ["Company announcing a net zero target", 1], ["Hotel advert about its green values", 1], ["Retailer donating to a tree-planting charity", 1]], explanation: "Circular practices keep products and materials in use. Pledges and adverts do not by themselves." },
+          { q: "A supermarket gives its unsold food to a local food bank and asks for nothing back. This is an example of:", options: ["Philanthropy", "Market research", "Diversification", "Price skimming"], answer: 0, explanation: "" },
+          { q: "A firm switches its delivery vans to electric to reduce emissions. Which impact is it improving most directly?", options: ["Environmental", "Legal", "Political", "Technological only"], answer: 0, explanation: "" },
+          { q: "A new factory creates 300 local jobs. This is mainly which kind of impact?", options: ["Economic (and social)", "Environmental only", "Legal", "Political"], answer: 0, explanation: "Jobs and wages boost the local economy and community." },
+          { q: "True or false: a business can only be socially responsible if it makes no profit.", options: ["True", "False"], answer: 1, explanation: "Carroll's pyramid puts being profitable at the base." }
         ],
         practice: [
           { q: "Describe three benefits to a business of having a positive social, economic and environmental impact on society.", marks: 3, suggested: true, answer: "Any three, 1 mark each:\n- Better reputation and brand image, which attracts customers.\n- Stronger commitment and loyalty from employees and customers.\n- Easier to recruit, because more prospective employees want to work there.\n- Helps secure the long-term future of the business.\n- Lower risk of fines or legal action." },
@@ -235,7 +252,11 @@
           { q: "'Increase sales.' Which SMART elements are missing?", options: ["Only Relevant", "Specific, Measurable and Timebound", "Only Achievable", "None, it is SMART"], answer: 1, explanation: "It doesn't say how much, so it isn't specific or measurable, and there's no deadline." },
           { q: "'Build brand awareness over the next year, even if that seems impossible given current budget constraints.' Which SMART element is weak?", options: ["Specific", "Achievable", "Timebound", "Relevant"], answer: 1, explanation: "If the budget makes it impossible, it isn't achievable." },
           { q: "'Release one new product press release.' Which SMART element is missing?", options: ["Measurable", "Specific", "Timebound", "Relevant"], answer: 2, explanation: "There is no deadline, so it isn't timebound." },
-          { q: "'Reduce staff sickness by 50% within six months.' According to the workbook, which SMART element is missing?", options: ["Specific", "Measurable", "Timebound", "None, it is fully SMART"], answer: 3, explanation: "It has a measurable target and a deadline. The workbook accepts it as fully SMART." }
+          { q: "'Reduce staff sickness by 50% within six months.' According to the workbook, which SMART element is missing?", options: ["Specific", "Measurable", "Timebound", "None, it is fully SMART"], answer: 3, explanation: "It has a measurable target and a deadline. The workbook accepts it as fully SMART." },
+          { q: "A café sets the objective 'Increase lunchtime sales by 10% by the end of June'. Which SMART element tells you WHEN?", options: ["Specific", "Measurable", "Achievable", "Timebound"], answer: 3, explanation: "" },
+          { q: "Which is the best example of an AIM rather than an objective?", options: ["Cut waste by 5% by March", "Be the most trusted bank in the UK", "Recruit two staff by September", "Raise prices by 3% in April"], answer: 1, explanation: "Aims are broad; the others are measurable objectives." },
+          { q: "A business finds a competitor is closing nearby. In a SWOT this is:", options: ["A strength", "A weakness", "An opportunity", "A threat"], answer: 2, explanation: "An external factor that could help the business." },
+          { q: "Corporate objectives are set for the whole business. Functional objectives are set for:", options: ["Individual departments", "Customers", "Competitors", "The government"], answer: 0, explanation: "" }
         ],
         practice: [
           { q: "Explain the difference between an aim and an objective.", marks: 2, answer: "An aim is a large, general goal the business intends to achieve (e.g. become market leader).\n\nAn objective is a precise, measurable step designed to achieve the aim (e.g. increase market share by 5% in one year)." },
@@ -282,7 +303,12 @@
           { q: "Which director brings independent challenge to the board and is not an employee of the company?", options: ["Chief Executive Officer", "Non-executive director", "Chief Financial Officer", "Chief Operating Officer"], answer: 1, explanation: "NEDs are independent of day-to-day management." },
           { q: "Who leads the board of directors?", options: ["The Chair", "The CFO", "The company secretary", "The largest customer"], answer: 0, explanation: "The Chair leads the board. The CEO runs the company." },
           { q: "Why should the roles of Chair and CEO be held by different people?", options: ["So that one person does not hold too much power", "To save on salaries", "Because the CEO must also be the CFO", "So the board meets less often"], answer: 0, explanation: "Separating them means the board can hold the CEO to account." },
-          { type: "match", q: "Match each role to its responsibility.", pairs: [["Chair", "Leads the board"], ["CEO", "Runs the company day to day"], ["CFO", "Responsible for finance"], ["COO", "Responsible for operations"], ["Non-executive director", "Independent challenge to the executives"]], explanation: "" }
+          { type: "match", q: "Match each role to its responsibility.", pairs: [["Chair", "Leads the board"], ["CEO", "Runs the company day to day"], ["CFO", "Responsible for finance"], ["COO", "Responsible for operations"], ["Non-executive director", "Independent challenge to the executives"]], explanation: "" },
+          { q: "What is the main purpose of a company's AGM?", options: ["To recruit new staff", "For the board to report to shareholders, who can vote on key decisions", "To launch new products", "To audit the accounts"], answer: 1, explanation: "" },
+          { q: "Which committee oversees internal audit and the financial reporting process?", options: ["Audit committee", "Marketing committee", "Social committee", "Staff council"], answer: 0, explanation: "" },
+          { q: "A company publishes clear, honest information about its pay and performance. Which governance characteristic does this show?", options: ["Transparency", "Prudence", "Diversity", "Independence"], answer: 0, explanation: "" },
+          { q: "A board appoints directors from different backgrounds to avoid 'groupthink'. Which characteristic is this?", options: ["Diversity", "Secrecy", "Prudence", "Profitability"], answer: 0, explanation: "" },
+          { q: "True or false: good governance only matters for large PLCs.", options: ["True", "False"], answer: 1, explanation: "Public bodies, charities and smaller companies all need it." }
         ],
         practice: [
           { q: "State the seven common characteristics of good governance shared by both sectors.", marks: 2, answer: "Diversity, honesty, independence, integrity, prudence, sustainability, transparency." },
@@ -353,7 +379,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "A stakeholder is any individual or group with an interest in the business, such as employees, customers, suppliers, investors and shareholders. Their actions and needs directly affect the business's decisions and operations.\n\nInternal stakeholders (workbook): employees and managers.\n\nExternal stakeholders (workbook): customers, shareholders, suppliers, local community, government, finance providers.\n\nShareholders want to know their investment is safe and what their dividend will be. Stakeholder needs can conflict, for example a new store may bring jobs for the community but more traffic for local residents."
+            body: "A stakeholder is any individual or group with an interest in the business, such as employees, customers, suppliers, investors and shareholders. Their actions and needs directly affect the business's decisions and operations.\n\nInternal stakeholders (workbook): employees and managers.\n\nExternal stakeholders (workbook): customers, shareholders, suppliers, local community, government, finance providers.\n\nShareholders want to know their investment is safe and what their dividend will be. Stakeholder needs can conflict, for example a new store may bring jobs for the community but more traffic for local residents.\n\nMendelow's matrix maps stakeholders by their power (ability to influence the business) and interest (how much they care about a decision):\n- High power, high interest: manage closely (key players, e.g. major shareholders, the board).\n- High power, low interest: keep satisfied (e.g. a bank that lent money, a regulator).\n- Low power, high interest: keep informed (e.g. local residents, staff affected by a change).\n- Low power, low interest: monitor (minimal effort).\nA stakeholder's position can change, e.g. residents become more powerful if they organise a campaign.\n\nInternal customers are colleagues or departments who receive your work (e.g. HR providing a service to managers). External customers buy the business's goods or services."
           },
           WORKBOOK
         ],
@@ -362,7 +388,14 @@
           ["Internal stakeholder", "Inside the business, e.g. employees and managers."],
           ["External stakeholder", "Outside the business, e.g. customers, suppliers, government, local community, finance providers."],
           ["Shareholder's interest", "That their investment is safe and what their dividend will be."],
-          ["Stakeholder conflict", "When stakeholders want different things, e.g. shareholders want growth but residents don't want a new store's traffic."]
+          ["Stakeholder conflict", "When stakeholders want different things, e.g. shareholders want growth but residents don't want a new store's traffic."],
+          ["Mendelow's matrix", "Maps stakeholders by power and interest to decide how to manage them."],
+          ["Manage closely", "High power, high interest stakeholders (key players)."],
+          ["Keep satisfied", "High power, low interest stakeholders."],
+          ["Keep informed", "Low power, high interest stakeholders."],
+          ["Monitor", "Low power, low interest stakeholders."],
+          ["Internal customer", "A colleague or department that receives your work."],
+          ["External customer", "Someone outside the business who buys its goods or services."]
         ],
         questions: [
           { type: "sort", q: "Is each one an internal or external stakeholder?", categories: ["Internal", "External"], items: [["Employees", 0], ["Managers", 0], ["Customers", 1], ["Suppliers", 1], ["Local community", 1], ["Government", 1], ["Finance providers", 1]], explanation: "" },
@@ -372,7 +405,17 @@
           { q: "Managers are which type of stakeholder?", options: ["Internal", "External"], answer: 0, explanation: "Managers work inside the business, so they are internal." },
           { q: "Suppliers are which type of stakeholder?", options: ["Internal", "External"], answer: 1, explanation: "Suppliers are outside the business." },
           { q: "The government is which type of stakeholder?", options: ["Internal", "External"], answer: 1, explanation: "Government is external." },
-          { q: "Finance providers, such as banks, are which type of stakeholder?", options: ["Internal", "External"], answer: 1, explanation: "Finance providers are external." }
+          { q: "Finance providers, such as banks, are which type of stakeholder?", options: ["Internal", "External"], answer: 1, explanation: "Finance providers are external." },
+          { q: "In Mendelow's matrix, how should high power, high interest stakeholders be managed?", options: ["Monitor", "Keep informed", "Keep satisfied", "Manage closely"], answer: 3, explanation: "They are key players." },
+          { q: "A bank has lent money to a business but takes little interest in daily decisions. Using Mendelow, how should it be managed?", options: ["Manage closely", "Keep satisfied", "Keep informed", "Monitor"], answer: 1, explanation: "High power, low interest." },
+          { q: "Local residents care a lot about a planned new warehouse but have little power over the decision. Using Mendelow, the business should:", options: ["Ignore them", "Keep them informed", "Keep them satisfied", "Manage them closely"], answer: 1, explanation: "Low power, high interest." },
+          { q: "The payroll team provides payslips to the sales team. To the payroll team, the sales team are:", options: ["Internal customers", "External customers", "Suppliers", "Shareholders"], answer: 0, explanation: "" },
+          { q: "Shareholders want higher dividends while employees want a pay rise from the same profit. This is an example of:", options: ["Stakeholder conflict", "Stakeholder agreement", "Delegation", "Diversification"], answer: 0, explanation: "" },
+          { q: "Residents start a petition and get the local council involved against a new store. On Mendelow's matrix, their position:", options: ["Moves towards higher power", "Moves towards lower interest", "Stays exactly the same", "Disappears from the matrix"], answer: 0, explanation: "Organising increases their power." },
+          { type: "match", q: "Match each Mendelow position to how to manage it.", pairs: [["High power, high interest", "Manage closely"], ["High power, low interest", "Keep satisfied"], ["Low power, high interest", "Keep informed"], ["Low power, low interest", "Monitor"]], explanation: "" },
+          { type: "sort", q: "Is each one an internal or an external customer?", categories: ["Internal", "External"], items: [["The finance team receiving reports from sales", 0], ["Managers using the HR team's recruitment service", 0], ["A shopper buying a coat", 1], ["A business buying office supplies from you", 1]], explanation: "" },
+          { type: "sort", q: "Using Mendelow, how should a supermarket opening a new store manage each one?", categories: ["Manage closely", "Keep satisfied", "Keep informed"], items: [["Major shareholders funding the project", 0], ["The local planning authority", 1], ["Nearby residents", 2], ["Staff who will transfer to the store", 2]], explanation: "" },
+          { type: "type", q: "Mendelow's matrix maps stakeholders by power and ______.", accept: ["interest"], explanation: "Power and interest." }
         ],
         practice: [
           { q: "Define the term 'stakeholder' and explain why stakeholders are important to a business.", marks: 2, answer: "A stakeholder is any individual or group who has an interest in the company (e.g. employees, customers, suppliers, investors, shareholders).\n\nStakeholders are important because their actions and needs directly affect the business's decisions and operations." },
@@ -418,7 +461,11 @@
           { q: "Operating differently through new business designs using technology is called:", options: ["Transformation", "Digitisation", "Cloud-based software", "Biometrics"], answer: 0, explanation: "Digital transformation." },
           { q: "Software stored and run from the internet rather than on a business's own network is:", options: ["Hybrid infrastructure", "Cloud-based software", "Digitisation", "IoT"], answer: 1, explanation: "Cloud-based software." },
           { q: "Automated recognition of individuals based on biological and behavioural characteristics is:", options: ["Robotics", "Big Data", "Biometrics", "Digitalisation"], answer: 2, explanation: "Biometrics, e.g. fingerprint or face recognition." },
-          { q: "A mix of public and private cloud storage with on-premises data centres is called:", options: ["Hybrid infrastructure", "Cloud-based software", "Transformation", "Digitisation"], answer: 0, explanation: "Hybrid infrastructure." }
+          { q: "A mix of public and private cloud storage with on-premises data centres is called:", options: ["Hybrid infrastructure", "Cloud-based software", "Transformation", "Digitisation"], answer: 0, explanation: "Hybrid infrastructure." },
+          { q: "A warehouse fits sensors to its shelves that report stock levels automatically over the internet. This is an example of:", options: ["IoT (Internet of Things)", "Biometrics", "Digitisation", "Hybrid working"], answer: 0, explanation: "" },
+          { q: "Staff unlock their laptops with a fingerprint. This uses:", options: ["Robotics", "Biometrics", "Big Data", "Cloud storage"], answer: 1, explanation: "" },
+          { q: "An employee receives a fake email asking for their password. This is a cyber attack known as:", options: ["Phishing", "Kaizen", "Benchmarking", "Outsourcing"], answer: 0, explanation: "Phishing tricks people into giving away details." },
+          { q: "A bank scans old paper customer files into PDFs. This is:", options: ["Digitisation", "Digitalisation", "Transformation", "Robotics"], answer: 0, explanation: "Converting into digital form." }
         ],
         practice: [
           { q: "Explain two advantages of a business using cloud-based software.", marks: 2, suggested: true, answer: "Any two, 1 mark each:\n- Staff can access files and software from anywhere with an internet connection, which supports remote and hybrid working.\n- Lower upfront costs: no need to buy and maintain servers; pay by subscription.\n- Automatic updates and backups reduce the risk of losing data.\n- Easy to scale up or down as the business grows." },
@@ -435,7 +482,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "Organisational culture: the expectations and practices that guide and inform the actions of individuals who work for a business.\n\nOrganisational values: the core beliefs of a business that act as guiding principles. Culture and values are not the same thing: values guide purpose; culture is the expectations and practices within the business.\n\nA strong culture promotes greater commitment from staff. A weak culture leads to lower commitment and loyalty, and high staff turnover.\n\nExternal culture is reinforced through things like mission statements on the website. Internal branding reinforces internal culture.\n\nHybrid working: some time at home and some in the office. It was not common before the COVID-19 pandemic.\n\nResistance to change can lead to strikes and work-to-rule."
+            body: "Organisational culture: the expectations and practices that guide and inform the actions of individuals who work for a business.\n\nOrganisational values: the core beliefs of a business that act as guiding principles. Culture and values are not the same thing: values guide purpose; culture is the expectations and practices within the business.\n\nA strong culture promotes greater commitment from staff. A weak culture leads to lower commitment and loyalty, and high staff turnover.\n\nExternal culture is reinforced through things like mission statements on the website. Internal branding reinforces internal culture.\n\nHybrid working: some time at home and some in the office. It was not common before the COVID-19 pandemic.\n\nResistance to change can lead to strikes and work-to-rule.\n\nCharles Handy's four organisational cultures:\n- Power culture (a web): power sits with one person or a small group at the centre, e.g. a founder-led small business. Fast decisions, but depends on the leader.\n- Role culture (a Greek temple): clear roles, rules and procedures, e.g. the civil service or a large bank. Stable and predictable, but slow to change.\n- Task culture (a net): teams formed to complete projects, power comes from expertise, e.g. a consultancy or design agency. Flexible and creative, but can be costly and hard to control.\n- Person culture (a cluster): the organisation exists to serve the individuals in it, e.g. barristers' chambers or a partnership of doctors."
           },
           WORKBOOK
         ],
@@ -446,7 +493,11 @@
           ["Weak culture", "Lower commitment and loyalty, and high staff turnover."],
           ["Hybrid working", "Spending some time working at home and some in the office."],
           ["Resistance to change", "Staff opposing change; can lead to strikes and work-to-rule."],
-          ["Internal branding", "Reinforces internal culture among staff."]
+          ["Internal branding", "Reinforces internal culture among staff."],
+          ["Handy's power culture", "Power with one central person or group; symbol: a web."],
+          ["Handy's role culture", "Rules, procedures and clear job roles; symbol: a Greek temple."],
+          ["Handy's task culture", "Project teams, power from expertise; symbol: a net."],
+          ["Handy's person culture", "The organisation serves its individuals, e.g. barristers; symbol: a cluster."]
         ],
         questions: [
           { type: "sort", q: "Does each one reinforce internal or external culture?", categories: ["Internal", "External"], items: [["Staff training sessions", 0], ["Internal newsletters", 0], ["Team meetings", 0], ["Internal branding", 0], ["Mission statement on the company website", 1], ["Social media posts about the company's values", 1]], explanation: "" },
@@ -461,7 +512,13 @@
           { q: "True or false: values guide a business's purpose; culture is based on the expectations and practices within the business.", options: ["True", "False"], answer: 0, explanation: "True." },
           { q: "True or false: resistance to change can lead to strikes and work-to-rule.", options: ["True", "False"], answer: 0, explanation: "True." },
           { q: "True or false: hybrid working was common before the COVID-19 pandemic.", options: ["True", "False"], answer: 1, explanation: "False. It became common because of the pandemic." },
-          { q: "True or false: internal branding is a way of reinforcing external culture.", options: ["True", "False"], answer: 1, explanation: "False. Internal branding reinforces internal culture." }
+          { q: "True or false: internal branding is a way of reinforcing external culture.", options: ["True", "False"], answer: 1, explanation: "False. Internal branding reinforces internal culture." },
+          { q: "A small business where the founder makes every important decision has which Handy culture?", options: ["Power", "Role", "Task", "Person"], answer: 0, explanation: "" },
+          { q: "A government department with strict rules, procedures and job descriptions has which Handy culture?", options: ["Power", "Role", "Task", "Person"], answer: 1, explanation: "" },
+          { q: "A design agency forms a new team for each client project, led by whoever has the right expertise. Which Handy culture?", options: ["Power", "Role", "Task", "Person"], answer: 2, explanation: "" },
+          { q: "A set of barristers share offices and admin staff but each works for themselves. Which Handy culture?", options: ["Power", "Role", "Task", "Person"], answer: 3, explanation: "" },
+          { q: "Which is a likely DISADVANTAGE of a role culture?", options: ["Slow to change because of rules and procedures", "Decisions depend on one person", "No clear job roles", "Too much freedom"], answer: 0, explanation: "" },
+          { type: "match", q: "Match each Handy culture to its symbol.", pairs: [["Power culture", "A web"], ["Role culture", "A Greek temple"], ["Task culture", "A net"], ["Person culture", "A cluster"]], explanation: "" }
         ],
         practice: [
           { q: "Explain why it is important for managers to understand organisational culture.", marks: 2, suggested: true, answer: "Culture shapes how staff behave and make decisions (1), so managers who understand it can lead in a way that fits, keep staff motivated and committed, and plan changes that staff will accept rather than resist (1)." },
@@ -477,7 +534,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "Formal communication follows established management systems, structures and procedures (e.g. formal reports, presentations). Informal communication is ad hoc (e.g. brief notes, informal meet-ups).\n\nChannel richness: video conferencing is high richness. Formal reports, press releases and bulletins are lower.\n\nFactors when choosing a method: content (is it confidential?), intended audience, file size.\n\nEmail: fast and cheap, but there can be too many and they may go unread, plus virus threats.\nSocial media: increases brand awareness, but negative comments can damage reputation.\nVideo conferencing: instantaneous, but needs a good internet connection.\nIntranet: a one-stop shop for information, but needs maintaining and updating.\nMobile apps: faster sales orders, but security issues.\nVoice mail: available 24/7, but language differences.\n\nEmail etiquette: professional email address, avoid exclamation marks, spell check, avoid jargon, be careful with reply-all, reread before sending."
+            body: "Formal communication follows established management systems, structures and procedures (e.g. formal reports, presentations). Informal communication is ad hoc (e.g. brief notes, informal meet-ups).\n\nChannel richness: video conferencing is high richness. Formal reports, press releases and bulletins are lower.\n\nFactors when choosing a method: content (is it confidential?), intended audience, file size.\n\nEmail: fast and cheap, but there can be too many and they may go unread, plus virus threats.\nSocial media: increases brand awareness, but negative comments can damage reputation.\nVideo conferencing: instantaneous, but needs a good internet connection.\nIntranet: a one-stop shop for information, but needs maintaining and updating.\nMobile apps: faster sales orders, but security issues.\nVoice mail: available 24/7, but language differences.\n\nEmail etiquette: professional email address, avoid exclamation marks, spell check, avoid jargon, be careful with reply-all, reread before sending.\n\nBarriers to communication: jargon and technical language; language differences; noise and distractions; technology failures; information overload; poor timing; the receiver's emotions or attitude; physical barriers such as different sites or time zones. Reduce them by using plain English, choosing the right channel, checking understanding and getting feedback."
           },
           WORKBOOK
         ],
@@ -487,7 +544,9 @@
           ["Channel richness", "How much a channel carries (voice, face, instant feedback). Video conferencing is high; reports are low."],
           ["Choosing a method", "Consider content (is it confidential?), the audience, and file size."],
           ["Intranet", "An internal website: a one-stop shop for information, but needs maintaining."],
-          ["Email etiquette", "Professional address, no exclamation marks, spell check, no jargon, careful with reply-all, reread before sending."]
+          ["Email etiquette", "Professional address, no exclamation marks, spell check, no jargon, careful with reply-all, reread before sending."],
+          ["Barriers to communication", "Jargon, language differences, noise, technology failure, information overload, poor timing, emotions."],
+          ["Feedback (communication)", "The receiver's response, which shows whether the message was understood."]
         ],
         questions: [
           { type: "sort", q: "Is each one formal or informal communication?", categories: ["Formal", "Informal"], items: [["Formal report", 0], ["Presentation", 0], ["Board meeting minutes", 0], ["Brief note", 1], ["Informal meet-up", 1], ["Chat by the coffee machine", 1]], explanation: "" },
@@ -499,7 +558,15 @@
           { q: "Which is a disadvantage of using social media to communicate?", options: ["It is slow", "Negative comments can damage reputation", "It only reaches staff", "It cannot carry images"], answer: 1, explanation: "Public comments can quickly harm reputation." },
           { q: "Which is an advantage of a company intranet?", options: ["It needs no maintenance", "It is a one-stop shop for information", "It is open to the public", "It replaces all meetings"], answer: 1, explanation: "An intranet gathers internal information in one place, but it needs maintaining." },
           { q: "Which is a disadvantage of video conferencing?", options: ["It is not instant", "It needs a good internet connection", "It cannot be used across regions", "It is always more expensive than travel"], answer: 1, explanation: "Poor connections ruin video calls." },
-          { q: "Which is a disadvantage of mobile applications for business communication?", options: ["Security issues", "They are slower than post", "They cannot collect data", "They only work in the office"], answer: 0, explanation: "Apps on personal devices can create security risks." }
+          { q: "Which is a disadvantage of mobile applications for business communication?", options: ["Security issues", "They are slower than post", "They cannot collect data", "They only work in the office"], answer: 0, explanation: "Apps on personal devices can create security risks." },
+          { q: "An HR manager must tell an employee the outcome of a disciplinary hearing. Which channel is most appropriate?", options: ["A group chat message", "A private meeting followed by a formal letter", "A post on the intranet", "A team email"], answer: 1, explanation: "Confidential and formal, and it needs a written record." },
+          { q: "A manager uses lots of technical terms that new staff don't understand. Which barrier to communication is this?", options: ["Jargon", "Noise", "Technology failure", "Information overload"], answer: 0, explanation: "" },
+          { q: "A team in the UK and a team in Australia struggle to find meeting times. Which barrier is this?", options: ["Time zones (a physical barrier)", "Jargon", "Emotions", "Too much feedback"], answer: 0, explanation: "" },
+          { q: "Staff receive 150 emails a day and miss important ones. Which barrier is this?", options: ["Information overload", "Jargon", "Language differences", "Noise"], answer: 0, explanation: "" },
+          { q: "What is the best way to check a message has been understood?", options: ["Send it twice", "Ask for feedback or ask the receiver to summarise it", "Use more jargon", "Write it in capitals"], answer: 1, explanation: "" },
+          { q: "A company needs to share live sales figures with managers in five regions. Which is most suitable?", options: ["A shared dashboard", "A noticeboard", "Voicemail", "A printed letter"], answer: 0, explanation: "" },
+          { type: "multi", q: "Select the barriers to communication.", options: ["Jargon", "Noise and distractions", "Technology failure", "Information overload", "Plain English", "Checking understanding"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "sort", q: "Does each one help or hinder communication?", categories: ["Helps", "Hinders"], items: [["Using plain English", 0], ["Checking understanding", 0], ["Choosing the right channel", 0], ["Using unexplained acronyms", 1], ["A noisy open-plan office", 1], ["Sending the message at the wrong time", 1]], explanation: "" }
         ],
         practice: [
           { q: "Explain the difference between formal and informal communication.", marks: 2, answer: "Formal communication follows established management systems, structures and procedures (e.g. formal reports, presentations).\n\nInformal communication is ad hoc (e.g. brief notes, informal meet-ups). Both are valid in business but serve different purposes." },
@@ -514,7 +581,7 @@
         title: "1.12 Organisational structures",
         summary: "Hierarchical, flat, matrix and divisional structures, span of control and chain of command.",
         resources: [
-          { type: "notes", title: "Key points", body: "Organisational structure: how roles, responsibilities and reporting lines are arranged.\n\nSpan of control: the number of people who report directly to one manager. Wide = many; narrow = few.\nChain of command: the line of authority from the top of the organisation to the bottom.\n\nHierarchical (tall): many layers of management, narrow spans of control, a long chain of command. Clear roles and promotion routes, but slow decisions and communication.\n\nFlat: few layers, wide spans of control, a short chain of command. Faster communication and more staff empowerment, but managers can be stretched and there are fewer promotion routes.\n\nMatrix: employees report to two managers, one for their function (e.g. marketing) and one for the project they are working on. Good for projects and sharing skills, but can cause confusion and conflicting priorities.\n\nDivisional: the organisation is split into divisions by product, region or market, each with its own functions. Focus on each market, but duplication of resources.\n\nFunctional: organised by department (finance, HR, marketing). Specialist expertise, but departments can work in silos.\n\nDelayering: removing layers of management to make a structure flatter." }
+          { type: "notes", title: "Key points", body: "Organisational structure: how roles, responsibilities and reporting lines are arranged.\n\nSpan of control: the number of people who report directly to one manager. Wide = many; narrow = few.\nChain of command: the line of authority from the top of the organisation to the bottom.\n\nHierarchical (tall): many layers of management, narrow spans of control, a long chain of command. Clear roles and promotion routes, but slow decisions and communication.\n\nFlat: few layers, wide spans of control, a short chain of command. Faster communication and more staff empowerment, but managers can be stretched and there are fewer promotion routes.\n\nMatrix: employees report to two managers, one for their function (e.g. marketing) and one for the project they are working on. Good for projects and sharing skills, but can cause confusion and conflicting priorities.\n\nDivisional: the organisation is split into divisions by product, region or market, each with its own functions. Focus on each market, but duplication of resources.\n\nFunctional: organised by department (finance, HR, marketing). Specialist expertise, but departments can work in silos.\n\nDelayering: removing layers of management to make a structure flatter.\n\nCentralised organisations keep decision-making at the top (head office), giving consistency and control but slower local decisions. Decentralised organisations push decisions down to branches or departments, giving faster, local decisions and motivated staff but less consistency." }
         ],
         cards: [
           ["Span of control", "The number of people who report directly to one manager."],
@@ -524,7 +591,9 @@
           ["Matrix structure", "Employees report to two managers: one for their function and one for their project."],
           ["Divisional structure", "Split into divisions by product, region or market."],
           ["Functional structure", "Organised by department, e.g. finance, HR, marketing."],
-          ["Delayering", "Removing layers of management to make the structure flatter."]
+          ["Delayering", "Removing layers of management to make the structure flatter."],
+          ["Centralised", "Decisions are made at the top (head office): consistent but slower locally."],
+          ["Decentralised", "Decisions are delegated to branches or departments: faster and more local, but less consistent."]
         ],
         questions: [
           { q: "In which structure do employees report to two managers, one for their function and one for their project?", options: ["Hierarchical", "Flat", "Divisional", "Matrix"], answer: 3, explanation: "Matrix structures combine functional and project lines." },
@@ -536,7 +605,15 @@
           { q: "Removing layers of management to make a structure flatter is called:", options: ["Delayering", "Delegation", "Diversification", "Divisional"], answer: 0, explanation: "Delayering. Delegation is passing tasks down; diversification is entering new markets." },
           { q: "True or false: a flat structure usually means faster communication than a tall structure.", options: ["True", "False"], answer: 0, explanation: "Messages pass through fewer layers." },
           { type: "sort", q: "Does each feature describe a tall or a flat structure?", categories: ["Tall", "Flat"], items: [["Many layers of management", 0], ["Narrow spans of control", 0], ["Long chain of command", 0], ["Few layers of management", 1], ["Wide spans of control", 1], ["Short chain of command", 1]], explanation: "" },
-          { type: "match", q: "Match each structure to its description.", pairs: [["Hierarchical", "Many layers and a long chain of command"], ["Flat", "Few layers and wide spans of control"], ["Matrix", "Two managers: function and project"], ["Divisional", "Split by product, region or market"], ["Functional", "Organised by department"]], explanation: "" }
+          { type: "match", q: "Match each structure to its description.", pairs: [["Hierarchical", "Many layers and a long chain of command"], ["Flat", "Few layers and wide spans of control"], ["Matrix", "Two managers: function and project"], ["Divisional", "Split by product, region or market"], ["Functional", "Organised by department"]], explanation: "" },
+          { q: "A manager has 9 people reporting directly to them. What is their span of control?", options: ["3", "9", "10", "1"], answer: 1, explanation: "" },
+          { q: "A small design agency has 12 staff who all report directly to the owner. Which structure is this closest to?", options: ["Flat", "Tall hierarchical", "Matrix", "Divisional"], answer: 0, explanation: "" },
+          { q: "The army, with many ranks from private to general, is a classic example of which structure?", options: ["Flat", "Hierarchical (tall)", "Matrix", "Person"], answer: 1, explanation: "" },
+          { q: "A construction firm builds project teams using staff from its engineering, finance and design departments. Which structure is this?", options: ["Matrix", "Flat", "Functional only", "Divisional"], answer: 0, explanation: "" },
+          { q: "A supermarket chain lets each store manager decide local promotions. This is an example of:", options: ["Decentralisation", "Centralisation", "Delayering", "A tall structure"], answer: 0, explanation: "" },
+          { q: "If a business widens managers' spans of control, what is a likely effect?", options: ["Less close supervision and more staff responsibility", "More layers of management", "A longer chain of command", "More managers needed"], answer: 0, explanation: "" },
+          { q: "A fast food chain makes all menu and pricing decisions at head office so every branch is the same. This is:", options: ["Centralised decision-making", "Decentralised decision-making", "A matrix structure", "Delayering"], answer: 0, explanation: "" },
+          { type: "sort", q: "Is each one an advantage of centralisation or decentralisation?", categories: ["Centralisation", "Decentralisation"], items: [["Consistent decisions across all branches", 0], ["Strong control from head office", 0], ["Faster decisions made locally", 1], ["Staff feel trusted and motivated", 1]], explanation: "" }
         ],
         practice: [
           { q: "Explain one advantage and one disadvantage of a matrix structure.", marks: 4, answer: "Advantage (2): staff with different skills work together on projects (1), so expertise is shared and projects benefit from specialists (1).\n\nDisadvantage (2): staff report to two managers (1), which can cause confusion and conflicting priorities about which work comes first (1).", suggested: true },

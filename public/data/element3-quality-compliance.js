@@ -64,7 +64,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "BSI (British Standards Institution): helps improve the quality and safety of products, services and systems in the UK; known for its Kitemark.\nBSI Kitemark: a symbol on products tested and certified by the BSI.\nISO (International Organization for Standardization): brings together international experts to develop voluntary international standards.\nEFQM (European Foundation for Quality Management): improves competitiveness through quality; businesses apply, complete a business matrix and are visited by assessors.\nInvestors in People: a people-based accreditation showing an organisation leads, supports and develops its people well.\nQuality standards: standards for processes and procedures set internationally or by sector experts.\n\nBenefits of accreditation: brand awareness (can publish it in marketing), helps win tenders, builds trust with customers and stakeholders.\n\nMaintaining accreditation: internal and external audits, process maps (how a process flows from input to output), accurate documentation, and reviewing costs against the benefits."
+            body: "BSI (British Standards Institution): helps improve the quality and safety of products, services and systems in the UK; known for its Kitemark.\nBSI Kitemark: a symbol on products tested and certified by the BSI.\nISO (International Organization for Standardization): brings together international experts to develop voluntary international standards.\nEFQM (European Foundation for Quality Management): improves competitiveness through quality; businesses apply, complete a business matrix and are visited by assessors.\nInvestors in People: a people-based accreditation showing an organisation leads, supports and develops its people well.\nQuality standards: standards for processes and procedures set internationally or by sector experts.\n\nBenefits of accreditation: brand awareness (can publish it in marketing), helps win tenders, builds trust with customers and stakeholders.\n\nMaintaining accreditation: internal and external audits, process maps (how a process flows from input to output), accurate documentation, and reviewing costs against the benefits.\n\nCommon ISO standards: ISO 9001 (quality management), ISO 14001 (environmental management), ISO 45001 (occupational health and safety), ISO 27001 (information security)."
           },
           WORKBOOK
         ],
@@ -76,7 +76,11 @@
           ["Investors in People", "A people-based accreditation for how well an organisation leads, supports and develops people."],
           ["Benefits of accreditation", "Brand awareness, help with tenders, trust with customers."],
           ["Process map", "Shows how a process flows from input to output, with decisions at each step."],
-          ["Tender", "A formal bid to supply goods or do a job; accreditation helps win them."]
+          ["Tender", "A formal bid to supply goods or do a job; accreditation helps win them."],
+          ["ISO 9001", "Quality management."],
+          ["ISO 14001", "Environmental management."],
+          ["ISO 45001", "Occupational health and safety."],
+          ["ISO 27001", "Information security."]
         ],
         questions: [
           { type: "match", q: "Match each organisation or award to its description.", pairs: [["BSI", "Improves quality and safety in the UK; known for its Kitemark"], ["ISO", "International experts developing voluntary international standards"], ["EFQM", "Apply, complete a business matrix, visit from assessors"], ["BSI Kitemark", "Symbol on products tested and certified by the BSI"], ["Investors in People", "People-based accreditation for leading and developing staff"]], explanation: "" },
@@ -90,7 +94,13 @@
           { q: "Which organisation's accreditation involves applying, completing a business matrix and a visit from assessors, to improve European competitiveness?", options: ["EFQM", "BSI", "ISO", "Investors in People"], answer: 0, explanation: "EFQM." },
           { q: "What is the BSI Kitemark?", options: ["An international management standard", "A symbol shown on products tested and certified by the BSI", "A people-based accreditation", "A type of audit"], answer: 1, explanation: "A symbol on BSI-certified products." },
           { q: "Which is a people-based accreditation showing an organisation leads, supports and develops its people well?", options: ["Kitemark", "ISO 9001", "Investors in People", "EFQM"], answer: 2, explanation: "Investors in People." },
-          { q: "What does a process map show?", options: ["Where the business's sites are", "How a process flows from input through stages to output", "Staff salaries", "The organisation chart"], answer: 1, explanation: "Process maps show the flow from input to output and the decisions at each step." }
+          { q: "What does a process map show?", options: ["Where the business's sites are", "How a process flows from input through stages to output", "Staff salaries", "The organisation chart"], answer: 1, explanation: "Process maps show the flow from input to output and the decisions at each step." },
+          { q: "Which ISO standard covers quality management?", options: ["ISO 9001", "ISO 14001", "ISO 45001", "ISO 27001"], answer: 0, explanation: "" },
+          { q: "A manufacturer wants to show customers it manages its environmental impact. Which standard should it work towards?", options: ["ISO 9001", "ISO 14001", "ISO 27001", "ISO 45001"], answer: 1, explanation: "" },
+          { q: "An IT company handling sensitive client data wants to prove its information security. Which standard?", options: ["ISO 27001", "ISO 14001", "ISO 9001", "Investors in People"], answer: 0, explanation: "" },
+          { q: "A construction firm wants accreditation for how it manages workplace health and safety. Which standard?", options: ["ISO 45001", "ISO 9001", "ISO 27001", "The Kitemark"], answer: 0, explanation: "" },
+          { q: "A council will only award contracts to suppliers with ISO 9001. This shows accreditation can help with:", options: ["Winning tenders", "Avoiding tax", "Reducing staff numbers", "Removing audits"], answer: 0, explanation: "" },
+          { type: "match", q: "Match each ISO standard to what it covers.", pairs: [["ISO 9001", "Quality management"], ["ISO 14001", "Environmental management"], ["ISO 45001", "Health and safety"], ["ISO 27001", "Information security"]], explanation: "" }
         ],
         practice: [
           { q: "Explain each benefit of quality accreditation: increased brand awareness, assisting with tender opportunities, developing trust with customers.", marks: 3, answer: "- Increased brand awareness: the brand is known, the business has been inspected or certified, and it can publish the accreditation on marketing materials.\n- Assisting with tender opportunities: proof of accreditation helps when submitting tenders to supply goods or perform a job.\n- Developing trust with customers: builds trust with customers, potential employees and stakeholders; confidence in the quality of goods or services." },

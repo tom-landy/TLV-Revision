@@ -133,7 +133,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "Equality: everyone has the same opportunities and is not discriminated against.\n\nInclusion: including every person who might be excluded or marginalised due to disability or other characteristics.\n\nFive benefits of an equal, diverse and inclusive workforce: promotes innovation; encourages and enhances creativity; increases diversity and opportunities for new talent; improves motivation and retention of staff; enhances reputation.\n\nThe Equality Act applies throughout employment, not just recruitment. Employees can go to an employment tribunal about discrimination without any required length of service. A diverse interview panel helps make recruitment fair."
+            body: "Equality: everyone has the same opportunities and is not discriminated against.\n\nInclusion: including every person who might be excluded or marginalised due to disability or other characteristics.\n\nFive benefits of an equal, diverse and inclusive workforce: promotes innovation; encourages and enhances creativity; increases diversity and opportunities for new talent; improves motivation and retention of staff; enhances reputation.\n\nThe Equality Act applies throughout employment, not just recruitment. Employees can go to an employment tribunal about discrimination without any required length of service. A diverse interview panel helps make recruitment fair.\n\nPositive action is legal: taking steps to help under-represented groups, e.g. encouraging applications, or choosing between two equally qualified candidates on that basis. Positive discrimination is generally illegal: choosing someone because of a protected characteristic regardless of merit.\n\nReasonable adjustments: employers must make reasonable changes so disabled people are not at a disadvantage, e.g. adapted equipment, flexible hours or accessible interview rooms.\n\nUnconscious bias: judgements people make without realising, based on stereotypes. Reduce it with training, structured interviews and diverse panels."
           },
           WORKBOOK
         ],
@@ -143,7 +143,11 @@
           ["Inclusion", "Including every person who might be excluded or marginalised, e.g. due to disability."],
           ["Benefits of EDI", "Innovation, creativity, new talent, motivation and retention, reputation."],
           ["Employment tribunal", "Employees can claim discrimination there without any required length of service."],
-          ["Fair recruitment", "e.g. a diverse interview panel, the same questions for everyone, inclusive adverts."]
+          ["Fair recruitment", "e.g. a diverse interview panel, the same questions for everyone, inclusive adverts."],
+          ["Positive action", "Legal steps to help under-represented groups, e.g. encouraging applications."],
+          ["Positive discrimination", "Choosing someone because of a protected characteristic regardless of merit; generally illegal."],
+          ["Reasonable adjustments", "Changes employers must make so disabled people aren't disadvantaged."],
+          ["Unconscious bias", "Judgements people make without realising, based on stereotypes."]
         ],
         questions: [
           { type: "multi", q: "Select the five benefits of an equal, diverse and inclusive workforce.", options: ["Promotes innovation", "Enhances creativity", "Opportunities for new talent", "Improves motivation and retention", "Enhances reputation", "Lower wage bill", "Removes the need for recruitment"], answers: [0, 1, 2, 3, 4], explanation: "" },
@@ -155,7 +159,15 @@
           { q: "True or false: a business only needs to consider the Equality Act during recruitment.", options: ["True", "False"], answer: 1, explanation: "False. It applies throughout employment." },
           { q: "True or false: employees can use an employment tribunal without any required length of service if they think discrimination has occurred.", options: ["True", "False"], answer: 0, explanation: "True." },
           { q: "True or false: values are what a customer experiences; benefits are from the business's point of view.", options: ["True", "False"], answer: 0, explanation: "True, according to the workbook." },
-          { q: "True or false: having a diverse interview panel can help achieve an equal recruitment process.", options: ["True", "False"], answer: 0, explanation: "True." }
+          { q: "True or false: having a diverse interview panel can help achieve an equal recruitment process.", options: ["True", "False"], answer: 0, explanation: "True." },
+          { q: "A firm says in its job advert that it 'particularly welcomes applications from women, who are under-represented in our engineering team'. This is:", options: ["Positive action (legal)", "Positive discrimination (illegal)", "Direct discrimination", "Victimisation"], answer: 0, explanation: "" },
+          { q: "A firm decides to hire only men for a role, whoever applies, to 'balance the team'. This is:", options: ["Positive action", "Positive discrimination, which is generally illegal", "A reasonable adjustment", "Good practice"], answer: 1, explanation: "" },
+          { q: "An employee who uses a wheelchair is given a desk on the ground floor and an adapted workstation. This is:", options: ["A reasonable adjustment", "Positive discrimination", "A disciplinary action", "A benefit in kind"], answer: 0, explanation: "" },
+          { q: "An interviewer prefers candidates who went to the same university as them, without realising. This is:", options: ["Unconscious bias", "Positive action", "A reasonable adjustment", "Governance"], answer: 0, explanation: "" },
+          { q: "Which is the best way to reduce bias in interviews?", options: ["Ask every candidate the same questions and score against set criteria", "Let each interviewer ask whatever they like", "Only interview people you know", "Decide in the first minute"], answer: 0, explanation: "" },
+          { q: "A diverse workforce is most likely to help a business:", options: ["Understand a wider range of customers", "Avoid all legal duties", "Pay lower wages", "Stop needing training"], answer: 0, explanation: "" },
+          { type: "sort", q: "Is each one positive action or positive discrimination?", categories: ["Positive action (legal)", "Positive discrimination (illegal)"], items: [["Running a mentoring scheme for under-represented staff", 0], ["Advertising in places that reach under-represented groups", 0], ["Rejecting all candidates over 50", 1], ["Hiring a less qualified candidate only because of their race", 1]], explanation: "" },
+          { type: "multi", q: "Select the examples of reasonable adjustments.", options: ["Adapted keyboard", "Flexible start times for medical appointments", "Accessible interview room", "Screen-reading software", "Paying disabled staff less", "Refusing to change anything"], answers: [0, 1, 2, 3], explanation: "" }
         ],
         practice: [
           { q: "Explain the difference between equality and inclusion in the workplace.", marks: 2, suggested: true, answer: "Equality means everyone has the same opportunities and is not discriminated against (1).\n\nInclusion goes further: actively making sure people who might be excluded or marginalised (e.g. because of disability) are involved, valued and able to take part fully (1)." },
@@ -171,7 +183,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "Wellbeing: being comfortable, healthy and happy in life.\n\nResilience: the ability of an individual to adapt when faced with difficult or challenging circumstances.\n\nWellbeing initiative: a plan of action designed and implemented to improve a situation or issue a business may be facing.\n\nEmployee assistance scheme: a free, confidential service funded by employers, including counselling and advice.\n\nBenefits of wellbeing initiatives for the business: better performance, reduced absence, more efficiency, lower staff turnover, better reputation, more applicants.\nDisadvantages: cost, staff need training to lead them, confidentiality issues, effect is hard to measure, tax or benefit issues."
+            body: "Wellbeing: being comfortable, healthy and happy in life.\n\nResilience: the ability of an individual to adapt when faced with difficult or challenging circumstances.\n\nWellbeing initiative: a plan of action designed and implemented to improve a situation or issue a business may be facing.\n\nEmployee assistance scheme: a free, confidential service funded by employers, including counselling and advice.\n\nBenefits of wellbeing initiatives for the business: better performance, reduced absence, more efficiency, lower staff turnover, better reputation, more applicants.\nDisadvantages: cost, staff need training to lead them, confidentiality issues, effect is hard to measure, tax or benefit issues.\n\nSigns of stress at work: more absence, lateness, mistakes, irritability, withdrawal and falling performance. Employers should spot the signs early, talk to the employee, and offer support.\n\nWellbeing support includes: an employee assistance programme (confidential counselling), mental health first aiders, flexible or hybrid working, reasonable workloads, regular one-to-ones, wellbeing days, and access to occupational health."
           },
           WORKBOOK
         ],
@@ -181,7 +193,10 @@
           ["Wellbeing initiative", "A plan of action to improve a situation or issue the business faces."],
           ["Employee assistance scheme", "A free, confidential, employer-funded service including counselling and advice."],
           ["Business benefits of wellbeing", "Better performance, less absence, lower staff turnover, better reputation, more applicants."],
-          ["Drawbacks of wellbeing initiatives", "Cost, training needed, confidentiality issues, hard to measure."]
+          ["Drawbacks of wellbeing initiatives", "Cost, training needed, confidentiality issues, hard to measure."],
+          ["Signs of stress", "More absence, lateness, mistakes, irritability, withdrawal, falling performance."],
+          ["Mental health first aider", "A trained member of staff who can spot signs of mental ill health and offer first support."],
+          ["Occupational health", "A specialist service advising on staff health and fitness for work."]
         ],
         questions: [
           { type: "sort", q: "Is each one mainly a benefit to the business or to the employee?", categories: ["Business", "Employee"], items: [["Reduced absence rates", 0], ["Lower staff turnover", 0], ["Better reputation", 0], ["Improved fitness", 1], ["Variety within work", 1], ["Feeling happier and healthier", 1]], explanation: "" },
@@ -193,7 +208,15 @@
           { q: "______ is defined as being comfortable, healthy and happy in life.", options: ["Resilience", "Wellbeing", "Motivation", "Productivity"], answer: 1, explanation: "Wellbeing." },
           { q: "______ is the ability of an individual to adapt when faced with difficult or challenging circumstances.", options: ["Wellbeing", "Resilience", "Empathy", "Delegation"], answer: 1, explanation: "Resilience." },
           { q: "A wellbeing ______ is a plan of action designed and implemented to improve a situation or issue a business may be facing.", options: ["policy", "initiative", "audit", "contract"], answer: 1, explanation: "Wellbeing initiative." },
-          { q: "Which is a disadvantage of wellbeing initiatives for a business?", options: ["Reduced staff turnover", "They cost money and their effect is hard to measure", "Improved reputation", "More job applicants"], answer: 1, explanation: "Cost and measuring impact are the main drawbacks." }
+          { q: "Which is a disadvantage of wellbeing initiatives for a business?", options: ["Reduced staff turnover", "They cost money and their effect is hard to measure", "Improved reputation", "More job applicants"], answer: 1, explanation: "Cost and measuring impact are the main drawbacks." },
+          { q: "An employee who is usually reliable starts arriving late, making mistakes and avoiding colleagues. What is the most likely issue?", options: ["Stress or poor wellbeing", "They want a promotion", "They need more work", "Nothing to worry about"], answer: 0, explanation: "" },
+          { q: "What should a manager do FIRST if they notice signs of stress in a team member?", options: ["Have a private, supportive conversation", "Start disciplinary action", "Ignore it", "Give them more work"], answer: 0, explanation: "" },
+          { q: "A firm trains some staff to spot signs of mental ill health and give first support. These staff are:", options: ["Mental health first aiders", "Shop stewards", "Auditors", "Line managers only"], answer: 0, explanation: "" },
+          { q: "Which wellbeing initiative mainly helps staff balance work with caring responsibilities?", options: ["Flexible working", "Longer shifts", "Removing breaks", "More overtime"], answer: 0, explanation: "" },
+          { q: "Which is a way an individual can build their own resilience?", options: ["Set realistic goals and ask for support when needed", "Never take breaks", "Hide problems from their manager", "Take on every task offered"], answer: 0, explanation: "" },
+          { type: "multi", q: "Select the signs that an employee may be stressed.", options: ["More frequent absence", "More mistakes", "Withdrawing from colleagues", "Irritability", "Taking regular breaks", "Meeting all targets easily"], answers: [0, 1, 2, 3], explanation: "" },
+          { type: "sort", q: "Is each one a sign of poor wellbeing or a wellbeing support?", categories: ["Sign of poor wellbeing", "Wellbeing support"], items: [["Rising absence", 0], ["Falling performance", 0], ["Employee assistance programme", 1], ["Regular one-to-ones", 1], ["Mental health first aiders", 1]], explanation: "" },
+          { q: "True or false: an employee assistance programme is confidential.", options: ["True", "False"], answer: 0, explanation: "" }
         ],
         practice: [
           { q: "Give three benefits and two disadvantages of wellbeing initiatives for businesses.", marks: 5, answer: "Benefits: improve performance / reduce absence rates / make the business more efficient / reduce staff turnover / improve reputation / attract more applicants.\n\nDisadvantages: cost money / staff need training to lead them / confidentiality issues / difficult to analyse the effect / tax or benefit issues." },
@@ -242,7 +265,11 @@
           { q: "Which style: manager sets high standards and expects employees to meet and exceed them?", options: ["Pacesetting", "Affiliative", "Democratic", "Coaching"], answer: 0, explanation: "Pacesetting." },
           { q: "Which style invites others to participate in the business and be part of the decision-making process?", options: ["Autocratic", "Democratic", "Directive", "Authoritative"], answer: 1, explanation: "Democratic." },
           { q: "Which style: individuals complete tasks their own way and learn from their mistakes; the leader provides resources?", options: ["Laissez-faire", "Pacesetting", "Authoritative", "Directive"], answer: 0, explanation: "Laissez-faire." },
-          { q: "Which style focuses on working in a positive and harmonious environment and resolves conflicts quickly?", options: ["Affiliative", "Autocratic", "Pacesetting", "Delegative"], answer: 0, explanation: "Affiliative." }
+          { q: "Which style focuses on working in a positive and harmonious environment and resolves conflicts quickly?", options: ["Affiliative", "Autocratic", "Pacesetting", "Delegative"], answer: 0, explanation: "Affiliative." },
+          { q: "A manager facing a fire evacuation gives clear, quick instructions without discussion. Which style suits this situation?", options: ["Directive/autocratic", "Laissez-faire", "Democratic", "Affiliative"], answer: 0, explanation: "Emergencies need fast, clear decisions." },
+          { q: "A team of highly skilled, motivated designers is trusted to work their own way with minimal supervision. Which style is this?", options: ["Laissez-faire", "Autocratic", "Pacesetting", "Directive"], answer: 0, explanation: "" },
+          { q: "After a merger causes conflict, a manager focuses on rebuilding relationships and team harmony. Which style?", options: ["Affiliative", "Autocratic", "Pacesetting", "Directive"], answer: 0, explanation: "" },
+          { q: "A risk of the pacesetting style is:", options: ["Staff burn out from constantly high expectations", "No standards at all", "Decisions take too long", "Too much consultation"], answer: 0, explanation: "" }
         ],
         practice: [
           { q: "Explain the difference between a direct report and an indirect report.", marks: 2, answer: "Direct report: an employee who reports directly to their boss or manager.\n\nIndirect report: an employee managed by their boss but who also reports to someone else for a specific task or project." },
@@ -259,7 +286,7 @@
           {
             type: "notes",
             title: "Key points",
-            body: "CPD: Continuing Professional Development.\n\nOn-the-job training happens at the employee's workplace while they do their job.\n\nLearning Development Plan (LDP): a formal record of CPD activities completed, so employee and employer can refer to it.\n\nMentoring: an experienced team member is paired with a newer one. Benefits: long-term, good working relationships, promotes growth and career aspirations, staff learn faster, being a mentor counts as CPD.\n\nCoaching: training driven by performance, helping the person being coached improve. Benefits: solve issues in different ways, better productivity, more confidence.\n\nPerformance review (appraisal): reviewing an employee's performance over a period of time."
+            body: "CPD: Continuing Professional Development.\n\nOn-the-job training happens at the employee's workplace while they do their job.\n\nLearning Development Plan (LDP): a formal record of CPD activities completed, so employee and employer can refer to it.\n\nMentoring: an experienced team member is paired with a newer one. Benefits: long-term, good working relationships, promotes growth and career aspirations, staff learn faster, being a mentor counts as CPD.\n\nCoaching: training driven by performance, helping the person being coached improve. Benefits: solve issues in different ways, better productivity, more confidence.\n\nPerformance review (appraisal): reviewing an employee's performance over a period of time.\n\nOn-the-job training happens while doing the job (e.g. shadowing, coaching, mentoring). Off-the-job training happens away from normal work (e.g. courses, college, e-learning, conferences). Internal training is delivered by the business's own staff; external training by outside providers.\n\nApprenticeships combine paid work with off-the-job training towards a qualification.\n\nAn induction usually covers: health and safety, a site tour, introductions to the team, policies and procedures, the job role, and paperwork such as contracts and payroll.\n\n360-degree feedback gathers views from managers, peers and people you manage."
           },
           WORKBOOK
         ],
@@ -270,7 +297,11 @@
           ["Mentoring", "An experienced team member paired with a newer one; long-term development."],
           ["Coaching", "Performance-driven training to help someone improve specific skills."],
           ["Appraisal", "A performance review of an employee over a period of time."],
-          ["Induction", "Introducing new staff to the business, their role, policies and health and safety."]
+          ["Induction", "Introducing new staff to the business, their role, policies and health and safety."],
+          ["Off-the-job training", "Training away from normal work, e.g. courses, college, e-learning."],
+          ["Job shadowing", "Learning by watching an experienced colleague do the job."],
+          ["Apprenticeship", "Paid work combined with off-the-job training towards a qualification."],
+          ["360-degree feedback", "Feedback from managers, peers and people you manage."]
         ],
         questions: [
           { type: "sort", q: "Does each statement describe mentoring or coaching?", categories: ["Mentoring", "Coaching"], items: [["A long-term working relationship", 0], ["An experienced colleague paired with a newer one", 0], ["Supports career aspirations", 0], ["Driven by performance", 1], ["Focused on improving specific skills", 1], ["Improves productivity and confidence", 1]], explanation: "" },
@@ -282,7 +313,15 @@
           { q: "______ is when two people are paired to help professional development: an experienced team member with a newer member.", options: ["Coaching", "Mentoring", "Shadowing", "Appraisal"], answer: 1, explanation: "Mentoring." },
           { q: "______ is a form of training driven by performance, enabling the individual being coached to improve.", options: ["Mentoring", "Coaching", "Induction", "CPD"], answer: 1, explanation: "Coaching." },
           { q: "A performance review is also known as an ______.", options: ["induction", "appraisal", "interview", "audit"], answer: 1, explanation: "Appraisal." },
-          { q: "Which is a benefit of mentoring?", options: ["It is a quick, one-off fix", "Being a mentor counts as CPD and good working relationships form", "It removes the need for appraisals", "It is only for senior managers"], answer: 1, explanation: "Mentoring is long-term, builds relationships and counts as CPD for the mentor." }
+          { q: "Which is a benefit of mentoring?", options: ["It is a quick, one-off fix", "Being a mentor counts as CPD and good working relationships form", "It removes the need for appraisals", "It is only for senior managers"], answer: 1, explanation: "Mentoring is long-term, builds relationships and counts as CPD for the mentor." },
+          { q: "A new receptionist learns by watching an experienced colleague for a week. This is:", options: ["Job shadowing (on-the-job)", "Off-the-job training", "An appraisal", "A disciplinary"], answer: 0, explanation: "" },
+          { q: "An employee attends a two-day external course on project management. This is:", options: ["Off-the-job training", "On-the-job training", "Job shadowing", "An induction"], answer: 0, explanation: "" },
+          { q: "Which is an advantage of on-the-job training?", options: ["Cheaper and directly relevant to the job", "Gives a recognised qualification every time", "No disruption to work at all", "Always delivered by experts from outside"], answer: 0, explanation: "" },
+          { q: "Which is an advantage of off-the-job training?", options: ["Staff can focus without workplace distractions and learn from specialists", "It's always free", "It never takes staff away from work", "It needs no planning"], answer: 0, explanation: "" },
+          { q: "Which should be covered FIRST in a warehouse induction?", options: ["Health and safety", "The company's five-year strategy", "Office party dates", "The pension scheme's investment funds"], answer: 0, explanation: "Safety comes first in a hazardous workplace." },
+          { q: "Gathering feedback on an employee from their manager, colleagues and the staff they manage is called:", options: ["360-degree feedback", "Job shadowing", "Induction", "Payroll"], answer: 0, explanation: "" },
+          { type: "sort", q: "Is each one on-the-job or off-the-job training?", categories: ["On-the-job", "Off-the-job"], items: [["Job shadowing", 0], ["Coaching at your desk", 0], ["Mentoring from a colleague", 0], ["A college day-release course", 1], ["An external conference", 1], ["An online course completed away from your role", 1]], explanation: "" },
+          { type: "multi", q: "Select what a good induction usually covers.", options: ["Health and safety", "Introductions to the team", "Policies and procedures", "The job role", "The manager's home address", "Next year's bonus amount"], answers: [0, 1, 2, 3], explanation: "" }
         ],
         practice: [
           { q: "Give two benefits of mentoring and two benefits of coaching.", marks: 4, answer: "Mentoring: long-term process with good working relationships formed / promotes individual growth and career aspirations / staff learn faster / becoming a mentor counts as CPD.\n\nCoaching: allows employees to solve issues in different ways / improves productivity / increases the individual's confidence." },
