@@ -577,17 +577,20 @@
     return Promise.race([check, new Promise(function (res) { setTimeout(function () { res(false); }, 4000); })]);
   }
 
+  // An episode can list several possible file names (e.g. a short name and NotebookLM's own name).
+  // The first one that exists is used.
   function podcastAvailable(e) {
     if (!podcastChecks[e.id]) {
-      // Never cache the check (a deleted file must disappear) and give up after 4 seconds,
-      // so the page can never hang on "Loading".
-      var check = !window.fetch ? Promise.resolve(false) :
-        fetch(podcastUrl(e), { method: "HEAD", cache: "no-store" }).then(function (r) {
-          var type = r.headers.get("content-type") || "";
-          return r.ok && type.indexOf("text/html") !== 0 && type.indexOf("text/plain") !== 0;
-        }).catch(function () { return false; });
-      var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(false); }, 4000); });
-      podcastChecks[e.id] = Promise.race([check, timeout]);
+      var names = e.files || [e.file];
+      var folder = e.folder || "audio/";
+      podcastChecks[e.id] = (function tryName(i) {
+        if (i >= names.length) return Promise.resolve(false);
+        var url = folder + encodeURIComponent(names[i]);
+        return headOk(url).then(function (ok) {
+          if (ok) { e.file = names[i]; e.url = url; return true; }
+          return tryName(i + 1);
+        });
+      })(0);
     }
     return podcastChecks[e.id];
   }
@@ -595,7 +598,7 @@
   function podcastCardHtml(e, full) {
     var ext = (e.file.split(".").pop() || "").toUpperCase();
     return '<article class="card podcast' + (e.deep ? " is-deep" : "") + '" data-ep="' + esc(e.deep ? "deep-" + e.topic : e.id) + '">' +
-      '<div class="podcast-head"><span class="badge">' + esc(e.deep ? "Deep dive" : e.id) + "</span><h3>" + esc(e.title) + "</h3></div>" +
+      '<div class="podcast-head"><span class="badge">' + esc(e.deep ? "Deep dive" : (e.badge || e.id)) + "</span><h3>" + esc(e.title) + "</h3></div>" +
       (full ? '<p class="small muted">' + esc(e.lesson) + ' · <a href="#/topic/' + encodeURIComponent(e.topic) + '">' + esc(topicIndex[e.topic].topic.title) + "</a></p>" : "") +
       '<audio controls preload="none" src="' + esc(podcastUrl(e)) + '">Your browser cannot play this audio.</audio>' +
       '<div class="podcast-actions"><a class="btn small-btn" href="' + esc(podcastUrl(e)) + '" download="' + esc(e.file) + '">Download (' + esc(ext) + ")</a></div>" +

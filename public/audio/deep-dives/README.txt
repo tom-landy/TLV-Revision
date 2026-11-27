@@ -1,15 +1,13 @@
-Deep-dive podcasts go in this folder: one per topic.
+Deep-dive podcasts go in this folder.
 
-Name each file after its topic number, exactly:
-  6.3.m4a   -> deep dive on topic 6.3
-  1.4.m4a   -> deep dive on topic 1.4
-(.mp3 also works, e.g. 2.1.mp3)
+The episodes are listed in public/data/podcasts.js. Each one accepts either a short
+name or NotebookLM's own download name, as .m4a or .mp3, for example:
+  6.1-1.mp3   or   From_TOWS_Matrix_to_Boardroom_Briefing.m4a
+  6.3-2.mp3   or   Diagnosing_Employee_Resistance_to_Change.m4a
+An episode appears on the site as soon as its file is here.
 
-That's all: the episode appears on the topic page and in the Podcasts tab
-as soon as the file is here. No list to edit.
-
-SIZE: GitHub's website only accepts files up to 25 MB.
-NotebookLM audio is about 0.7 MB per minute, so episodes over ~35 minutes
-will be too big. Export them as MP3, mono, 64 kbps (about 0.5 MB per minute,
-so 40 minutes is about 19 MB) using Audacity or any free converter.
+SIZE LIMIT: GitHub's website rejects files over 25 MB ("file is too large").
+NotebookLM audio is about 0.7 MB per minute, so long episodes must be shrunk first:
+open the file in Audacity (free), then File > Export > Export as MP3,
+choose Mono and 64 kbps. That is about 0.5 MB a minute, so 40 minutes is about 19 MB.
 Play each file to the end before uploading.
