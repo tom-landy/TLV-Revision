@@ -597,8 +597,8 @@
 
   function podcastCardHtml(e, full) {
     var ext = (e.file.split(".").pop() || "").toUpperCase();
-    return '<article class="card podcast' + (e.deep ? " is-deep" : "") + '" data-ep="' + esc(e.deep ? "deep-" + e.topic : e.id) + '">' +
-      '<div class="podcast-head"><span class="badge">' + esc(e.deep ? "Deep dive" : (e.badge || e.id)) + "</span><h3>" + esc(e.title) + "</h3></div>" +
+    return '<article class="card podcast' + (e.deep || e.kind === "deep" ? " is-deep" : "") + '" data-ep="' + esc(e.deep ? "deep-" + e.topic : e.id) + '">' +
+      '<div class="podcast-head"><span class="badge">' + esc(e.deep || e.kind === "deep" ? "Deep dive" : e.id) + "</span><h3>" + esc(e.title) + "</h3></div>" +
       (full ? '<p class="small muted">' + esc(e.lesson) + ' · <a href="#/topic/' + encodeURIComponent(e.topic) + '">' + esc(topicIndex[e.topic].topic.title) + "</a></p>" : "") +
       '<audio controls preload="none" src="' + esc(podcastUrl(e)) + '">Your browser cannot play this audio.</audio>' +
       '<div class="podcast-actions"><a class="btn small-btn" href="' + esc(podcastUrl(e)) + '" download="' + esc(e.file) + '">Download (' + esc(ext) + ")</a></div>" +
@@ -626,7 +626,9 @@
     if (!box) return;
     Promise.all([findDeepDive(t)].concat(eps.map(podcastAvailable))).then(function (res) {
       var deep = res[0], ok = res.slice(1);
-      var live = (deep ? [deep] : []).concat(eps.filter(function (_, i) { return ok[i]; }));
+      var avail = eps.filter(function (_, i) { return ok[i]; });
+      var live = avail.filter(function (e) { return e.kind !== "deep"; })
+        .concat(avail.filter(function (e) { return e.kind === "deep"; }), deep ? [deep] : []);
       if (!live.length || !document.body.contains(box)) return;
       box.innerHTML = '<section class="card podcast-group no-print"><h3>Listen: topic podcast' + (live.length > 1 ? "s" : "") + "</h3>" +
         live.map(function (e) { return podcastCardHtml(e, false); }).join("") +
@@ -651,22 +653,20 @@
       var live = PODCASTS.filter(function (_, i) { return ok[i]; });
       if (!live.length && !deeps.length) { list.innerHTML = '<div class="card"><p>No podcasts yet. Check back soon.</p></div>'; return; }
       var out = "";
-      if (deeps.length) {
-        out += '<h2 class="pod-section">Deep dives</h2><p class="muted">One long episode per topic.</p>';
+      var sections = [
+        { title: "Topic overviews", blurb: "Short summaries of each lesson.", eps: live.filter(function (e) { return e.kind !== "deep"; }) },
+        { title: "Deep dives", blurb: "Longer episodes that go into each topic in depth.", eps: live.filter(function (e) { return e.kind === "deep"; }).concat(deeps) }
+      ];
+      sections.forEach(function (sec) {
+        if (!sec.eps.length) return;
+        out += '<h2 class="pod-section">' + sec.title + '</h2><p class="muted">' + sec.blurb + "</p>";
         CONTENT.subjects.forEach(function (s) {
-          var ds = deeps.filter(function (d) { return topicIndex[d.topic].subject === s; });
-          if (!ds.length) return;
-          out += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '"><div class="subject-head"><h3 class="pod-el">' + esc(s.title) + "</h3></div>" +
-            '<div class="podcast-grid">' + ds.map(function (d) { return podcastCardHtml(d, true); }).join("") + "</div></section>";
+          var eps = sec.eps.filter(function (e) { return topicIndex[e.topic].subject === s; });
+          if (!eps.length) return;
+          out += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '"><div class="subject-head"><h3 class="pod-el">' + esc(s.title) + "</h3>" +
+            '<span class="muted">' + eps.length + " episode" + (eps.length === 1 ? "" : "s") + "</span></div>" +
+            '<div class="podcast-grid">' + eps.map(function (e) { return podcastCardHtml(e, true); }).join("") + "</div></section>";
         });
-        if (live.length) out += '<h2 class="pod-section">Short episodes</h2>';
-      }
-      CONTENT.subjects.forEach(function (s) {
-        var eps = live.filter(function (e) { return topicIndex[e.topic].subject === s; });
-        if (!eps.length) return;
-        out += '<section class="subject" style="--subject:' + esc(s.colour || "#1f4e79") + '"><div class="subject-head"><h2>' + esc(s.title) + "</h2>" +
-          '<span class="muted">' + eps.length + " episode" + (eps.length === 1 ? "" : "s") + "</span></div>" +
-          '<div class="podcast-grid">' + eps.map(function (e) { return podcastCardHtml(e, true); }).join("") + "</div></section>";
       });
       list.innerHTML = out;
       deeps.concat(live).forEach(function (e) { bindPodcastCard(list.querySelector('[data-ep="' + (e.deep ? "deep-" + e.topic : e.id) + '"]'), e); });
