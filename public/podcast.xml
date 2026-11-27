@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TLV Revision Podcasts</title>
+    <link>https://tlv-revision.onrender.com/#/podcasts</link>
+    <atom:link href="https://tlv-revision.onrender.com/podcast.xml" rel="self" type="application/rss+xml"/>
+    <description>Deep-dive podcasts for City &amp; Guilds T Level Management and Administration.</description>
+    <language>en-gb</language>
+    <itunes:author>TLV Teaching Team</itunes:author>
+    <itunes:image href="https://tlv-revision.onrender.com/podcast-cover.png"/>
+    <image><url>https://tlv-revision.onrender.com/podcast-cover.png</url><title>TLV Revision Podcasts</title><link>https://tlv-revision.onrender.com/</link></image>
+    <itunes:category text="Education"/>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:type>serial</itunes:type>
+    <itunes:block>Yes</itunes:block>
+    <item>
+      <title>Deep dive 6.1: From TOWS matrix to boardroom briefing</title>
+      <description>Deep dive for topic 6.1 (Lessons 1B, 2A and 2B).
+- Using PESTLE to feed external opportunities and threats into a SWOT.
+- Building the TOWS matrix: SO, WO, ST and WT strategies.
+- Turning the analysis into evidence-based recommendations for a board.</description>
+      <itunes:summary>Deep dive for topic 6.1 (Lessons 1B, 2A and 2B).
+- Using PESTLE to feed external opportunities and threats into a SWOT.
+- Building the TOWS matrix: SO, WO, ST and WT strategies.
+- Turning the analysis into evidence-based recommendations for a board.</itunes:summary>
+      <enclosure url="https://tlv-revision.onrender.com/audio/deep-dives/From_TOWS_Matrix_to_Boardroom_Briefing.m4a" length="15983218" type="audio/mp4"/>
+      <guid isPermaLink="false">tlv-revision-D1</guid>
+      <pubDate>Fri, 27 Nov 2026 08:00:00 GMT</pubDate>
+      <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:duration>21:51</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Deep dive 6.2: Why small daily changes beat massive restructures</title>
+      <description>Deep dive for topic 6.2 (Lesson 3A).
+- The Kaizen philosophy and standard work as the baseline.
+- Running the PDCA cycle (Plan, Do, Check, Act) with measurable KPIs.
+- Preventing operational bottlenecks.</description>
+      <itunes:summary>Deep dive for topic 6.2 (Lesson 3A).
+- The Kaizen philosophy and standard work as the baseline.
+- Running the PDCA cycle (Plan, Do, Check, Act) with measurable KPIs.
+- Preventing operational bottlenecks.</itunes:summary>
+      <enclosure url="https://tlv-revision.onrender.com/audio/deep-dives/Why_Small_Daily_Changes_Beat_Massive_Restructures.m4a" length="14024056" type="audio/mp4"/>
+      <guid isPermaLink="false">tlv-revision-D2</guid>
+      <pubDate>Fri, 27 Nov 2026 08:01:00 GMT</pubDate>
+      <itunes:episode>2</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:duration>19:10</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Deep dive 6.2: How continuous improvement prevents business crises</title>
+      <description>Deep dive for topic 6.2 (Lesson 3B).
+- Total Quality Management: customer focus and zero defects.
+- Psychological safety: admitting errors without blame.
+- The limits of small improvements during sudden structural crises.</description>
+      <itunes:summary>Deep dive for topic 6.2 (Lesson 3B).
+- Total Quality Management: customer focus and zero defects.
+- Psychological safety: admitting errors without blame.
+- The limits of small improvements during sudden structural crises.</itunes:summary>
+      <enclosure url="https://tlv-revision.onrender.com/audio/deep-dives/How_Continuous_Improvement_Prevents_Business_Crises.m4a" length="16134240" type="audio/mp4"/>
+      <guid isPermaLink="false">tlv-revision-D3</guid>
+      <pubDate>Fri, 27 Nov 2026 08:02:00 GMT</pubDate>
+      <itunes:episode>3</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:duration>22:03</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Deep dive 6.3: Choosing between Kotter and Lewin</title>
+      <description>Deep dive for topic 6.3 (Lesson 4A).
+- Lewin's 3 stages: unfreeze, change, refreeze.
+- Kotter's 8 sequential steps.
+- Which fits small changes and which fits large-scale transformation.</description>
+      <itunes:summary>Deep dive for topic 6.3 (Lesson 4A).
+- Lewin's 3 stages: unfreeze, change, refreeze.
+- Kotter's 8 sequential steps.
+- Which fits small changes and which fits large-scale transformation.</itunes:summary>
+      <enclosure url="https://tlv-revision.onrender.com/audio/deep-dives/Choosing_Between_Kotter_and_Lewin.m4a" length="16457343" type="audio/mp4"/>
+      <guid isPermaLink="false">tlv-revision-D4</guid>
+      <pubDate>Fri, 27 Nov 2026 08:03:00 GMT</pubDate>
+      <itunes:episode>4</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:duration>22:30</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>Deep dive 6.3: Diagnosing employee resistance to change</title>
+      <description>Deep dive for topic 6.3 (Lesson 4B).
+- The root fears behind staff pushback.
+- Kotter and Schlesinger's six approaches: education, participation, facilitation, negotiation, manipulation, coercion.</description>
+      <itunes:summary>Deep dive for topic 6.3 (Lesson 4B).
+- The root fears behind staff pushback.
+- Kotter and Schlesinger's six approaches: education, participation, facilitation, negotiation, manipulation, coercion.</itunes:summary>
+      <enclosure url="https://tlv-revision.onrender.com/audio/deep-dives/Diagnosing_Employee_Resistance_to_Change.m4a" length="16872425" type="audio/mp4"/>
+      <guid isPermaLink="false">tlv-revision-D5</guid>
+      <pubDate>Fri, 27 Nov 2026 08:04:00 GMT</pubDate>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:duration>23:04</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>

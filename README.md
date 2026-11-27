@@ -80,6 +80,14 @@ One long episode per topic goes in `public/audio/deep-dives/`, named after the t
 - Written exam questions keep the mark scheme locked until the student has written at least 15 words.
 - Flashcards have a "Type my answer first" option that shows the student's attempt next to the real answer.
 
+## Podcast feed (subscribe in a podcast app)
+
+`public/podcast.xml` is a podcast RSS feed of the **deep dives only** (topic overviews stay on topic pages). Students subscribe from the Podcasts tab: copy the link into any podcast app, or "Open in Apple Podcasts" on an iPhone. Spotify does not accept private feeds.
+
+The feed is built by `scripts/build-feed.js` from `public/data/podcasts.js` and the files in `public/audio/deep-dives/`. Render runs it on every deploy (`buildCommand` in `render.yaml`), so uploading a deep dive updates the feed. If your Render service was set up by hand rather than from the Blueprint, set its Build Command to `node scripts/build-feed.js` in Render's settings. A built copy is also committed, so the feed works either way. Run it yourself with `node scripts/build-feed.js`.
+
+The feed is marked `itunes:block` so it is not listed in Apple's public directory: only people with the link can subscribe. Plays in podcast apps are not counted in GoatCounter.
+
 ## Adding and editing content
 
 Content is in `public/data/`, one file per Element (`element1-business-context.js` and so on). Site name, pass mark and certificate signatory are in `public/data/settings.js`. Edit, push, and Render redeploys.

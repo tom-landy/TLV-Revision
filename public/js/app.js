@@ -637,13 +637,40 @@
     });
   }
 
+  // Subscribe to the deep dives in a podcast app (feed built by scripts/build-feed.js).
+  function subscribeHtml() {
+    var feed = location.origin + "/podcast.xml";
+    return '<details class="card subscribe no-print"><summary>Subscribe in a podcast app</summary>' +
+      '<p class="small">New deep dives then appear on your phone automatically.</p>' +
+      '<div class="row"><label for="feedUrl" class="sr-only">Podcast feed link</label>' +
+      '<input id="feedUrl" readonly value="' + esc(feed) + '">' +
+      '<button class="btn" id="copyFeed" type="button">Copy link</button>' +
+      '<a class="btn" id="applePod" href="' + esc(feed.replace(/^https?:/, "podcast:")) + '">Open in Apple Podcasts</a></div>' +
+      '<p class="small muted" id="feedMsg" aria-live="polite">Other apps: choose "Add by URL" (or similar) and paste the link. Pocket Casts, Overcast and AntennaPod all work. Spotify does not.</p>' +
+      "</details>";
+  }
+
+  function bindSubscribe() {
+    var input = document.getElementById("feedUrl"), msg = document.getElementById("feedMsg");
+    if (!input) return;
+    document.getElementById("copyFeed").addEventListener("click", function () {
+      input.select();
+      var done = function () { msg.textContent = "Link copied. Paste it into your podcast app."; track("podcast-feed-copied", "Podcast feed link copied", true); };
+      if (navigator.clipboard) navigator.clipboard.writeText(input.value).then(done, function () { document.execCommand("copy"); done(); });
+      else { document.execCommand("copy"); done(); }
+    });
+    document.getElementById("applePod").addEventListener("click", function () { track("podcast-feed-apple", "Opened feed in Apple Podcasts", true); });
+  }
+
   function viewPodcasts() {
     setTitle("Podcasts");
     markNav("podcasts");
     var html = "<h1>Podcasts</h1>" +
       '<p class="muted">Listen here or download to your device.</p>' +
+      subscribeHtml() +
       '<div id="podcastList"><p class="muted">Loading…</p></div>';
     app.innerHTML = html;
+    bindSubscribe();
     var allTopics = [];
     CONTENT.subjects.forEach(function (s) { s.topics.forEach(function (t) { allTopics.push(t); }); });
     Promise.all([Promise.all(allTopics.map(findDeepDive)), Promise.all(PODCASTS.map(function (e) { return e.kind === "deep" ? podcastAvailable(e) : Promise.resolve(false); }))]).then(function (res) {

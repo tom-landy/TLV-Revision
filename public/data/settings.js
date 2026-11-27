@@ -5,6 +5,8 @@
 window.TLV_CONTENT = {
   settings: {
     siteName: "TLV Revision",
+    // The live address. Used to build the podcast feed (podcast.xml).
+    siteUrl: "https://tlv-revision.onrender.com",
     tagline: "City & Guilds T Level Management and Administration",
     organisation: "TLV",
     defaultPassMark: 80,
