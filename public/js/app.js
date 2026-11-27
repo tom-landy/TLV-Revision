@@ -640,19 +640,26 @@
   // Subscribe to the deep dives in a podcast app (feed built by scripts/build-feed.js).
   function subscribeHtml() {
     var feed = location.origin + "/podcast.xml";
-    return '<details class="card subscribe no-print"><summary>Subscribe in a podcast app</summary>' +
+    return '<div class="card subscribe no-print" id="subPanel" hidden><h2>Subscribe in a podcast app</h2>' +
       '<p class="small">New deep dives then appear on your phone automatically.</p>' +
       '<div class="row"><label for="feedUrl" class="sr-only">Podcast feed link</label>' +
       '<input id="feedUrl" readonly value="' + esc(feed) + '">' +
       '<button class="btn" id="copyFeed" type="button">Copy link</button>' +
       '<a class="btn" id="applePod" href="' + esc(feed.replace(/^https?:/, "podcast:")) + '">Open in Apple Podcasts</a></div>' +
       '<p class="small muted" id="feedMsg" aria-live="polite">Other apps: choose "Add by URL" (or similar) and paste the link. Pocket Casts, Overcast and AntennaPod all work. Spotify does not.</p>' +
-      "</details>";
+      "</div>";
   }
 
   function bindSubscribe() {
     var input = document.getElementById("feedUrl"), msg = document.getElementById("feedMsg");
     if (!input) return;
+    var btn = document.getElementById("subBtn"), panel = document.getElementById("subPanel");
+    btn.addEventListener("click", function () {
+      panel.hidden = !panel.hidden;
+      btn.setAttribute("aria-expanded", String(!panel.hidden));
+      btn.textContent = panel.hidden ? "Subscribe" : "Close";
+      if (!panel.hidden) { track("podcast-subscribe-opened", "Subscribe panel opened", true); input.focus(); input.select(); }
+    });
     document.getElementById("copyFeed").addEventListener("click", function () {
       input.select();
       var done = function () { msg.textContent = "Link copied. Paste it into your podcast app."; track("podcast-feed-copied", "Podcast feed link copied", true); };
@@ -665,7 +672,8 @@
   function viewPodcasts() {
     setTitle("Podcasts");
     markNav("podcasts");
-    var html = "<h1>Podcasts</h1>" +
+    var html = '<div class="page-title"><h1>Podcasts</h1>' +
+      '<button class="btn primary" id="subBtn" type="button" aria-expanded="false" aria-controls="subPanel">Subscribe</button></div>' +
       '<p class="muted">Listen here or download to your device.</p>' +
       subscribeHtml() +
       '<div id="podcastList"><p class="muted">Loading…</p></div>';
