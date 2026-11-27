@@ -646,20 +646,19 @@
     app.innerHTML = html;
     var allTopics = [];
     CONTENT.subjects.forEach(function (s) { s.topics.forEach(function (t) { allTopics.push(t); }); });
-    Promise.all([Promise.all(allTopics.map(findDeepDive)), Promise.all(PODCASTS.map(podcastAvailable))]).then(function (res) {
+    Promise.all([Promise.all(allTopics.map(findDeepDive)), Promise.all(PODCASTS.map(function (e) { return e.kind === "deep" ? podcastAvailable(e) : Promise.resolve(false); }))]).then(function (res) {
       var deeps = res[0].filter(function (d) { return d; }), ok = res[1];
       var list = document.getElementById("podcastList");
       if (!list) return;
-      var live = PODCASTS.filter(function (_, i) { return ok[i]; });
+      var live = PODCASTS.filter(function (_, i) { return ok[i] && PODCASTS[i].kind === "deep"; });
       if (!live.length && !deeps.length) { list.innerHTML = '<div class="card"><p>No podcasts yet. Check back soon.</p></div>'; return; }
       var out = "";
+      // The Podcasts tab is for deep dives only. Topic overviews live on their topic pages.
       var sections = [
-        { title: "Topic overviews", blurb: "Short summaries of each lesson.", eps: live.filter(function (e) { return e.kind !== "deep"; }) },
-        { title: "Deep dives", blurb: "Longer episodes that go into each topic in depth.", eps: live.filter(function (e) { return e.kind === "deep"; }).concat(deeps) }
+        { eps: live.filter(function (e) { return e.kind === "deep"; }).concat(deeps) }
       ];
       sections.forEach(function (sec) {
         if (!sec.eps.length) return;
-        out += '<h2 class="pod-section">' + sec.title + '</h2><p class="muted">' + sec.blurb + "</p>";
         CONTENT.subjects.forEach(function (s) {
           var eps = sec.eps.filter(function (e) { return topicIndex[e.topic].subject === s; });
           if (!eps.length) return;
