@@ -199,6 +199,16 @@
         "Supporting staff through the Kübler-Ross change curve, from denial to acceptance.",
         "Thaler and Sunstein's nudge theory: choice architecture, defaults and ethics."
       ]
+    },
+    {
+      kind: "deep", id: "D8", badge: "6.4", topic: "6.4", folder: "audio/deep-dives/", added: "2026-11-28",
+      files: names("6.4-1", "PRINCE2_versus_Agile_for_T_Level_Business"),
+      title: "PRINCE2 versus Agile", lesson: "Lesson 7A",
+      covers: [
+        "PRINCE2: controlled stages, the project board, business justification and managing by exception.",
+        "Agile: short iterations, customer collaboration and changing requirements.",
+        "Which methodology suits which kind of project."
+      ]
     }
   ];
 })();
